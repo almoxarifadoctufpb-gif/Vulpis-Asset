@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Vulpis Asset · Dashboard</title>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #F5F5F5;  /* cinza claro fundo */
+      color: #212121;             /* preto suave */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* estrutura app-like */
+    .app-wrapper {
+      max-width: 400px;
+      width: 100%;
+      margin: 0 auto;
+      background-color: #F5F5F5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0,0,0,0.02);
+      position: relative;
+    }
+
+    /* cabeçalho fixo? usamos flex */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px 8px 16px;
+      scrollbar-width: none; /* firefox */
+      -ms-overflow-style: none;
+    }
+    .main-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* tipografia */
+    h1, h2, h3, h4, .logo-text, .card-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    }
+    .logo-icon img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+    .brand-name {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #212121;
+    }
+    .greeting {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9rem;
+      color: #5a5a5a;
+      margin-top: 4px;
+      margin-left: 50px;  /* alinhado com o texto após logo */
+      font-weight: 400;
+    }
+
+    /* cards padrão */
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 18px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: transform 0.15s ease, box-shadow 0.2s;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .card:active {
+      transform: scale(0.99);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    }
+
+    /* progresso geral */
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .progress-percent {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: #F57C00;
+      line-height: 1;
+    }
+    .progress-label {
+      color: #5a5a5a;
+      font-size: 0.9rem;
+    }
+    .progress-bar-bg {
+      background: #e9e9e9;
+      height: 10px;
+      border-radius: 20px;
+      margin: 12px 0 8px;
+    }
+    .progress-bar-fill {
+      width: 68%; /* valor de exemplo */
+      height: 10px;
+      background: #F57C00;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(245, 124, 0, 0.25);
+    }
+    .motivation-text {
+      color: #212121;
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .motivation-text i {
+      color: #E65100;
+      font-size: 1rem;
+    }
+
+    /* grid de ações principais (2x2) */
+    .grid-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .action-card {
+      background: #FFFFFF;
+      border-radius: 22px;
+      padding: 18px 8px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+      border: 1px solid #f0f0f0;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .action-card i {
+      font-size: 2rem;
+      color: #F57C00;
+      margin-bottom: 10px;
+    }
+    .action-card span {
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #212121;
+    }
+    .action-card:active {
+      background: #fef5eb;
+      border-color: #F57C00;
+    }
+
+    /* card desempenho (gráfico) */
+    .chart-title {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .chart-title h3 {
+      font-size: 1.1rem;
+    }
+    .chart-title i {
+      color: #F57C00;
+    }
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      margin-top: 8px;
+    }
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 12%;
+    }
+    .bar {
+      width: 100%;
+      background: #F57C00;
+      border-radius: 12px 12px 8px 8px;
+      min-height: 4px;
+      transition: height 0.2s;
+    }
+    .bar-label {
+      font-size: 0.7rem;
+      color: #6b6b6b;
+      font-weight: 500;
+    }
+    /* valores fictícios para barras */
+    .bar1 { height: 42px; background: #F57C00; }
+    .bar2 { height: 28px; background: #F57C00; }
+    .bar3 { height: 55px; background: #F57C00; }
+    .bar4 { height: 38px; background: #F57C00; }
+    .bar5 { height: 68px; background: #E65100; } /* destaque */
+    .bar6 { height: 50px; background: #F57C00; }
+    .bar7 { height: 61px; background: #F57C00; }
+
+    /* estatísticas rápidas (3 colunas) */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      margin-top: 4px;
+    }
+    .stat-item {
+      flex: 1;
+    }
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #212121;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #757575;
+      letter-spacing: 0.02em;
+    }
+
+    /* card continuidade (streak) */
+    .streak-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-left: 6px solid #E65100;
+      box-shadow: 0 8px 16px rgba(245, 124, 0, 0.06);
+    }
+    .streak-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .streak-icon {
+      background: #fff2e6;
+      width: 48px;
+      height: 48px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #E65100;
+      font-size: 1.8rem;
+    }
+    .streak-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .streak-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #E65100;
+      line-height: 1;
+    }
+    .streak-dias {
+      font-size: 0.8rem;
+      color: #5a5a5a;
+    }
+
+    /* CTA principal */
+    .cta-button {
+      background: #E65100;
+      border: none;
+      border-radius: 60px;
+      padding: 18px 24px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      box-shadow: 0 10px 20px rgba(230, 81, 0, 0.25);
+      margin: 8px 0 16px;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .cta-button i {
+      font-size: 1.3rem;
+    }
+    .cta-button:active {
+      background: #bf4300;
+      transform: scale(0.98);
+      box-shadow: 0 6px 12px rgba(230, 81, 0, 0.3);
+    }
+
+    /* navegação inferior */
+    .bottom-nav {
+      background: #FFFFFF;
+      padding: 10px 16px 14px;
+      border-top: 1px solid #eeeeee;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.02);
+      border-radius: 30px 30px 0 0;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #9e9e9e;
+      font-size: 0.7rem;
+      transition: color 0.1s;
+      cursor: pointer;
+    }
+    .nav-item i {
+      font-size: 1.4rem;
+      margin-bottom: 2px;
+    }
+    .nav-item.active {
+      color: #E65100;
+      font-weight: 500;
+    }
+    .nav-item span {
+      font-weight: 500;
+    }
+
+    /* ajustes espaçamento */
+    .inline-icon {
+      margin-right: 6px;
+      color: #F57C00;
+    }
+
+    /* micro interações extras */
+    .hover-lift:hover {
+      transform: translateY(-2px);
+    }
+
+    /* font size ajuste */
+    .small-note {
+      font-size: 0.8rem;
+    }
+
+    /* card de estatísticas tem fundo branco */
+    .stats-card {
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+  <!-- Conteúdo rolável -->
+  <div class="main-content">
+    <!-- HEADER com logo e saudação -->
+    <div class="header">
+      <div class="brand-row">
+        <div class="logo-icon">
+          <!-- Imagem da raposa estilizada (Flaticon sticker) -->
+          <img src="https://cdn-icons-png.flaticon.com/512/4193/4193312.png" alt="Raposa Vulpis" style="width:36px; height:36px;" 
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <i class="fas fa-fox" style="display:none; font-size: 30px; color: #F57C00;"></i>
+        </div>
+        <span class="brand-name">Vulpis Asset</span>
+      </div>
+      <div class="greeting">
+        <i class="fas fa-sun" style="color: #F57C00; margin-right: 6px;"></i>Bem-vindo de volta, continue sua estratégia.
+      </div>
+    </div>
+
+    <!-- 1. Card de progresso geral -->
+    <div class="card">
+      <div class="progress-header">
+        <span class="progress-percent">68%</span>
+        <span class="progress-label">progresso total</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width:68%"></div>
+      </div>
+      <div class="motivation-text">
+        <i class="fas fa-bullseye"></i> 
+        <span>Você está mais perto da aprovação.</span>
+      </div>
+    </div>
+
+    <!-- 2. Grid de ações principais (4 cards) -->
+    <div class="grid-actions">
+      <div class="action-card" role="button" tabindex="0">
+        <i class="fas fa-book-open"></i>
+        <span>Estudar</span>
+      </div>
+      <div class="action-card" role="button" tabindex="0">
+        <i class="fas fa-pencil-alt"></i>
+        <span>Resolver questões</span>
+      </div>
+      <div class="action-card" role="button" tabindex="0">
+        <i class="fas fa-chart-line"></i>
+        <span>Desempenho</span>
+      </div>
+      <div class="action-card" role="button" tabindex="0">
+        <i class="fas fa-brain"></i>
+        <span>Plano de estudo</span>
+      </div>
+    </div>
+
+    <!-- 3. Card de desempenho (gráfico de barras) -->
+    <div class="card">
+      <div class="chart-title">
+        <h3><i class="fas fa-chart-bar" style="margin-right: 8px; color:#F57C00;"></i>Evolução de acertos</h3>
+        <i class="fas fa-chevron-right" style="color:#9e9e9e;"></i>
+      </div>
+      <!-- gráfico de barras simples -->
+      <div class="bar-chart">
+        <div class="bar-item"><div class="bar bar1"></div><span class="bar-label">S</span></div>
+        <div class="bar-item"><div class="bar bar2"></div><span class="bar-label">T</span></div>
+        <div class="bar-item"><div class="bar bar3"></div><span class="bar-label">Q</span></div>
+        <div class="bar-item"><div class="bar bar4"></div><span class="bar-label">Q</span></div>
+        <div class="bar-item"><div class="bar bar5"></div><span class="bar-label">S</span></div>
+        <div class="bar-item"><div class="bar bar6"></div><span class="bar-label">S</span></div>
+        <div class="bar-item"><div class="bar bar7"></div><span class="bar-label">D</span></div>
+      </div>
+      <div style="display:flex; justify-content: space-between; margin-top: 8px; padding:0 4px;">
+        <span style="font-size:0.7rem; color:#757575;">Últimos 7 dias</span>
+        <span style="font-size:0.8rem; font-weight:500; color:#E65100;">+12% vs semana anterior</span>
+      </div>
+    </div>
+
+    <!-- 4. Card de estatísticas rápidas (questões, acerto, horas) -->
+    <div class="card stats-card">
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-number">1.284</div>
+          <div class="stat-label">Questões resolvidas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">76%</div>
+          <div class="stat-label">Taxa de acerto</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">18h</div>
+          <div class="stat-label">Tempo estudado</div>
+        </div>
+      </div>
+      <div style="margin-top: 12px; background:#f9f9f9; padding: 8px 10px; border-radius: 20px; font-size:0.8rem; color:#424242;">
+        <i class="fas fa-clock" style="color:#F57C00; margin-right:6px;"></i>Média diária: 2.6h · Ritmo excelente!
+      </div>
+    </div>
+
+    <!-- 5. Card de continuidade (streak) -->
+    <div class="streak-card">
+      <div class="streak-left">
+        <div class="streak-icon">
+          <i class="fas fa-fire"></i>
+        </div>
+        <div class="streak-info">
+          <h4>Sequência de estudos</h4>
+          <div style="display: flex; align-items: baseline; gap: 6px;">
+            <span class="streak-number">7</span> 
+            <span class="streak-dias">dias consecutivos</span>
+          </div>
+          <span style="font-size:0.75rem; color:#F57C00; background: #fff0e0; padding:2px 10px; border-radius: 20px;">🔥 +2 dias para recorde</span>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right" style="color:#E65100; opacity: 0.7;"></i>
+    </div>
+
+    <!-- 6. Botão de ação principal (CTA) -->
+    <button class="cta-button">
+      <i class="fas fa-play-circle"></i> Continuar estudo
+    </button>
+
+    <!-- espaço extra para respiro -->
+    <div style="height: 8px;"></div>
+  </div>
+
+  <!-- Navegação inferior (menu) -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <i class="fas fa-th-large"></i>
+      <span>Dashboard</span>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-book"></i>
+      <span>Estudos</span>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-question-circle"></i>
+      <span>Questões</span>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-user-circle"></i>
+      <span>Perfil</span>
+    </div>
+  </div>
+</div>
+
+<!-- micro interações e fallback para fonte/icone -->
+<script>
+  (function() {
+    // Pequeno ajuste para fallback da imagem, e hover simulando microinterações
+    console.log('Vulpis Asset · Gestão inteligente para mentes estratégicas.');
+    // Apenas para dar sensação de clique suave nos cards (já feito via css :active)
+    const cards = document.querySelectorAll('.action-card, .cta-button, .streak-card, .nav-item');
+    cards.forEach(el => {
+      el.addEventListener('click', (e) => {
+        // apenas efeito visual, sem navegação real
+        if(!el.classList.contains('no-feedback')) {
+          // Pequeno feedback
+        }
+      });
+    });
+    // Atualiza o ano ou algo? não necessário.
+  })();
+</script>
+<!-- pequeno ajuste para garantir que a imagem carregue; se falhar, mostra ícone fox -->
+</body>
+</html>
