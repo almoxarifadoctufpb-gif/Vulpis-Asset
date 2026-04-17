@@ -3,17 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vulpis Asset · Disciplinas</title>
-  <!-- Fonts e Ícones -->
+  <title>Vulpis Asset · Dashboard Inteligente</title>
+  <!-- Fonts & Icons (Flaticon via CDN e Font Awesome) -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Roboto', sans-serif;
       background: #F5F5F5;
@@ -23,7 +18,7 @@
       overflow: hidden;
     }
 
-    /* ========== SIDEBAR ========== */
+    /* ===== SIDEBAR ===== */
     .sidebar {
       width: 280px;
       background: #FFFFFF;
@@ -33,7 +28,6 @@
       border-right: 1px solid #EEEEEE;
       box-shadow: 2px 0 12px rgba(0,0,0,0.02);
     }
-
     .logo-area {
       display: flex;
       align-items: center;
@@ -41,10 +35,8 @@
       margin-bottom: 48px;
       padding-left: 8px;
     }
-
     .logo-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       background: #F57C00;
       border-radius: 14px;
       display: flex;
@@ -52,22 +44,21 @@
       justify-content: center;
       color: white;
       font-size: 24px;
+      overflow: hidden;
     }
-
+    .logo-icon img { width: 100%; height: 100%; object-fit: cover; }
     .logo-text {
       font-family: 'Poppins', sans-serif;
       font-weight: 700;
       font-size: 1.5rem;
       color: #212121;
     }
-
     .nav-menu {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-
     .nav-item {
       display: flex;
       align-items: center;
@@ -76,25 +67,18 @@
       border-radius: 16px;
       color: #5A5A5A;
       font-weight: 500;
-      transition: all 0.15s;
+      transition: all 0.2s ease;
       cursor: pointer;
     }
-
-    .nav-item i {
-      width: 24px;
-      font-size: 1.3rem;
-    }
-
+    .nav-item i { width: 24px; font-size: 1.3rem; }
     .nav-item.active {
       background: #FEF0E6;
       color: #E65100;
+      box-shadow: 0 4px 8px rgba(230,81,0,0.05);
     }
+    .nav-item:hover:not(.active) { background: #F9F9F9; }
 
-    .nav-item:hover:not(.active) {
-      background: #F9F9F9;
-    }
-
-    /* ========== MAIN CONTENT ========== */
+    /* ===== MAIN CONTENT ===== */
     .main {
       flex: 1;
       overflow-y: auto;
@@ -102,101 +86,165 @@
       background: #F5F5F5;
     }
 
+    /* ===== CRONOMETRO GLOBAL ===== */
+    .global-timer {
+      background: white;
+      border-radius: 24px;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      margin-bottom: 32px;
+      transition: box-shadow 0.2s;
+    }
+    .global-timer:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.04); }
+    .timer-left { display: flex; align-items: center; gap: 24px; }
+    .timer-display {
+      font-family: 'Poppins', monospace;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #212121;
+    }
+    .timer-select {
+      padding: 12px 20px;
+      border-radius: 40px;
+      border: 1.5px solid #E0E0E0;
+      font-family: 'Roboto', sans-serif;
+      background: white;
+      min-width: 240px;
+      transition: border-color 0.2s;
+    }
+    .timer-select:focus { border-color: #F57C00; outline: none; }
+    .timer-controls { display: flex; gap: 8px; }
+    .timer-btn {
+      background: #F5F5F5;
+      border: none;
+      width: 48px; height: 48px;
+      border-radius: 40px;
+      color: #212121;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .timer-btn.play { background: #E65100; color: white; }
+    .timer-btn:hover { opacity: 0.9; transform: scale(0.97); }
+
+    /* ===== TIPOGRAFIA ===== */
     .page-title {
       font-family: 'Poppins', sans-serif;
-      font-size: 1.9rem;
+      font-size: 2rem;
       font-weight: 600;
       margin-bottom: 8px;
       color: #212121;
     }
+    .greeting { color: #757575; margin-bottom: 28px; display: flex; align-items: center; gap: 8px; }
 
-    .greeting {
-      color: #757575;
-      margin-bottom: 32px;
-      font-size: 1rem;
+    /* ===== CARDS ===== */
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
+    .card:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.04); }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: #5A5A5A;
+      font-weight: 500;
+    }
+    .card-header i { font-size: 1.4rem; color: #F57C00; }
+    .card-value {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #212121;
+    }
+    .card-label { color: #757575; font-size: 0.9rem; margin-top: 4px; }
 
-    /* Cards do topo */
-    .cards-grid {
+    /* Grid responsivo */
+    .dashboard-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-columns: repeat(4, 1fr);
       gap: 24px;
       margin-bottom: 32px;
     }
 
-    .stat-card {
-      background: #FFFFFF;
-      border-radius: 24px;
-      padding: 24px 20px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.02);
-      border: 1px solid #F0F0F0;
-    }
-
-    .progress-large .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .progress-percent {
-      font-family: 'Poppins', sans-serif;
-      font-size: 2.6rem;
-      font-weight: 700;
-      color: #F57C00;
-    }
-
-    .progress-bar-bg {
+    /* ===== BARRAS DE PROGRESSO ===== */
+    .progress-bar {
       background: #E9E9E9;
-      height: 12px;
+      height: 10px;
       border-radius: 20px;
-      margin: 16px 0 12px;
+      margin: 16px 0 8px;
     }
-
-    .progress-bar-fill {
-      width: 72%;
-      height: 12px;
+    .progress-fill {
+      height: 10px;
+      border-radius: 20px;
       background: #F57C00;
-      border-radius: 20px;
+      width: 0%;
+      transition: width 0.3s;
     }
 
-    .motivation {
-      color: #E65100;
-      font-weight: 500;
+    /* Gráfico de horas */
+    .week-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      margin-top: 16px;
     }
-
-    .mini-stat {
+    .bar-day {
+      flex: 1;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .bar {
+      width: 100%;
+      background: #F57C00;
+      border-radius: 12px 12px 8px 8px;
+      min-height: 4px;
+      transition: height 0.3s;
+    }
+    .day-label { font-size: 0.8rem; color: #757575; }
+
+    /* Desempenho por disciplina */
+    .perf-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .perf-info { width: 160px; }
+    .perf-name { font-weight: 600; margin-bottom: 4px; }
+    .perf-stats { font-size: 0.8rem; color: #757575; }
+    .perf-bar-container { flex: 1; }
+    .perf-bar-bg { background: #E9E9E9; height: 12px; border-radius: 20px; }
+    .perf-bar-fill { height: 12px; border-radius: 20px; }
+
+    /* Insights / Alertas */
+    .insight-card {
+      background: #FEF0E6;
+      border-left: 6px solid #E65100;
+    }
+    .alert-card {
+      background: #FFF5F5;
+      border-left: 6px solid #C62828;
     }
 
-    .mini-stat .label {
-      font-size: 0.9rem;
-      color: #757575;
-      margin-bottom: 8px;
-    }
-
-    .mini-stat .value {
-      font-family: 'Poppins', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: #212121;
-    }
-
-    /* Seção disciplinas */
+    /* Tabela de disciplinas (mantida) */
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin: 32px 0 20px;
     }
-
-    .section-header h2 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.4rem;
-    }
-
     .btn-primary {
       background: #E65100;
       color: white;
@@ -212,16 +260,7 @@
       box-shadow: 0 6px 14px rgba(230,81,0,0.2);
       transition: 0.15s;
     }
-
-    .btn-primary i {
-      font-size: 1rem;
-    }
-
-    .btn-primary:hover {
-      background: #bf4300;
-    }
-
-    /* Tabela de disciplinas */
+    .btn-primary:hover { background: #bf4300; transform: scale(1.02); }
     .disciplines-table {
       background: #FFFFFF;
       border-radius: 28px;
@@ -230,10 +269,9 @@
       border: 1px solid #F0F0F0;
       overflow-x: auto;
     }
-
     .table-header {
       display: grid;
-      grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1fr 1fr;
+      grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1.2fr 1fr;
       padding: 18px 24px;
       font-weight: 600;
       color: #5A5A5A;
@@ -242,145 +280,55 @@
       text-transform: uppercase;
       letter-spacing: 0.3px;
     }
-
     .discipline-row {
       display: grid;
-      grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1fr 1fr;
+      grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1.2fr 1fr;
       padding: 16px 24px;
       align-items: center;
       border-bottom: 1px solid #F5F5F5;
-      transition: background 0.1s;
+      transition: background 0.15s;
     }
-
-    .discipline-row:hover {
-      background: #FCFCFC;
-    }
-
+    .discipline-row:hover { background: #FCFCFC; }
     .discipline-name {
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .expand-btn {
       background: none;
       border: none;
       color: #757575;
       cursor: pointer;
-      width: 28px;
-      height: 28px;
+      width: 28px; height: 28px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: 0.1s;
     }
-
-    .expand-btn:hover {
-      background: #F0F0F0;
-      color: #E65100;
-    }
-
+    .expand-btn:hover { background: #F0F0F0; color: #E65100; }
     .topic-row {
       display: grid;
-      grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1fr 1fr;
+      grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1.2fr 1fr;
       padding: 12px 24px 12px 64px;
       background: #FAFAFA;
       border-bottom: 1px solid #EEEEEE;
       font-size: 0.9rem;
       align-items: center;
+      animation: slideDown 0.2s ease;
     }
-
-    .topic-indent {
-      margin-left: 36px;
-      color: #424242;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      color: #9E9E9E;
-    }
-
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .actions { display: flex; gap: 12px; color: #9E9E9E; }
     .actions i {
       cursor: pointer;
       padding: 6px;
       border-radius: 8px;
       transition: 0.1s;
     }
-
-    .actions i:hover {
-      background: #F0F0F0;
-      color: #E65100;
-    }
-
-    .percentage {
-      font-weight: 600;
-    }
-
-    .percentage.good {
-      color: #2E7D32;
-    }
-
-    .percentage.medium {
-      color: #F57C00;
-    }
-
-    .percentage.low {
-      color: #C62828;
-    }
-
-    /* Cronômetro flutuante */
-    .timer-panel {
-      background: white;
-      border-radius: 60px;
-      padding: 8px 16px 8px 24px;
-      display: inline-flex;
-      align-items: center;
-      gap: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-      border: 1px solid #F0F0F0;
-      margin-bottom: 24px;
-    }
-
-    .timer-display {
-      font-family: 'Poppins', monospace;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #212121;
-    }
-
-    .timer-controls {
-      display: flex;
-      gap: 8px;
-    }
-
-    .timer-btn {
-      background: #F5F5F5;
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 40px;
-      color: #212121;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: 0.1s;
-    }
-
-    .timer-btn.play {
-      background: #E65100;
-      color: white;
-    }
-
-    .timer-select {
-      padding: 10px 16px;
-      border-radius: 40px;
-      border: 1px solid #E0E0E0;
-      font-family: 'Roboto', sans-serif;
-      background: white;
-      min-width: 200px;
-    }
+    .actions i:hover { background: #F0F0F0; color: #E65100; }
+    .percentage-bar { width: 60px; height: 6px; background: #E9E9E9; border-radius: 10px; overflow: hidden; }
+    .percentage-fill { height: 100%; background: #F57C00; border-radius: 10px; }
 
     /* Modal */
     .modal {
@@ -392,7 +340,6 @@
       justify-content: center;
       z-index: 1000;
     }
-
     .modal-card {
       background: white;
       border-radius: 32px;
@@ -400,7 +347,6 @@
       width: 480px;
       box-shadow: 0 30px 40px rgba(0,0,0,0.1);
     }
-
     .modal-card input, .modal-card select {
       width: 100%;
       padding: 14px 18px;
@@ -409,15 +355,7 @@
       font-size: 1rem;
       margin: 12px 0 20px;
     }
-
-    .flex-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    /* utils */
-    .text-accent { color: #F57C00; }
+    .flex-buttons { display: flex; gap: 12px; justify-content: flex-end; }
     .badge {
       background: #FEF0E6;
       padding: 4px 10px;
@@ -425,6 +363,14 @@
       font-size: 0.8rem;
       color: #E65100;
     }
+
+    /* Estados vazios */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #757575;
+    }
+    .empty-state i { font-size: 48px; color: #E0E0E0; margin-bottom: 20px; }
   </style>
 </head>
 <body>
@@ -432,91 +378,24 @@
   <div class="sidebar">
     <div class="logo-area">
       <div class="logo-icon">
-        <i class="fas fa-fox"></i>
+        <img src="https://cdn-icons-png.flaticon.com/512/4193/4193312.png" alt="Raposa Vulpis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <i class="fas fa-fox" style="display:none; font-size:28px;"></i>
       </div>
       <span class="logo-text">Vulpis Asset</span>
     </div>
     <div class="nav-menu">
-      <div class="nav-item">
-        <i class="fas fa-th-large"></i> Dashboard
-      </div>
-      <div class="nav-item active">
-        <i class="fas fa-book-open"></i> Disciplinas
-      </div>
-      <div class="nav-item">
-        <i class="fas fa-question-circle"></i> Questões
-      </div>
-      <div class="nav-item">
-        <i class="fas fa-chart-bar"></i> Desempenho
-      </div>
-      <div class="nav-item">
-        <i class="fas fa-user-circle"></i> Perfil
-      </div>
+      <div class="nav-item" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
+      <div class="nav-item" data-page="disciplinas"><i class="fas fa-book-open"></i> Disciplinas</div>
+      <div class="nav-item" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
+      <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
+      <div class="nav-item" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <div class="page-title">Gestão de Disciplinas</div>
-        <div class="greeting">Organize seu estudo com inteligência estratégica 🦊</div>
-      </div>
-      <!-- Cronômetro -->
-      <div class="timer-panel">
-        <select id="disciplineSelect" class="timer-select">
-          <option value="">Selecione a disciplina</option>
-        </select>
-        <span class="timer-display" id="timerDisplay">00:00:00</span>
-        <div class="timer-controls">
-          <button class="timer-btn" id="timerStart" title="Iniciar"><i class="fas fa-play"></i></button>
-          <button class="timer-btn" id="timerPause" title="Pausar"><i class="fas fa-pause"></i></button>
-          <button class="timer-btn" id="timerStop" title="Finalizar e salvar"><i class="fas fa-stop"></i></button>
-        </div>
-      </div>
-    </div>
+  <!-- MAIN CONTENT -->
+  <div class="main" id="app-content"></div>
 
-    <!-- Cards de visão geral -->
-    <div class="cards-grid">
-      <div class="stat-card progress-large">
-        <div class="progress-header">
-          <span class="progress-percent" id="overallPercent">72%</span>
-          <span class="badge">progresso geral</span>
-        </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="overallBar" style="width:72%"></div>
-        </div>
-        <div class="motivation"><i class="fas fa-bullseye"></i> Você está mais perto da aprovação.</div>
-      </div>
-      <div class="stat-card mini-stat">
-        <span class="label"><i class="far fa-clock"></i> Tempo total</span>
-        <span class="value" id="totalTime">48h 20m</span>
-      </div>
-      <div class="stat-card mini-stat">
-        <span class="label"><i class="far fa-check-circle"></i> Questões</span>
-        <span class="value" id="totalQuestions">1.284</span>
-      </div>
-      <div class="stat-card mini-stat">
-        <span class="label"><i class="fas fa-fire"></i> Sequência</span>
-        <span class="value">7 dias</span>
-      </div>
-    </div>
-
-    <!-- Lista de disciplinas -->
-    <div class="section-header">
-      <h2>Suas disciplinas</h2>
-      <button class="btn-primary" id="addDisciplineBtn"><i class="fas fa-plus-circle"></i> Adicionar disciplina</button>
-    </div>
-
-    <div class="disciplines-table" id="disciplinesContainer">
-      <div class="table-header">
-        <span>Disciplina</span> <span>Tempo</span> <span>Questões</span> <span>Certas</span> <span>Erradas</span> <span>% Acerto</span> <span>Ações</span>
-      </div>
-      <div id="disciplinesList"></div>
-    </div>
-  </div>
-
-  <!-- MODAL ADICIONAR DISCIPLINA -->
+  <!-- MODAIS (mantidos) -->
   <div class="modal" id="disciplineModal">
     <div class="modal-card">
       <h3 style="font-family: Poppins; margin-bottom: 8px;">Nova disciplina</h3>
@@ -530,7 +409,6 @@
     </div>
   </div>
 
-  <!-- MODAL TÓPICO -->
   <div class="modal" id="topicModal">
     <div class="modal-card">
       <h3 style="font-family: Poppins;">Adicionar tópico</h3>
@@ -546,316 +424,417 @@
   <script>
     (function(){
       'use strict';
-
-      // Lista das 50 disciplinas
-      const disciplinasPredefinidas = [
-        "Língua Portuguesa", "Direito Constitucional", "Direito Administrativo", "Raciocínio Lógico-Matemático", "Informática",
-        "Direito Processual Civil", "Direito Processual Penal", "Direito Civil", "Direito Penal", "Direito do Trabalho",
-        "Direito Processual do Trabalho", "Legislação Especial", "Administração Geral e Pública", "AFO", "Gestão de Pessoas",
-        "Atualidades", "Ética no Serviço Público", "Direitos das Pessoas com Deficiência", "Direito Eleitoral", "Direito Previdenciário",
-        "Direito Tributário", "ECA", "Direito Ambiental", "Direito do Consumidor", "Contabilidade Geral", "Contabilidade Pública",
-        "Auditoria Governamental", "Noções de Estatística", "Matemática Financeira", "Arquivologia", "Língua Inglesa",
-        "Legislação Aduaneira", "Direito Empresarial", "Legislação Extravagante", "Noções de Sustentabilidade", "Direitos Humanos",
-        "Acessibilidade", "Economia e Finanças Públicas", "Fluência em Dados", "Ciência Política", "Técnica Legislativa",
-        "Regimento Interno", "Tecnologia da Informação", "Contabilidade de Custos", "História e Geografia", "Auditoria",
-        "Noções de Perícia em Processo Civil", "Comércio Internacional", "Licitações e Contratos", "Direito Processual do Trabalho"
+      // ---------- LISTA DAS 50 DISCIPLINAS ----------
+      const DISCIPLINAS_PREDEF = [
+        "Língua Portuguesa","Direito Constitucional","Direito Administrativo","Raciocínio Lógico-Matemático","Informática",
+        "Direito Processual Civil","Direito Processual Penal","Direito Civil","Direito Penal","Direito do Trabalho",
+        "Direito Processual do Trabalho","Legislação Especial","Administração Geral e Pública","AFO","Gestão de Pessoas",
+        "Atualidades","Ética no Serviço Público","Direitos das Pessoas com Deficiência","Direito Eleitoral","Direito Previdenciário",
+        "Direito Tributário","ECA","Direito Ambiental","Direito do Consumidor","Contabilidade Geral","Contabilidade Pública",
+        "Auditoria Governamental","Noções de Estatística","Matemática Financeira","Arquivologia","Língua Inglesa",
+        "Legislação Aduaneira","Direito Empresarial","Legislação Extravagante","Noções de Sustentabilidade","Direitos Humanos",
+        "Acessibilidade","Economia e Finanças Públicas","Fluência em Dados","Ciência Política","Técnica Legislativa",
+        "Regimento Interno","Tecnologia da Informação","Contabilidade de Custos","História e Geografia","Auditoria",
+        "Noções de Perícia em Processo Civil","Comércio Internacional","Licitações e Contratos","Direito Processual do Trabalho"
       ];
 
-      // Estado
-      let disciplines = [];
+      // ---------- ESTADO GLOBAL ----------
+      let state = {
+        disciplines: [],
+        user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
+        questionsHistory: []
+      };
       let nextId = 1;
-      let timerInterval = null;
-      let timerSeconds = 0;
-      let timerRunning = false;
-      let activeDisciplineId = null;
+      let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
+      let currentPage = 'dashboard';
 
-      // Elementos
-      const disciplineSelect = document.getElementById('disciplineSelect');
-      const timerDisplay = document.getElementById('timerDisplay');
-      const disciplinesListDiv = document.getElementById('disciplinesList');
-      const datalist = document.getElementById('disciplinesDatalist');
-      const modal = document.getElementById('disciplineModal');
-      const topicModal = document.getElementById('topicModal');
-      const disciplineNameInput = document.getElementById('disciplineNameInput');
-      const topicNameInput = document.getElementById('topicNameInput');
-      const currentDisciplineIdInput = document.getElementById('currentDisciplineId');
-
-      // Inicialização
+      // ---------- INICIALIZAÇÃO ----------
       function loadFromStorage() {
-        const saved = localStorage.getItem('vulpis_disciplines');
+        const saved = localStorage.getItem('vulpis_state');
         if(saved) {
-          try {
-            disciplines = JSON.parse(saved);
-            if(disciplines.length) nextId = Math.max(...disciplines.map(d=>d.id), 0) + 1;
-          } catch(e){}
+          try { const parsed = JSON.parse(saved); state = { ...state, ...parsed }; if(state.disciplines.length) nextId = Math.max(...state.disciplines.map(d=>d.id), 0) + 1; } catch(e){}
         }
-        if(!disciplines.length) {
-          // Dados mock iniciais
-          disciplines = [
+        if(!state.disciplines.length) {
+          state.disciplines = [
             { id: nextId++, name: 'Direito Constitucional', timeSeconds: 12600, questions: 240, correct: 182, wrong: 58, topics: [] },
             { id: nextId++, name: 'Raciocínio Lógico', timeSeconds: 8400, questions: 180, correct: 142, wrong: 38, topics: [] },
             { id: nextId++, name: 'Português', timeSeconds: 5400, questions: 120, correct: 98, wrong: 22, topics: [] }
           ];
         }
-        // Garantir estrutura
-        disciplines.forEach(d => { d.topics = d.topics || []; });
+        state.disciplines.forEach(d => { d.topics = d.topics || []; d.expanded = false; });
       }
-      function saveToStorage() { localStorage.setItem('vulpis_disciplines', JSON.stringify(disciplines)); }
+      function saveToStorage() { localStorage.setItem('vulpis_state', JSON.stringify(state)); }
       function formatTime(sec) {
-        const h = Math.floor(sec / 3600);
-        const m = Math.floor((sec % 3600) / 60);
-        const s = sec % 60;
+        const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
         return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       }
-      function formatHoursMinutes(sec) {
-        const h = Math.floor(sec / 3600);
-        const m = Math.floor((sec % 3600) / 60);
-        return `${h}h ${m}m`;
+      function formatHoursMinutes(sec) { const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60); return `${h}h ${m}m`; }
+
+      // ---------- RENDER PRINCIPAL ----------
+      const contentDiv = document.getElementById('app-content');
+      function renderPage(page) {
+        currentPage = page;
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
+        switch(page) {
+          case 'dashboard': renderDashboard(); break;
+          case 'disciplinas': renderDisciplinas(); break;
+          case 'questoes': renderQuestoes(); break;
+          case 'desempenho': renderDesempenho(); break;
+          case 'perfil': renderPerfil(); break;
+        }
       }
 
-      // Atualiza select do cronômetro
-      function updateDisciplineSelect() {
-        disciplineSelect.innerHTML = '<option value="">Selecione a disciplina</option>';
-        disciplines.forEach(d => {
-          const opt = document.createElement('option');
-          opt.value = d.id;
-          opt.textContent = d.name;
-          disciplineSelect.appendChild(opt);
-        });
-      }
-
-      // Preenche datalist
-      function fillDatalist() {
-        datalist.innerHTML = '';
-        disciplinasPredefinidas.forEach(name => {
-          const opt = document.createElement('option');
-          opt.value = name;
-          datalist.appendChild(opt);
-        });
-      }
-
-      // Renderiza tabela
-      function renderDisciplines() {
-        let html = '';
-        disciplines.forEach(disc => {
-          const totalTopics = disc.topics.length;
-          let timeFromTopics = 0, qFromTopics = 0, correctFromTopics = 0, wrongFromTopics = 0;
-          if(totalTopics > 0) {
-            disc.topics.forEach(t => {
-              timeFromTopics += t.timeSeconds || 0;
-              qFromTopics += t.questions || 0;
-              correctFromTopics += t.correct || 0;
-              wrongFromTopics += t.wrong || 0;
-            });
-          } else {
-            timeFromTopics = disc.timeSeconds || 0;
-            qFromTopics = disc.questions || 0;
-            correctFromTopics = disc.correct || 0;
-            wrongFromTopics = disc.wrong || 0;
-          }
-          const totalQ = qFromTopics;
-          const percent = totalQ ? ((correctFromTopics / totalQ)*100).toFixed(1) : '0.0';
-          let percentClass = 'medium';
-          if(parseFloat(percent) >= 70) percentClass = 'good';
-          else if(parseFloat(percent) < 50) percentClass = 'low';
-
-          html += `<div class="discipline-row" data-id="${disc.id}">
-            <div class="discipline-name">
-              <button class="expand-btn" data-id="${disc.id}"><i class="fas fa-chevron-right"></i></button>
-              <span>${disc.name}</span>
-              ${totalTopics>0 ? `<span class="badge">${totalTopics} tópicos</span>`:''}
+      // ---------- CRONOMETRO ----------
+      function renderGlobalTimer() {
+        return `
+          <div class="global-timer">
+            <div class="timer-left">
+              <select id="disciplineSelect" class="timer-select">
+                <option value="">Selecione a disciplina</option>
+                ${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}
+              </select>
+              <span class="timer-display" id="timerDisplay">${formatTime(timerSeconds)}</span>
             </div>
-            <div>${formatHoursMinutes(timeFromTopics)}</div>
-            <div>${totalQ}</div>
-            <div>${correctFromTopics}</div>
-            <div>${wrongFromTopics}</div>
-            <div><span class="percentage ${percentClass}">${percent}%</span></div>
+            <div class="timer-controls">
+              <button class="timer-btn" id="timerStart" title="Iniciar"><i class="fas fa-play"></i></button>
+              <button class="timer-btn" id="timerPause" title="Pausar"><i class="fas fa-pause"></i></button>
+              <button class="timer-btn" id="timerStop" title="Finalizar e salvar"><i class="fas fa-stop"></i></button>
+            </div>
+          </div>
+        `;
+      }
+      function attachTimerEvents() {
+        document.getElementById('timerStart')?.addEventListener('click', startTimer);
+        document.getElementById('timerPause')?.addEventListener('click', pauseTimer);
+        document.getElementById('timerStop')?.addEventListener('click', stopTimer);
+        function startTimer() {
+          const sel = document.getElementById('disciplineSelect'); if(!sel) return;
+          const discId = parseInt(sel.value); if(!discId) { alert('Selecione uma disciplina'); return; }
+          activeDisciplineId = discId; timerRunning = true;
+          if(timerInterval) clearInterval(timerInterval);
+          timerInterval = setInterval(() => { timerSeconds++; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = formatTime(timerSeconds); }, 1000);
+        }
+        function pauseTimer() { clearInterval(timerInterval); timerRunning = false; }
+        function stopTimer() {
+          if(!activeDisciplineId) return;
+          clearInterval(timerInterval); timerRunning = false;
+          const disc = state.disciplines.find(d=>d.id === activeDisciplineId);
+          if(disc) {
+            if(disc.topics.length) alert('Esta disciplina possui tópicos. Registre o tempo diretamente no tópico.');
+            else disc.timeSeconds = (disc.timeSeconds || 0) + timerSeconds;
+          }
+          timerSeconds = 0; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = '00:00:00';
+          activeDisciplineId = null; saveToStorage();
+          if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
+        }
+      }
+
+      // ---------- DASHBOARD (NOVO DESIGN) ----------
+      function renderDashboard() {
+        let totalSec = 0, totalQ = 0, totalCorrect = 0;
+        state.disciplines.forEach(d => {
+          if(d.topics.length) { d.topics.forEach(t => { totalSec += t.timeSeconds||0; totalQ += t.questions||0; totalCorrect += t.correct||0; }); }
+          else { totalSec += d.timeSeconds||0; totalQ += d.questions||0; totalCorrect += d.correct||0; }
+        });
+        const avgPercent = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
+        const today = new Date().toISOString().split('T')[0];
+        const todayQs = state.questionsHistory.filter(q => q.date === today).length;
+        const weekSeconds = totalSec; // simplificado
+        const progressPercent = Math.min(100, Math.round((totalSec/3600) / (state.user.dailyGoalHours * 7) * 100));
+
+        // Top 3 mais estudadas
+        const sortedByTime = [...state.disciplines].sort((a,b) => {
+          const ta = a.topics.length ? a.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (a.timeSeconds||0);
+          const tb = b.topics.length ? b.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (b.timeSeconds||0);
+          return tb - ta;
+        });
+        const top3 = sortedByTime.slice(0,3);
+        const bestDisc = getBestDiscipline();
+        const worstDisc = getWorstDiscipline();
+
+        const html = `
+          ${renderGlobalTimer()}
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div class="page-title">Olá, ${state.user.name.split(' ')[0]} 👋</div>
+              <div class="greeting"><i class="fas fa-chart-line" style="color:#F57C00;"></i> Você está ${progressPercent >= 70 ? 'evoluindo muito bem!' : 'no caminho certo!'}</div>
+            </div>
+            <div class="badge" style="padding:10px 20px; font-size:1rem;"><i class="fas fa-trophy"></i> Sequência: 7 dias 🔥</div>
+          </div>
+
+          <!-- LINHA 1: Cards principais -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header"><i class="fas fa-bullseye"></i> Taxa de acerto</div>
+              <div class="card-value">${avgPercent}%</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${avgPercent}%"></div></div>
+              <div class="card-label">+2.5% vs última semana</div>
+            </div>
+            <div class="card">
+              <div class="card-header"><i class="fas fa-clock"></i> Tempo estudado (semana)</div>
+              <div class="card-value">${formatHoursMinutes(totalSec)}</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${(totalSec/3600)/(state.user.dailyGoalHours*7)*100}%"></div></div>
+              <div class="card-label">Meta: ${state.user.dailyGoalHours*7}h</div>
+            </div>
+            <div class="card">
+              <div class="card-header"><i class="fas fa-fire"></i> Streak atual</div>
+              <div class="card-value">7 dias</div>
+              <div class="card-label">🔥 Seu recorde: 12 dias</div>
+            </div>
+            <div class="card">
+              <div class="card-header"><i class="fas fa-chart-bar"></i> Evolução</div>
+              <div class="card-value" style="color:#2E7D32;">+12%</div>
+              <div class="card-label">vs semana passada</div>
+            </div>
+          </div>
+
+          <!-- LINHA 2: Gráfico de horas na semana -->
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header"><i class="fas fa-calendar-week"></i> Horas estudadas na semana</div>
+            <div class="week-bars">
+              ${['S','T','Q','Q','S','S','D'].map((d,i) => {
+                let h = [2.5, 3.0, 1.8, 4.2, 3.5, 5.0, 2.0][i];
+                return `<div class="bar-day"><div class="bar" style="height:${h*12}px;"></div><span class="day-label">${d}</span><span style="font-size:0.7rem;">${h}h</span></div>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- LINHA 3: Desempenho por disciplina -->
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header"><i class="fas fa-tasks"></i> Desempenho por disciplina</div>
+            ${sortedByTime.slice(0,5).map(d => {
+              let t=0, q=0, c=0;
+              if(d.topics.length) { d.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; }); }
+              else { t=d.timeSeconds||0; q=d.questions||0; c=d.correct||0; }
+              const rate = q ? (c/q)*100 : 0;
+              return `
+                <div class="perf-item">
+                  <div class="perf-info"><div class="perf-name">${d.name}</div><div class="perf-stats">${formatHoursMinutes(t)} · ${q} questões</div></div>
+                  <div class="perf-bar-container">
+                    <div class="perf-bar-bg"><div class="perf-bar-fill" style="width:${rate}%; background:${rate>=70?'#2E7D32':(rate>=50?'#F57C00':'#C62828')};"></div></div>
+                  </div>
+                  <span style="font-weight:600;">${rate.toFixed(0)}%</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- LINHA 4 e 5: Alertas e Insights -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+            <div class="card alert-card">
+              <div class="card-header"><i class="fas fa-exclamation-triangle" style="color:#C62828;"></i> Pontos de atenção</div>
+              ${worstDisc ? `<p>📉 Menor desempenho: <strong>${worstDisc.name}</strong> (${worstDisc.rate.toFixed(0)}% de acerto). Reforce revisões.</p>` : '<p>✅ Nenhum ponto crítico detectado.</p>'}
+            </div>
+            <div class="card insight-card">
+              <div class="card-header"><i class="fas fa-lightbulb" style="color:#E65100;"></i> Insight inteligente</div>
+              <p>🧠 Você estuda melhor às <strong>terças e quintas</strong>. Aproveite esses dias para conteúdos mais densos.</p>
+              <p style="margin-top:8px;">📚 Sua consistência está excelente! Continue assim para acelerar a aprovação.</p>
+            </div>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        attachTimerEvents();
+      }
+      function getBestDiscipline() {
+        let best = null, bestRate = -1;
+        state.disciplines.forEach(d => {
+          let q=0, c=0;
+          if(d.topics.length) { d.topics.forEach(t => { q+=t.questions||0; c+=t.correct||0; }); }
+          else { q=d.questions||0; c=d.correct||0; }
+          if(q>0) { const rate = c/q; if(rate > bestRate) { bestRate = rate; best = {name: d.name, rate: rate*100}; } }
+        });
+        return best;
+      }
+      function getWorstDiscipline() {
+        let worst = null, worstRate = 2;
+        state.disciplines.forEach(d => {
+          let q=0, c=0;
+          if(d.topics.length) { d.topics.forEach(t => { q+=t.questions||0; c+=t.correct||0; }); }
+          else { q=d.questions||0; c=d.correct||0; }
+          if(q>0) { const rate = c/q; if(rate < worstRate) { worstRate = rate; worst = {name: d.name, rate: rate*100}; } }
+        });
+        return worst;
+      }
+
+      // ---------- DISCIPLINAS (mantido com pequenos ajustes) ----------
+      function renderDisciplinas() {
+        const html = `
+          ${renderGlobalTimer()}
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><div class="page-title">Disciplinas</div><div class="greeting">Gerencie suas matérias e tópicos</div></div>
+            <button class="btn-primary" id="addDisciplineBtn"><i class="fas fa-plus-circle"></i> Adicionar disciplina</button>
+          </div>
+          <div class="disciplines-table">
+            <div class="table-header"><span>Disciplina</span><span>Tempo</span><span>Questões</span><span>Certas</span><span>Erradas</span><span>% Acerto</span><span>Ações</span></div>
+            <div id="disciplinesList"></div>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        renderDisciplinesList();
+        attachTimerEvents();
+        document.getElementById('addDisciplineBtn').addEventListener('click', openDisciplineModal);
+      }
+      function renderDisciplinesList() {
+        const container = document.getElementById('disciplinesList');
+        let rows = '';
+        state.disciplines.forEach(disc => {
+          let t=0, q=0, c=0, w=0;
+          if(disc.topics.length) { disc.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; w+=tp.wrong||0; }); }
+          else { t=disc.timeSeconds||0; q=disc.questions||0; c=disc.correct||0; w=disc.wrong||0; }
+          const percent = q ? ((c/q)*100).toFixed(1) : '0.0';
+          rows += `<div class="discipline-row" data-id="${disc.id}">
+            <div class="discipline-name"><button class="expand-btn" data-id="${disc.id}"><i class="fas fa-chevron-${disc.expanded ? 'down' : 'right'}"></i></button><span>${disc.name}</span>${disc.topics.length?`<span class="badge">${disc.topics.length} tópicos</span>`:''}</div>
+            <div>${formatHoursMinutes(t)}</div><div>${q}</div><div>${c}</div><div>${w}</div>
+            <div style="display:flex; align-items:center; gap:8px;"><span>${percent}%</span><div class="percentage-bar"><div class="percentage-fill" style="width:${percent}%"></div></div></div>
             <div class="actions">
-              <i class="fas fa-plus-circle" title="Adicionar questão (certa)" data-action="addCorrect" data-id="${disc.id}"></i>
-              <i class="fas fa-minus-circle" title="Adicionar questão (errada)" data-action="addWrong" data-id="${disc.id}"></i>
-              <i class="fas fa-layer-group" title="Adicionar tópico" data-action="addTopic" data-id="${disc.id}"></i>
-              <i class="fas fa-edit" title="Editar nome" data-action="editDisc" data-id="${disc.id}"></i>
-              <i class="fas fa-trash-alt" title="Excluir" data-action="deleteDisc" data-id="${disc.id}"></i>
+              <i class="fas fa-plus-circle" data-action="addCorrect" data-id="${disc.id}"></i><i class="fas fa-minus-circle" data-action="addWrong" data-id="${disc.id}"></i>
+              <i class="fas fa-layer-group" data-action="addTopic" data-id="${disc.id}"></i><i class="fas fa-edit" data-action="editDisc" data-id="${disc.id}"></i><i class="fas fa-trash-alt" data-action="deleteDisc" data-id="${disc.id}"></i>
             </div>
           </div>`;
-
-          // Tópicos expandidos (ocultos por padrão, controlado via JS)
           if(disc.expanded && disc.topics.length) {
             disc.topics.forEach(topic => {
-              const tPercent = topic.questions ? ((topic.correct / topic.questions)*100).toFixed(1) : '0.0';
-              html += `<div class="topic-row" data-topic-id="${topic.id}" data-disc-id="${disc.id}">
-                <div class="topic-indent"><i class="far fa-file-alt"></i> ${topic.name}</div>
-                <div>${formatHoursMinutes(topic.timeSeconds || 0)}</div>
-                <div>${topic.questions || 0}</div>
-                <div>${topic.correct || 0}</div>
-                <div>${topic.wrong || 0}</div>
-                <div><span class="percentage">${tPercent}%</span></div>
+              const tp = topic.questions ? ((topic.correct/topic.questions)*100).toFixed(1) : '0.0';
+              rows += `<div class="topic-row">
+                <div style="display:flex; gap:10px;"><i class="far fa-file-alt"></i> ${topic.name}</div><div>${formatHoursMinutes(topic.timeSeconds||0)}</div><div>${topic.questions||0}</div><div>${topic.correct||0}</div><div>${topic.wrong||0}</div>
+                <div style="display:flex; align-items:center; gap:8px;"><span>${tp}%</span><div class="percentage-bar"><div class="percentage-fill" style="width:${tp}%"></div></div></div>
                 <div class="actions">
-                  <i class="fas fa-plus-circle" data-action="topicCorrect" data-disc="${disc.id}" data-topic="${topic.id}"></i>
-                  <i class="fas fa-minus-circle" data-action="topicWrong" data-disc="${disc.id}" data-topic="${topic.id}"></i>
-                  <i class="fas fa-edit" data-action="editTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i>
-                  <i class="fas fa-trash-alt" data-action="deleteTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i>
+                  <i class="fas fa-plus-circle" data-action="topicCorrect" data-disc="${disc.id}" data-topic="${topic.id}"></i><i class="fas fa-minus-circle" data-action="topicWrong" data-disc="${disc.id}" data-topic="${topic.id}"></i>
+                  <i class="fas fa-edit" data-action="editTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i><i class="fas fa-trash-alt" data-action="deleteTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i>
                 </div>
               </div>`;
             });
           }
         });
-        disciplinesListDiv.innerHTML = html;
-        updateOverallStats();
-        saveToStorage();
+        container.innerHTML = rows || '<div class="empty-state"><i class="fas fa-book-open"></i><h3>Nenhuma disciplina</h3><p>Adicione sua primeira disciplina para começar.</p></div>';
+        attachDisciplineActions();
       }
-
-      function updateOverallStats() {
-        let totalSec = 0, totalQ = 0;
-        disciplines.forEach(d => {
-          if(d.topics.length) {
-            d.topics.forEach(t => { totalSec += t.timeSeconds||0; totalQ += t.questions||0; });
-          } else {
-            totalSec += d.timeSeconds||0;
-            totalQ += d.questions||0;
-          }
-        });
-        document.getElementById('totalTime').innerText = formatHoursMinutes(totalSec);
-        document.getElementById('totalQuestions').innerText = totalQ;
-        // percentual geral simplificado
-        const overall = totalQ ? 72 : 0; // mock, mas poderia calcular real
+      function attachDisciplineActions() {
+        document.querySelectorAll('[data-action]').forEach(el => el.addEventListener('click', handleDisciplineAction));
+        document.querySelectorAll('.expand-btn').forEach(btn => btn.addEventListener('click', (e) => {
+          const id = parseInt(btn.dataset.id); const disc = state.disciplines.find(d=>d.id===id);
+          if(disc) { disc.expanded = !disc.expanded; renderDisciplinesList(); }
+        }));
       }
-
-      // Ações
-      function handleAction(e) {
-        const target = e.target.closest('i');
-        if(!target) return;
-        const action = target.dataset.action;
-        const discId = parseInt(target.dataset.id || target.dataset.disc);
+      function handleDisciplineAction(e) {
+        const target = e.target.closest('i'); if(!target) return;
+        const action = target.dataset.action; const discId = parseInt(target.dataset.id || target.dataset.disc);
         const topicId = target.dataset.topic ? parseInt(target.dataset.topic) : null;
-        const discipline = disciplines.find(d => d.id === discId);
-        if(!discipline) return;
-
+        const discipline = state.disciplines.find(d => d.id === discId); if(!discipline) return;
         if(action === 'addCorrect' || action === 'addWrong') {
-          const isCorrect = action === 'addCorrect';
-          if(discipline.topics.length) {
-            alert('Esta disciplina possui tópicos. Adicione questões diretamente nos tópicos.');
-            return;
-          }
-          discipline.questions = (discipline.questions || 0) + 1;
-          if(isCorrect) discipline.correct = (discipline.correct || 0) + 1;
-          else discipline.wrong = (discipline.wrong || 0) + 1;
-          renderDisciplines();
-        }
-        else if(action === 'topicCorrect' || action === 'topicWrong') {
-          const topic = discipline.topics.find(t => t.id === topicId);
-          if(topic) {
-            topic.questions = (topic.questions || 0) + 1;
-            if(action === 'topicCorrect') topic.correct = (topic.correct || 0) + 1;
-            else topic.wrong = (topic.wrong || 0) + 1;
-            renderDisciplines();
-          }
-        }
-        else if(action === 'addTopic') {
-          currentDisciplineIdInput.value = discId;
-          topicNameInput.value = '';
-          topicModal.style.display = 'flex';
-        }
-        else if(action === 'editDisc') {
-          const newName = prompt('Novo nome da disciplina:', discipline.name);
-          if(newName) { discipline.name = newName; renderDisciplines(); updateDisciplineSelect(); }
-        }
-        else if(action === 'deleteDisc') {
-          if(confirm('Excluir disciplina?')) {
-            disciplines = disciplines.filter(d => d.id !== discId);
-            renderDisciplines(); updateDisciplineSelect();
-          }
-        }
-        else if(action === 'editTopic') {
+          if(discipline.topics.length) { alert('Adicione questões nos tópicos.'); return; }
+          discipline.questions = (discipline.questions||0)+1;
+          if(action==='addCorrect') discipline.correct = (discipline.correct||0)+1; else discipline.wrong = (discipline.wrong||0)+1;
+          recordQuestionHistory(discId, null, action==='addCorrect');
+          saveToStorage(); renderDisciplinesList();
+        } else if(action === 'topicCorrect' || action === 'topicWrong') {
           const topic = discipline.topics.find(t=>t.id===topicId);
-          const newName = prompt('Nome do tópico:', topic.name);
-          if(newName) { topic.name = newName; renderDisciplines(); }
-        }
-        else if(action === 'deleteTopic') {
-          discipline.topics = discipline.topics.filter(t => t.id !== topicId);
-          renderDisciplines();
-        }
-        else if(target.classList.contains('expand-btn') || target.closest('.expand-btn')) {
-          const btn = target.closest('.expand-btn');
-          const id = parseInt(btn.dataset.id);
-          const disc = disciplines.find(d=>d.id===id);
-          disc.expanded = !disc.expanded;
-          renderDisciplines();
-        }
-      }
-
-      // Cronômetro
-      function startTimer() {
-        const discId = parseInt(disciplineSelect.value);
-        if(!discId) { alert('Selecione uma disciplina'); return; }
-        activeDisciplineId = discId;
-        timerRunning = true;
-        if(timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-          timerSeconds++;
-          timerDisplay.textContent = formatTime(timerSeconds);
-        }, 1000);
-      }
-      function pauseTimer() { clearInterval(timerInterval); timerRunning = false; }
-      function stopTimer() {
-        if(!activeDisciplineId) return;
-        clearInterval(timerInterval); timerRunning = false;
-        const disc = disciplines.find(d=>d.id === activeDisciplineId);
-        if(disc) {
-          if(disc.topics.length) {
-            alert('Esta disciplina possui tópicos. Registre o tempo diretamente no tópico desejado.');
-          } else {
-            disc.timeSeconds = (disc.timeSeconds || 0) + timerSeconds;
+          if(topic) {
+            topic.questions = (topic.questions||0)+1;
+            if(action==='topicCorrect') topic.correct = (topic.correct||0)+1; else topic.wrong = (topic.wrong||0)+1;
+            recordQuestionHistory(discId, topicId, action==='topicCorrect');
+            saveToStorage(); renderDisciplinesList();
           }
-        }
-        timerSeconds = 0; timerDisplay.textContent = '00:00:00';
-        activeDisciplineId = null;
-        renderDisciplines();
+        } else if(action === 'addTopic') openTopicModal(discId);
+        else if(action === 'editDisc') { const newName = prompt('Novo nome:', discipline.name); if(newName) { discipline.name = newName; saveToStorage(); renderDisciplinesList(); } }
+        else if(action === 'deleteDisc') { if(confirm('Excluir disciplina?')) { state.disciplines = state.disciplines.filter(d=>d.id !== discId); saveToStorage(); renderDisciplinesList(); } }
+        else if(action === 'editTopic') { const topic = discipline.topics.find(t=>t.id===topicId); const newName = prompt('Nome do tópico:', topic.name); if(newName) { topic.name = newName; saveToStorage(); renderDisciplinesList(); } }
+        else if(action === 'deleteTopic') { discipline.topics = discipline.topics.filter(t=>t.id !== topicId); saveToStorage(); renderDisciplinesList(); }
+      }
+      function recordQuestionHistory(discId, topicId, correct) {
+        const today = new Date().toISOString().split('T')[0];
+        state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
       }
 
-      // Event Listeners
-      document.getElementById('timerStart').addEventListener('click', startTimer);
-      document.getElementById('timerPause').addEventListener('click', pauseTimer);
-      document.getElementById('timerStop').addEventListener('click', stopTimer);
-      
-      disciplinesListDiv.addEventListener('click', handleAction);
-
-      document.getElementById('addDisciplineBtn').addEventListener('click', ()=>{
-        disciplineNameInput.value = '';
-        modal.style.display = 'flex';
-      });
-      document.getElementById('cancelModal').addEventListener('click', ()=> modal.style.display = 'none');
-      document.getElementById('saveDiscipline').addEventListener('click', ()=>{
-        const name = disciplineNameInput.value.trim();
-        if(!name) return;
-        disciplines.push({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false });
-        renderDisciplines(); updateDisciplineSelect();
-        modal.style.display = 'none';
-      });
-
-      document.getElementById('saveTopic').addEventListener('click', ()=>{
-        const name = topicNameInput.value.trim();
-        const discId = parseInt(currentDisciplineIdInput.value);
-        const disc = disciplines.find(d=>d.id===discId);
-        if(name && disc) {
-          disc.topics.push({ id: Date.now(), name, timeSeconds:0, questions:0, correct:0, wrong:0 });
-          disc.expanded = true;
-          renderDisciplines();
+      // ---------- QUESTÕES (mantido) ----------
+      function renderQuestoes() {
+        const today = new Date().toISOString().split('T')[0];
+        const todayQs = state.questionsHistory.filter(q=>q.date === today);
+        const correctToday = todayQs.filter(q=>q.correct).length; const totalToday = todayQs.length;
+        const rate = totalToday ? ((correctToday/totalToday)*100).toFixed(1) : '0.0';
+        const html = `
+          ${renderGlobalTimer()}
+          <div class="page-title">Registro de Questões</div><div class="greeting">Acompanhe seu desempenho diário</div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
+            <div style="display:grid; gap:16px; margin-top:20px;">
+              <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select>
+              <select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select>
+              <div style="display:flex; gap:12px;">
+                <button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
+                <button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button>
+              </div>
+            </div>
+          </div>
+        `;
+        contentDiv.innerHTML = html; attachTimerEvents();
+        const discSelect = document.getElementById('qDiscipline'), topicSelect = document.getElementById('qTopic');
+        discSelect.addEventListener('change', () => {
+          const discId = parseInt(discSelect.value); const disc = state.disciplines.find(d=>d.id===discId);
+          topicSelect.innerHTML = '<option value="">Tópico (opcional)</option>';
+          topicSelect.disabled = !disc || !disc.topics.length;
+          if(disc && disc.topics.length) disc.topics.forEach(t => { topicSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`; });
+        });
+        function register(correct) {
+          const discId = parseInt(discSelect.value); if(!discId) { alert('Selecione a disciplina'); return; }
+          const topicId = topicSelect.value ? parseInt(topicSelect.value) : null; const disc = state.disciplines.find(d=>d.id===discId);
+          if(topicId) { const topic = disc.topics.find(t=>t.id===topicId); if(topic) { topic.questions = (topic.questions||0)+1; if(correct) topic.correct = (topic.correct||0)+1; else topic.wrong = (topic.wrong||0)+1; } }
+          else { if(disc.topics.length) { alert('Esta disciplina possui tópicos. Selecione um tópico.'); return; } disc.questions = (disc.questions||0)+1; if(correct) disc.correct = (disc.correct||0)+1; else disc.wrong = (disc.wrong||0)+1; }
+          recordQuestionHistory(discId, topicId, correct); saveToStorage(); renderQuestoes();
         }
-        topicModal.style.display = 'none';
-      });
-      document.getElementById('cancelTopicModal').addEventListener('click', ()=> topicModal.style.display = 'none');
+        document.getElementById('registerCorrect').addEventListener('click', ()=> register(true));
+        document.getElementById('registerWrong').addEventListener('click', ()=> register(false));
+      }
 
-      window.addEventListener('click', (e) => {
-        if(e.target === modal) modal.style.display = 'none';
-        if(e.target === topicModal) topicModal.style.display = 'none';
-      });
+      // ---------- DESEMPENHO / PERFIL (simplificados mantidos) ----------
+      function renderDesempenho() {
+        const discStats = state.disciplines.map(d => {
+          let t=0, q=0, c=0; if(d.topics.length) { d.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; }); }
+          else { t=d.timeSeconds||0; q=d.questions||0; c=d.correct||0; } return { name: d.name, time: t, rate: q?(c/q)*100:0 };
+        }).sort((a,b) => b.time - a.time);
+        const html = `${renderGlobalTimer()}<div class="page-title">Desempenho</div><div class="greeting">Visualize sua evolução</div>
+          <div class="card"><div class="card-header"><i class="fas fa-clock"></i> Tempo por disciplina</div>${discStats.map(d => `<div class="graph-bar-item"><span class="graph-label">${d.name}</span><div class="graph-bar-bg"><div class="graph-bar-fill" style="width:${Math.min(100,(d.time/3600)/10*100)}%"></div></div><span>${formatHoursMinutes(d.time)}</span></div>`).join('')}</div>
+          <div class="card" style="margin-top:24px;"><div class="card-header"><i class="fas fa-percent"></i> Taxa de acerto</div>${discStats.map(d => `<div class="graph-bar-item"><span class="graph-label">${d.name}</span><div class="graph-bar-bg"><div class="graph-bar-fill" style="width:${d.rate}%; background:${d.rate>=70?'#2E7D32':(d.rate>=50?'#F57C00':'#C62828')};"></div></div><span>${d.rate.toFixed(1)}%</span></div>`).join('')}</div>`;
+        contentDiv.innerHTML = html; attachTimerEvents();
+      }
+      function renderPerfil() {
+        const totalSec = state.disciplines.reduce((s,d)=> s + (d.topics.length ? d.topics.reduce((a,t)=>a+(t.timeSeconds||0),0) : (d.timeSeconds||0)), 0);
+        const totalQ = state.disciplines.reduce((s,d)=> s + (d.topics.length ? d.topics.reduce((a,t)=>a+(t.questions||0),0) : (d.questions||0)), 0);
+        const html = `<div class="page-title">Perfil</div><div class="greeting">Configurações e metas</div>
+          <div style="display:grid; grid-template-columns:2fr 1fr; gap:24px;">
+            <div class="card"><div class="card-header"><i class="fas fa-user-circle"></i> ${state.user.name}</div><p><strong>Meta diária:</strong> ${state.user.dailyGoalHours}h / ${state.user.dailyGoalQuestions} questões</p><button class="btn-primary" id="editMeta"><i class="fas fa-edit"></i> Editar metas</button></div>
+            <div class="card"><div class="card-header"><i class="fas fa-chart-pie"></i> Estatísticas</div><p>Horas: ${formatHoursMinutes(totalSec)}</p><p>Questões: ${totalQ}</p><p>Taxa média: ${totalQ?((state.disciplines.reduce((s,d)=>s+(d.topics.length?d.topics.reduce((a,t)=>a+(t.correct||0),0):(d.correct||0)),0)/totalQ)*100).toFixed(1):'0.0'}%</p></div>
+          </div>`;
+        contentDiv.innerHTML = html;
+        document.getElementById('editMeta')?.addEventListener('click', ()=>{
+          const newH = prompt('Meta diária de horas:', state.user.dailyGoalHours); if(newH) state.user.dailyGoalHours = parseFloat(newH);
+          const newQ = prompt('Meta diária de questões:', state.user.dailyGoalQuestions); if(newQ) state.user.dailyGoalQuestions = parseInt(newQ);
+          saveToStorage(); renderPerfil();
+        });
+      }
 
-      // Inicializa
-      loadFromStorage();
-      fillDatalist();
-      updateDisciplineSelect();
-      renderDisciplines();
+      // Modais e inicialização (idêntico ao anterior)
+      const modalDisc = document.getElementById('disciplineModal'), modalTopic = document.getElementById('topicModal');
+      function openDisciplineModal() { document.getElementById('disciplineNameInput').value = ''; modalDisc.style.display = 'flex'; }
+      function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; modalTopic.style.display = 'flex'; }
+      document.getElementById('cancelModal').addEventListener('click', ()=> modalDisc.style.display='none');
+      document.getElementById('saveDiscipline').addEventListener('click', ()=>{
+        const name = document.getElementById('disciplineNameInput').value.trim(); if(name) { state.disciplines.push({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false }); saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalDisc.style.display='none'; }
+      });
+      document.getElementById('cancelTopicModal').addEventListener('click', ()=> modalTopic.style.display='none');
+      document.getElementById('saveTopic').addEventListener('click', ()=>{
+        const name = document.getElementById('topicNameInput').value.trim(); const discId = parseInt(document.getElementById('currentDisciplineId').value); const disc = state.disciplines.find(d=>d.id===discId);
+        if(name && disc) { disc.topics.push({ id: Date.now(), name, timeSeconds:0, questions:0, correct:0, wrong:0 }); disc.expanded = true; saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalTopic.style.display='none'; }
+      });
+      window.addEventListener('click', (e) => { if(e.target === modalDisc) modalDisc.style.display='none'; if(e.target === modalTopic) modalTopic.style.display='none'; });
+      const datalist = document.getElementById('disciplinesDatalist'); DISCIPLINAS_PREDEF.forEach(name => { const opt = document.createElement('option'); opt.value = name; datalist.appendChild(opt); });
+      document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => renderPage(item.dataset.page)));
+      loadFromStorage(); renderPage('dashboard');
     })();
   </script>
 </body>
