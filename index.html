@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vulpis Asset · Dashboard Inteligente</title>
-  <!-- Fonts & Icons (Flaticon via CDN e Font Awesome) -->
+  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* ===== ESTILOS GERAIS (mantidos) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Roboto', sans-serif;
@@ -17,8 +18,6 @@
       height: 100vh;
       overflow: hidden;
     }
-
-    /* ===== SIDEBAR ===== */
     .sidebar {
       width: 280px;
       background: #FFFFFF;
@@ -77,16 +76,12 @@
       box-shadow: 0 4px 8px rgba(230,81,0,0.05);
     }
     .nav-item:hover:not(.active) { background: #F9F9F9; }
-
-    /* ===== MAIN CONTENT ===== */
     .main {
       flex: 1;
       overflow-y: auto;
       padding: 32px 40px;
       background: #F5F5F5;
     }
-
-    /* ===== CRONOMETRO GLOBAL ===== */
     .global-timer {
       background: white;
       border-radius: 24px;
@@ -130,8 +125,6 @@
     }
     .timer-btn.play { background: #E65100; color: white; }
     .timer-btn:hover { opacity: 0.9; transform: scale(0.97); }
-
-    /* ===== TIPOGRAFIA ===== */
     .page-title {
       font-family: 'Poppins', sans-serif;
       font-size: 2rem;
@@ -140,8 +133,6 @@
       color: #212121;
     }
     .greeting { color: #757575; margin-bottom: 28px; display: flex; align-items: center; gap: 8px; }
-
-    /* ===== CARDS ===== */
     .card {
       background: #FFFFFF;
       border-radius: 24px;
@@ -167,16 +158,12 @@
       color: #212121;
     }
     .card-label { color: #757575; font-size: 0.9rem; margin-top: 4px; }
-
-    /* Grid responsivo */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
       margin-bottom: 32px;
     }
-
-    /* ===== BARRAS DE PROGRESSO ===== */
     .progress-bar {
       background: #E9E9E9;
       height: 10px;
@@ -190,8 +177,68 @@
       width: 0%;
       transition: width 0.3s;
     }
-
-    /* Gráfico de horas */
+    .btn-primary {
+      background: #E65100;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(230,81,0,0.2);
+      transition: 0.15s;
+    }
+    .btn-primary:hover { background: #bf4300; transform: scale(1.02); }
+    .btn-secondary {
+      background: #F5F5F5;
+      color: #212121;
+      border: 1px solid #E0E0E0;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .btn-secondary:hover { background: #E9E9E9; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.2);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-card {
+      background: white;
+      border-radius: 32px;
+      padding: 32px;
+      width: 480px;
+      box-shadow: 0 30px 40px rgba(0,0,0,0.1);
+    }
+    .modal-card input, .modal-card select, .modal-card textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid #E0E0E0;
+      border-radius: 20px;
+      font-size: 1rem;
+      margin: 12px 0 20px;
+    }
+    .flex-buttons { display: flex; gap: 12px; justify-content: flex-end; }
+    .badge {
+      background: #FEF0E6;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      color: #E65100;
+    }
     .week-bars {
       display: flex;
       align-items: flex-end;
@@ -213,8 +260,6 @@
       transition: height 0.3s;
     }
     .day-label { font-size: 0.8rem; color: #757575; }
-
-    /* Desempenho por disciplina */
     .perf-item {
       display: flex;
       align-items: center;
@@ -227,8 +272,6 @@
     .perf-bar-container { flex: 1; }
     .perf-bar-bg { background: #E9E9E9; height: 12px; border-radius: 20px; }
     .perf-bar-fill { height: 12px; border-radius: 20px; }
-
-    /* Insights / Alertas */
     .insight-card {
       background: #FEF0E6;
       border-left: 6px solid #E65100;
@@ -237,30 +280,12 @@
       background: #FFF5F5;
       border-left: 6px solid #C62828;
     }
-
-    /* Tabela de disciplinas (mantida) */
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin: 32px 0 20px;
     }
-    .btn-primary {
-      background: #E65100;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      box-shadow: 0 6px 14px rgba(230,81,0,0.2);
-      transition: 0.15s;
-    }
-    .btn-primary:hover { background: #bf4300; transform: scale(1.02); }
     .disciplines-table {
       background: #FFFFFF;
       border-radius: 28px;
@@ -329,52 +354,76 @@
     .actions i:hover { background: #F0F0F0; color: #E65100; }
     .percentage-bar { width: 60px; height: 6px; background: #E9E9E9; border-radius: 10px; overflow: hidden; }
     .percentage-fill { height: 100%; background: #F57C00; border-radius: 10px; }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.2);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .modal-card {
-      background: white;
-      border-radius: 32px;
-      padding: 32px;
-      width: 480px;
-      box-shadow: 0 30px 40px rgba(0,0,0,0.1);
-    }
-    .modal-card input, .modal-card select {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1.5px solid #E0E0E0;
-      border-radius: 20px;
-      font-size: 1rem;
-      margin: 12px 0 20px;
-    }
-    .flex-buttons { display: flex; gap: 12px; justify-content: flex-end; }
-    .badge {
-      background: #FEF0E6;
-      padding: 4px 10px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      color: #E65100;
-    }
-
-    /* Estados vazios */
     .empty-state {
       text-align: center;
       padding: 60px 20px;
       color: #757575;
     }
     .empty-state i { font-size: 48px; color: #E0E0E0; margin-bottom: 20px; }
+    .graph-bar-item { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .graph-label { width: 180px; font-weight: 500; }
+    .graph-bar-bg { flex:1; height: 12px; background: #E9E9E9; border-radius: 20px; }
+    .graph-bar-fill { height: 12px; border-radius: 20px; background: #F57C00; }
+    /* Estilos para questões */
+    .question-card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid #F0F0F0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+    .question-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #E65100;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .question-enunciado { font-weight: 500; margin-bottom: 20px; line-height: 1.5; }
+    .alternativas { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .alternativa-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .alternativa-item:hover { background: #F9F9F9; }
+    .alternativa-item input[type="radio"] { accent-color: #E65100; width: 18px; height: 18px; cursor: pointer; }
+    .alternativa-item label { flex: 1; cursor: pointer; }
+    .alternativa-item.correta-destaque {
+      background: #E8F5E9;
+      border-left: 4px solid #2E7D32;
+    }
+    .alternativa-item.errada-destaque {
+      background: #FFEBEE;
+      border-left: 4px solid #C62828;
+    }
+    .feedback-message {
+      padding: 12px 16px;
+      border-radius: 16px;
+      margin: 16px 0;
+      font-weight: 500;
+    }
+    .feedback-correct { background: #E8F5E9; color: #2E7D32; }
+    .feedback-wrong { background: #FFEBEE; color: #C62828; }
+    .comentario-box {
+      background: #F5F5F5;
+      padding: 18px;
+      border-radius: 16px;
+      margin-top: 16px;
+      border-left: 4px solid #F57C00;
+    }
+    .comentario-box strong { color: #E65100; }
+    .question-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .section-divider { margin: 40px 0 24px; border-top: 2px dashed #E0E0E0; }
+    .copy-feedback { color: #2E7D32; font-size: 0.9rem; margin-left: 12px; }
   </style>
 </head>
 <body>
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="logo-area">
       <div class="logo-icon">
@@ -391,11 +440,9 @@
       <div class="nav-item" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
     </div>
   </div>
-
-  <!-- MAIN CONTENT -->
   <div class="main" id="app-content"></div>
 
-  <!-- MODAIS (mantidos) -->
+  <!-- Modais existentes -->
   <div class="modal" id="disciplineModal">
     <div class="modal-card">
       <h3 style="font-family: Poppins; margin-bottom: 8px;">Nova disciplina</h3>
@@ -408,7 +455,6 @@
       </div>
     </div>
   </div>
-
   <div class="modal" id="topicModal">
     <div class="modal-card">
       <h3 style="font-family: Poppins;">Adicionar tópico</h3>
@@ -417,6 +463,38 @@
       <div class="flex-buttons">
         <button class="btn-primary" style="background: #9E9E9E;" id="cancelTopicModal">Cancelar</button>
         <button class="btn-primary" id="saveTopic">Adicionar</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modeloQuestaoModal">
+    <div class="modal-card" style="width: 600px; max-width: 90vw;">
+      <h3 style="font-family: Poppins; margin-bottom: 16px;"><i class="fas fa-copy" style="color:#E65100;"></i> Modelo de Prompt</h3>
+      <textarea id="modeloPromptText" rows="12" readonly style="background:#F9F9F9; font-family: monospace;">Gere uma questão de concurso público no seguinte formato EXATO:
+
+(Questão de Treino)
+[Digite aqui o enunciado claro e objetivo]
+
+a) [Alternativa A]
+b) [Alternativa B]
+c) [Alternativa C]
+d) [Alternativa D]
+e) [Alternativa E]
+
+Gabarito: [Letra correta]
+
+Comentário:
+[Explique de forma clara e objetiva o motivo da alternativa correta e por que as demais estão erradas]
+
+REGRAS IMPORTANTES:
+* Sempre gerar 5 alternativas (a até e)
+* Apenas UMA alternativa correta
+* Linguagem no padrão de concursos
+* Comentário explicativo obrigatório
+* Não alterar o formato acima</textarea>
+      <div class="flex-buttons" style="margin-top: 20px;">
+        <button class="btn-secondary" id="fecharModeloModal">Fechar</button>
+        <button class="btn-primary" id="copiarModeloBtn"><i class="fas fa-copy"></i> Copiar modelo</button>
+        <span id="copyFeedback" class="copy-feedback"></span>
       </div>
     </div>
   </div>
@@ -438,6 +516,38 @@
         "Noções de Perícia em Processo Civil","Comércio Internacional","Licitações e Contratos","Direito Processual do Trabalho"
       ];
 
+      // Banco mock de questões
+      const MOCK_QUESTIONS = [
+        { tema: "direito constitucional", enunciado: "Acerca dos direitos e garantias fundamentais previstos na Constituição Federal de 1988, assinale a alternativa correta:", alternativas: [
+          "A) A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial.",
+          "B) É plena a liberdade de associação para fins lícitos, inclusive a de caráter paramilitar.",
+          "C) A lei penal não retroagirá, salvo para beneficiar o réu, mas a lei processual penal poderá retroagir para prejudicar o acusado.",
+          "D) A prática do racismo constitui crime inafiançável e imprescritível, sujeito à pena de detenção, nos termos da lei.",
+          "E) Ninguém será privado de direitos por motivo de crença religiosa ou de convicção filosófica ou política, salvo se as invocar para eximir-se de obrigação legal a todos imposta e recusar-se a cumprir prestação alternativa."
+        ], gabarito: 0, comentario: "Alternativa A correta (art. 5º, XI, CF). B errada: associação paramilitar é vedada. C errada: lei processual não retroage para prejudicar. D errada: pena de reclusão. E errada: a exceção não é absoluta." },
+        { tema: "direito constitucional", enunciado: "Sobre os direitos políticos, é correto afirmar que:", alternativas: [
+          "A) O alistamento eleitoral e o voto são obrigatórios para os maiores de dezoito anos e facultativos para os analfabetos, os maiores de setenta anos e os maiores de dezesseis e menores de dezoito anos.",
+          "B) São inelegíveis os inalistáveis e os analfabetos, em qualquer hipótese.",
+          "C) A idade mínima para concorrer ao cargo de Senador é de trinta anos, e para Governador, vinte e um anos.",
+          "D) O mandato eletivo poderá ser impugnado ante a Justiça Eleitoral no prazo de trinta dias contados da diplomação, instruída a ação com provas de abuso do poder econômico, corrupção ou fraude.",
+          "E) A ação de impugnação de mandato tramitará em segredo de justiça."
+        ], gabarito: 3, comentario: "Alternativa D correta (art. 14, §10). A errada: voto facultativo para analfabetos, maiores de 70 e entre 16 e 18. B errada: analfabetos são inelegíveis mas podem votar. C errada: Governador idade mínima 30. E errada: não tramita em segredo." },
+        { tema: "português", enunciado: "Assinale a frase em que a concordância verbal está de acordo com a norma-padrão:", alternativas: [
+          "A) Fazem dois anos que não o vejo.",
+          "B) Haviam muitos candidatos na sala.",
+          "C) Tratam-se de questões complexas.",
+          "D) Mais de um aluno compareceu à cerimônia.",
+          "E) A maioria dos alunos reclamaram da prova."
+        ], gabarito: 3, comentario: "Alternativa D correta: 'Mais de um' leva verbo no singular. A errada: 'Fazer' impessoal (Faz). B errada: 'Haver' impessoal (Havia). C errada: 'Tratar-se de' invariável (Trata-se). E errada: preferência por singular com 'maioria'." },
+        { tema: "raciocínio lógico", enunciado: "Em uma sala, todos os alunos que gostam de matemática também gostam de física. Sabe-se que alguns alunos gostam de química. Se essas informações são verdadeiras, conclui-se que:", alternativas: [
+          "A) Nenhum aluno que gosta de química gosta de física.",
+          "B) Todo aluno que gosta de física gosta de matemática.",
+          "C) Algum aluno que gosta de química pode não gostar de matemática.",
+          "D) Todos os alunos que não gostam de matemática não gostam de física.",
+          "E) Pelo menos um aluno que gosta de matemática também gosta de química."
+        ], gabarito: 2, comentario: "Matemática → Física. Química não tem restrição. Portanto C é possível. A, B, D e E não podem ser garantidos." }
+      ];
+
       // ---------- ESTADO GLOBAL ----------
       let state = {
         disciplines: [],
@@ -447,6 +557,7 @@
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
       let currentPage = 'dashboard';
+      let generatedQuestions = [];
 
       // ---------- INICIALIZAÇÃO ----------
       function loadFromStorage() {
@@ -504,32 +615,39 @@
         `;
       }
       function attachTimerEvents() {
-        document.getElementById('timerStart')?.addEventListener('click', startTimer);
-        document.getElementById('timerPause')?.addEventListener('click', pauseTimer);
-        document.getElementById('timerStop')?.addEventListener('click', stopTimer);
-        function startTimer() {
-          const sel = document.getElementById('disciplineSelect'); if(!sel) return;
-          const discId = parseInt(sel.value); if(!discId) { alert('Selecione uma disciplina'); return; }
-          activeDisciplineId = discId; timerRunning = true;
-          if(timerInterval) clearInterval(timerInterval);
-          timerInterval = setInterval(() => { timerSeconds++; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = formatTime(timerSeconds); }, 1000);
+        const startBtn = document.getElementById('timerStart');
+        const pauseBtn = document.getElementById('timerPause');
+        const stopBtn = document.getElementById('timerStop');
+        if(!startBtn || !pauseBtn || !stopBtn) return;
+        startBtn.replaceWith(startBtn.cloneNode(true));
+        pauseBtn.replaceWith(pauseBtn.cloneNode(true));
+        stopBtn.replaceWith(stopBtn.cloneNode(true));
+        document.getElementById('timerStart').addEventListener('click', startTimer);
+        document.getElementById('timerPause').addEventListener('click', pauseTimer);
+        document.getElementById('timerStop').addEventListener('click', stopTimer);
+      }
+      function startTimer() {
+        const sel = document.getElementById('disciplineSelect'); if(!sel) return;
+        const discId = parseInt(sel.value); if(!discId) { alert('Selecione uma disciplina'); return; }
+        activeDisciplineId = discId; timerRunning = true;
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => { timerSeconds++; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = formatTime(timerSeconds); }, 1000);
+      }
+      function pauseTimer() { clearInterval(timerInterval); timerRunning = false; }
+      function stopTimer() {
+        if(!activeDisciplineId) return;
+        clearInterval(timerInterval); timerRunning = false;
+        const disc = state.disciplines.find(d=>d.id === activeDisciplineId);
+        if(disc) {
+          if(disc.topics.length) alert('Esta disciplina possui tópicos. Registre o tempo diretamente no tópico.');
+          else disc.timeSeconds = (disc.timeSeconds || 0) + timerSeconds;
         }
-        function pauseTimer() { clearInterval(timerInterval); timerRunning = false; }
-        function stopTimer() {
-          if(!activeDisciplineId) return;
-          clearInterval(timerInterval); timerRunning = false;
-          const disc = state.disciplines.find(d=>d.id === activeDisciplineId);
-          if(disc) {
-            if(disc.topics.length) alert('Esta disciplina possui tópicos. Registre o tempo diretamente no tópico.');
-            else disc.timeSeconds = (disc.timeSeconds || 0) + timerSeconds;
-          }
-          timerSeconds = 0; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = '00:00:00';
-          activeDisciplineId = null; saveToStorage();
-          if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
-        }
+        timerSeconds = 0; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = '00:00:00';
+        activeDisciplineId = null; saveToStorage();
+        if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ---------- DASHBOARD (NOVO DESIGN) ----------
+      // ---------- DASHBOARD ----------
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -539,16 +657,12 @@
         const avgPercent = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q => q.date === today).length;
-        const weekSeconds = totalSec; // simplificado
         const progressPercent = Math.min(100, Math.round((totalSec/3600) / (state.user.dailyGoalHours * 7) * 100));
-
-        // Top 3 mais estudadas
         const sortedByTime = [...state.disciplines].sort((a,b) => {
           const ta = a.topics.length ? a.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (a.timeSeconds||0);
           const tb = b.topics.length ? b.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (b.timeSeconds||0);
           return tb - ta;
         });
-        const top3 = sortedByTime.slice(0,3);
         const bestDisc = getBestDiscipline();
         const worstDisc = getWorstDiscipline();
 
@@ -561,34 +675,12 @@
             </div>
             <div class="badge" style="padding:10px 20px; font-size:1rem;"><i class="fas fa-trophy"></i> Sequência: 7 dias 🔥</div>
           </div>
-
-          <!-- LINHA 1: Cards principais -->
           <div class="dashboard-grid">
-            <div class="card">
-              <div class="card-header"><i class="fas fa-bullseye"></i> Taxa de acerto</div>
-              <div class="card-value">${avgPercent}%</div>
-              <div class="progress-bar"><div class="progress-fill" style="width:${avgPercent}%"></div></div>
-              <div class="card-label">+2.5% vs última semana</div>
-            </div>
-            <div class="card">
-              <div class="card-header"><i class="fas fa-clock"></i> Tempo estudado (semana)</div>
-              <div class="card-value">${formatHoursMinutes(totalSec)}</div>
-              <div class="progress-bar"><div class="progress-fill" style="width:${(totalSec/3600)/(state.user.dailyGoalHours*7)*100}%"></div></div>
-              <div class="card-label">Meta: ${state.user.dailyGoalHours*7}h</div>
-            </div>
-            <div class="card">
-              <div class="card-header"><i class="fas fa-fire"></i> Streak atual</div>
-              <div class="card-value">7 dias</div>
-              <div class="card-label">🔥 Seu recorde: 12 dias</div>
-            </div>
-            <div class="card">
-              <div class="card-header"><i class="fas fa-chart-bar"></i> Evolução</div>
-              <div class="card-value" style="color:#2E7D32;">+12%</div>
-              <div class="card-label">vs semana passada</div>
-            </div>
+            <div class="card"><div class="card-header"><i class="fas fa-bullseye"></i> Taxa de acerto</div><div class="card-value">${avgPercent}%</div><div class="progress-bar"><div class="progress-fill" style="width:${avgPercent}%"></div></div><div class="card-label">+2.5% vs última semana</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-clock"></i> Tempo estudado (semana)</div><div class="card-value">${formatHoursMinutes(totalSec)}</div><div class="progress-bar"><div class="progress-fill" style="width:${(totalSec/3600)/(state.user.dailyGoalHours*7)*100}%"></div></div><div class="card-label">Meta: ${state.user.dailyGoalHours*7}h</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-fire"></i> Streak atual</div><div class="card-value">7 dias</div><div class="card-label">🔥 Seu recorde: 12 dias</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-chart-bar"></i> Evolução</div><div class="card-value" style="color:#2E7D32;">+12%</div><div class="card-label">vs semana passada</div></div>
           </div>
-
-          <!-- LINHA 2: Gráfico de horas na semana -->
           <div class="card" style="margin-bottom:24px;">
             <div class="card-header"><i class="fas fa-calendar-week"></i> Horas estudadas na semana</div>
             <div class="week-bars">
@@ -598,8 +690,6 @@
               }).join('')}
             </div>
           </div>
-
-          <!-- LINHA 3: Desempenho por disciplina -->
           <div class="card" style="margin-bottom:24px;">
             <div class="card-header"><i class="fas fa-tasks"></i> Desempenho por disciplina</div>
             ${sortedByTime.slice(0,5).map(d => {
@@ -610,26 +700,15 @@
               return `
                 <div class="perf-item">
                   <div class="perf-info"><div class="perf-name">${d.name}</div><div class="perf-stats">${formatHoursMinutes(t)} · ${q} questões</div></div>
-                  <div class="perf-bar-container">
-                    <div class="perf-bar-bg"><div class="perf-bar-fill" style="width:${rate}%; background:${rate>=70?'#2E7D32':(rate>=50?'#F57C00':'#C62828')};"></div></div>
-                  </div>
+                  <div class="perf-bar-container"><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:${rate}%; background:${rate>=70?'#2E7D32':(rate>=50?'#F57C00':'#C62828')};"></div></div></div>
                   <span style="font-weight:600;">${rate.toFixed(0)}%</span>
                 </div>
               `;
             }).join('')}
           </div>
-
-          <!-- LINHA 4 e 5: Alertas e Insights -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-            <div class="card alert-card">
-              <div class="card-header"><i class="fas fa-exclamation-triangle" style="color:#C62828;"></i> Pontos de atenção</div>
-              ${worstDisc ? `<p>📉 Menor desempenho: <strong>${worstDisc.name}</strong> (${worstDisc.rate.toFixed(0)}% de acerto). Reforce revisões.</p>` : '<p>✅ Nenhum ponto crítico detectado.</p>'}
-            </div>
-            <div class="card insight-card">
-              <div class="card-header"><i class="fas fa-lightbulb" style="color:#E65100;"></i> Insight inteligente</div>
-              <p>🧠 Você estuda melhor às <strong>terças e quintas</strong>. Aproveite esses dias para conteúdos mais densos.</p>
-              <p style="margin-top:8px;">📚 Sua consistência está excelente! Continue assim para acelerar a aprovação.</p>
-            </div>
+            <div class="card alert-card"><div class="card-header"><i class="fas fa-exclamation-triangle" style="color:#C62828;"></i> Pontos de atenção</div>${worstDisc ? `<p>📉 Menor desempenho: <strong>${worstDisc.name}</strong> (${worstDisc.rate.toFixed(0)}% de acerto).</p>` : '<p>✅ Nenhum ponto crítico.</p>'}</div>
+            <div class="card insight-card"><div class="card-header"><i class="fas fa-lightbulb" style="color:#E65100;"></i> Insight inteligente</div><p>🧠 Você estuda melhor às <strong>terças e quintas</strong>.</p><p>📚 Consistência excelente!</p></div>
           </div>
         `;
         contentDiv.innerHTML = html;
@@ -656,7 +735,7 @@
         return worst;
       }
 
-      // ---------- DISCIPLINAS (mantido com pequenos ajustes) ----------
+      // ---------- DISCIPLINAS ----------
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
@@ -745,7 +824,7 @@
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
       }
 
-      // ---------- QUESTÕES (mantido) ----------
+      // ---------- QUESTÕES (com Elaboração e Modelo) ----------
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q=>q.date === today);
@@ -753,14 +832,15 @@
         const rate = totalToday ? ((correctToday/totalToday)*100).toFixed(1) : '0.0';
         const html = `
           ${renderGlobalTimer()}
-          <div class="page-title">Registro de Questões</div><div class="greeting">Acompanhe seu desempenho diário</div>
+          <div class="page-title">Questões</div>
+          <div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div>
           <div class="dashboard-grid">
             <div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
             <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
             <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
             <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
           </div>
-          <div class="card">
+          <div class="card" style="margin-bottom: 32px;">
             <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
             <div style="display:grid; gap:16px; margin-top:20px;">
               <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select>
@@ -771,8 +851,26 @@
               </div>
             </div>
           </div>
+          <div class="section-divider"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn-secondary" id="modeloQuestaoBtn"><i class="far fa-file-alt"></i> Modelo de Questão</button>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display: flex; gap: 16px; align-items: flex-start;">
+              <textarea id="temaInput" placeholder="Digite o tema ou assunto (ex: Direitos Fundamentais, Poder Judiciário...)" rows="2" style="flex:1; padding: 16px; border-radius: 20px; border:1.5px solid #E0E0E0; resize: vertical;"></textarea>
+              <button class="btn-primary" id="gerarQuestoesBtn" style="height: 56px;"><i class="fas fa-magic"></i> Gerar questões</button>
+            </div>
+            <p style="color:#757575; margin-top: 8px;"><i class="far fa-lightbulb"></i> Digite um tema e o sistema gerará questões no padrão concurso.</p>
+          </div>
+          <div id="generatedQuestionsContainer" style="margin-top: 24px;">
+            ${generatedQuestions.length ? renderQuestionCards(generatedQuestions) : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Digite um tema e clique em "Gerar questões".</p></div>'}
+          </div>
         `;
-        contentDiv.innerHTML = html; attachTimerEvents();
+        contentDiv.innerHTML = html;
+        attachTimerEvents();
         const discSelect = document.getElementById('qDiscipline'), topicSelect = document.getElementById('qTopic');
         discSelect.addEventListener('change', () => {
           const discId = parseInt(discSelect.value); const disc = state.disciplines.find(d=>d.id===discId);
@@ -789,27 +887,125 @@
         }
         document.getElementById('registerCorrect').addEventListener('click', ()=> register(true));
         document.getElementById('registerWrong').addEventListener('click', ()=> register(false));
+        document.getElementById('gerarQuestoesBtn').addEventListener('click', gerarQuestoesHandler);
+        document.getElementById('modeloQuestaoBtn').addEventListener('click', abrirModeloModal);
+        if(generatedQuestions.length) attachAnswerEvents();
       }
+      function gerarQuestoesHandler() {
+        const temaInput = document.getElementById('temaInput');
+        const tema = temaInput.value.trim();
+        if (!tema) { alert('Por favor, digite um tema.'); return; }
+        const termoLower = tema.toLowerCase();
+        let filtered = MOCK_QUESTIONS.filter(q => q.tema.includes(termoLower) || termoLower.includes(q.tema));
+        if (filtered.length === 0) filtered = MOCK_QUESTIONS.sort(() => 0.5 - Math.random()).slice(0, 2);
+        generatedQuestions = filtered.slice(0, 3).map((q, idx) => ({
+          id: Date.now() + idx,
+          enunciado: q.enunciado,
+          alternativas: q.alternativas,
+          gabarito: q.gabarito,
+          comentario: q.comentario,
+          respondida: false,
+          respostaUsuario: null,
+          correta: false
+        }));
+        const container = document.getElementById('generatedQuestionsContainer');
+        container.innerHTML = renderQuestionCards(generatedQuestions);
+        attachAnswerEvents();
+      }
+      function renderQuestionCards(questions) {
+        return questions.map((q, index) => {
+          const respondida = q.respondida;
+          const acertou = q.correta;
+          const respostaIdx = q.respostaUsuario;
+          const letras = ['A', 'B', 'C', 'D', 'E'];
+          return `
+            <div class="question-card" data-question-id="${q.id}">
+              <div class="question-title"><i class="fas fa-gavel"></i> (Questão de Treino)</div>
+              <div class="question-enunciado">${q.enunciado}</div>
+              <div class="alternativas">
+                ${q.alternativas.map((alt, i) => {
+                  let classeExtra = '';
+                  if (respondida) {
+                    if (i === q.gabarito) classeExtra = 'correta-destaque';
+                    else if (respostaIdx === i && i !== q.gabarito) classeExtra = 'errada-destaque';
+                  }
+                  return `
+                    <div class="alternativa-item ${classeExtra}">
+                      <input type="radio" name="questao_${q.id}" value="${i}" id="q${q.id}_alt${i}" ${respondida ? 'disabled' : ''}>
+                      <label for="q${q.id}_alt${i}"><strong>${letras[i]})</strong> ${alt}</label>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+              ${!respondida ? `<div class="question-actions"><button class="btn-primary responder-btn" data-question-id="${q.id}"><i class="fas fa-check-circle"></i> Responder</button></div>` : ''}
+              ${respondida ? `
+                <div class="feedback-message ${acertou ? 'feedback-correct' : 'feedback-wrong'}">
+                  ${acertou ? '✅ Você acertou!' : `❌ Você errou! Alternativa correta: ${letras[q.gabarito]}`}
+                </div>
+                <div class="comentario-box"><strong><i class="fas fa-info-circle"></i> Comentário:</strong><br>${q.comentario}</div>
+                ${index === questions.length-1 ? `<div style="margin-top: 20px; display: flex; justify-content: flex-end;"><button class="btn-secondary" id="novaGeracaoBtn"><i class="fas fa-sync-alt"></i> Gerar nova questão</button></div>` : ''}
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+      function attachAnswerEvents() {
+        document.querySelectorAll('.responder-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const questionId = parseInt(btn.dataset.questionId);
+            const question = generatedQuestions.find(q => q.id === questionId);
+            if (!question) return;
+            const card = btn.closest('.question-card');
+            const selectedRadio = card.querySelector(`input[name="questao_${questionId}"]:checked`);
+            if (!selectedRadio) { alert('Selecione uma alternativa.'); return; }
+            const respostaIdx = parseInt(selectedRadio.value);
+            const acertou = (respostaIdx === question.gabarito);
+            question.respondida = true;
+            question.respostaUsuario = respostaIdx;
+            question.correta = acertou;
+            const container = document.getElementById('generatedQuestionsContainer');
+            container.innerHTML = renderQuestionCards(generatedQuestions);
+            attachAnswerEvents();
+          });
+        });
+        const novaBtn = document.getElementById('novaGeracaoBtn');
+        if (novaBtn) {
+          novaBtn.addEventListener('click', () => {
+            generatedQuestions = [];
+            document.getElementById('temaInput').value = '';
+            document.getElementById('generatedQuestionsContainer').innerHTML = '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Digite um tema e clique em "Gerar questões".</p></div>';
+          });
+        }
+      }
+      function abrirModeloModal() { document.getElementById('modeloQuestaoModal').style.display = 'flex'; }
 
-      // ---------- DESEMPENHO / PERFIL (simplificados mantidos) ----------
+      // ---------- DESEMPENHO ----------
       function renderDesempenho() {
         const discStats = state.disciplines.map(d => {
           let t=0, q=0, c=0; if(d.topics.length) { d.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; }); }
           else { t=d.timeSeconds||0; q=d.questions||0; c=d.correct||0; } return { name: d.name, time: t, rate: q?(c/q)*100:0 };
         }).sort((a,b) => b.time - a.time);
-        const html = `${renderGlobalTimer()}<div class="page-title">Desempenho</div><div class="greeting">Visualize sua evolução</div>
+        const html = `
+          ${renderGlobalTimer()}
+          <div class="page-title">Desempenho</div><div class="greeting">Visualize sua evolução</div>
           <div class="card"><div class="card-header"><i class="fas fa-clock"></i> Tempo por disciplina</div>${discStats.map(d => `<div class="graph-bar-item"><span class="graph-label">${d.name}</span><div class="graph-bar-bg"><div class="graph-bar-fill" style="width:${Math.min(100,(d.time/3600)/10*100)}%"></div></div><span>${formatHoursMinutes(d.time)}</span></div>`).join('')}</div>
-          <div class="card" style="margin-top:24px;"><div class="card-header"><i class="fas fa-percent"></i> Taxa de acerto</div>${discStats.map(d => `<div class="graph-bar-item"><span class="graph-label">${d.name}</span><div class="graph-bar-bg"><div class="graph-bar-fill" style="width:${d.rate}%; background:${d.rate>=70?'#2E7D32':(d.rate>=50?'#F57C00':'#C62828')};"></div></div><span>${d.rate.toFixed(1)}%</span></div>`).join('')}</div>`;
-        contentDiv.innerHTML = html; attachTimerEvents();
+          <div class="card" style="margin-top:24px;"><div class="card-header"><i class="fas fa-percent"></i> Taxa de acerto</div>${discStats.map(d => `<div class="graph-bar-item"><span class="graph-label">${d.name}</span><div class="graph-bar-bg"><div class="graph-bar-fill" style="width:${d.rate}%; background:${d.rate>=70?'#2E7D32':(d.rate>=50?'#F57C00':'#C62828')};"></div></div><span>${d.rate.toFixed(1)}%</span></div>`).join('')}</div>
+        `;
+        contentDiv.innerHTML = html;
+        attachTimerEvents();
       }
+
+      // ---------- PERFIL ----------
       function renderPerfil() {
         const totalSec = state.disciplines.reduce((s,d)=> s + (d.topics.length ? d.topics.reduce((a,t)=>a+(t.timeSeconds||0),0) : (d.timeSeconds||0)), 0);
         const totalQ = state.disciplines.reduce((s,d)=> s + (d.topics.length ? d.topics.reduce((a,t)=>a+(t.questions||0),0) : (d.questions||0)), 0);
-        const html = `<div class="page-title">Perfil</div><div class="greeting">Configurações e metas</div>
+        const html = `
+          <div class="page-title">Perfil</div><div class="greeting">Configurações e metas</div>
           <div style="display:grid; grid-template-columns:2fr 1fr; gap:24px;">
             <div class="card"><div class="card-header"><i class="fas fa-user-circle"></i> ${state.user.name}</div><p><strong>Meta diária:</strong> ${state.user.dailyGoalHours}h / ${state.user.dailyGoalQuestions} questões</p><button class="btn-primary" id="editMeta"><i class="fas fa-edit"></i> Editar metas</button></div>
             <div class="card"><div class="card-header"><i class="fas fa-chart-pie"></i> Estatísticas</div><p>Horas: ${formatHoursMinutes(totalSec)}</p><p>Questões: ${totalQ}</p><p>Taxa média: ${totalQ?((state.disciplines.reduce((s,d)=>s+(d.topics.length?d.topics.reduce((a,t)=>a+(t.correct||0),0):(d.correct||0)),0)/totalQ)*100).toFixed(1):'0.0'}%</p></div>
-          </div>`;
+          </div>
+        `;
         contentDiv.innerHTML = html;
         document.getElementById('editMeta')?.addEventListener('click', ()=>{
           const newH = prompt('Meta diária de horas:', state.user.dailyGoalHours); if(newH) state.user.dailyGoalHours = parseFloat(newH);
@@ -818,23 +1014,47 @@
         });
       }
 
-      // Modais e inicialização (idêntico ao anterior)
-      const modalDisc = document.getElementById('disciplineModal'), modalTopic = document.getElementById('topicModal');
-      function openDisciplineModal() { document.getElementById('disciplineNameInput').value = ''; modalDisc.style.display = 'flex'; }
-      function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; modalTopic.style.display = 'flex'; }
-      document.getElementById('cancelModal').addEventListener('click', ()=> modalDisc.style.display='none');
-      document.getElementById('saveDiscipline').addEventListener('click', ()=>{
-        const name = document.getElementById('disciplineNameInput').value.trim(); if(name) { state.disciplines.push({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false }); saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalDisc.style.display='none'; }
-      });
-      document.getElementById('cancelTopicModal').addEventListener('click', ()=> modalTopic.style.display='none');
-      document.getElementById('saveTopic').addEventListener('click', ()=>{
-        const name = document.getElementById('topicNameInput').value.trim(); const discId = parseInt(document.getElementById('currentDisciplineId').value); const disc = state.disciplines.find(d=>d.id===discId);
-        if(name && disc) { disc.topics.push({ id: Date.now(), name, timeSeconds:0, questions:0, correct:0, wrong:0 }); disc.expanded = true; saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalTopic.style.display='none'; }
-      });
-      window.addEventListener('click', (e) => { if(e.target === modalDisc) modalDisc.style.display='none'; if(e.target === modalTopic) modalTopic.style.display='none'; });
-      const datalist = document.getElementById('disciplinesDatalist'); DISCIPLINAS_PREDEF.forEach(name => { const opt = document.createElement('option'); opt.value = name; datalist.appendChild(opt); });
-      document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => renderPage(item.dataset.page)));
-      loadFromStorage(); renderPage('dashboard');
+      // ---------- MODAIS ----------
+      function openDisciplineModal() { document.getElementById('disciplineNameInput').value = ''; document.getElementById('disciplineModal').style.display = 'flex'; }
+      function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; document.getElementById('topicModal').style.display = 'flex'; }
+      function setupModals() {
+        const modalDisc = document.getElementById('disciplineModal');
+        document.getElementById('cancelModal').addEventListener('click', ()=> modalDisc.style.display='none');
+        document.getElementById('saveDiscipline').addEventListener('click', ()=>{
+          const name = document.getElementById('disciplineNameInput').value.trim();
+          if(name) { state.disciplines.push({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false }); saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalDisc.style.display='none'; }
+        });
+        const modalTopic = document.getElementById('topicModal');
+        document.getElementById('cancelTopicModal').addEventListener('click', ()=> modalTopic.style.display='none');
+        document.getElementById('saveTopic').addEventListener('click', ()=>{
+          const name = document.getElementById('topicNameInput').value.trim();
+          const discId = parseInt(document.getElementById('currentDisciplineId').value);
+          const disc = state.disciplines.find(d=>d.id===discId);
+          if(name && disc) { disc.topics.push({ id: Date.now(), name, timeSeconds:0, questions:0, correct:0, wrong:0 }); disc.expanded = true; saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalTopic.style.display='none'; }
+        });
+        const modalModelo = document.getElementById('modeloQuestaoModal');
+        document.getElementById('fecharModeloModal').addEventListener('click', ()=> modalModelo.style.display='none');
+        document.getElementById('copiarModeloBtn').addEventListener('click', () => {
+          const texto = document.getElementById('modeloPromptText').value;
+          navigator.clipboard.writeText(texto).then(() => document.getElementById('copyFeedback').textContent = '✓ Modelo copiado!').catch(() => alert('Erro ao copiar'));
+        });
+        window.addEventListener('click', (e) => {
+          if(e.target === modalDisc) modalDisc.style.display='none';
+          if(e.target === modalTopic) modalTopic.style.display='none';
+          if(e.target === modalModelo) modalModelo.style.display='none';
+        });
+      }
+
+      // ---------- INICIALIZAÇÃO FINAL ----------
+      function init() {
+        loadFromStorage();
+        setupModals();
+        const datalist = document.getElementById('disciplinesDatalist');
+        DISCIPLINAS_PREDEF.forEach(name => { const opt = document.createElement('option'); opt.value = name; datalist.appendChild(opt); });
+        document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => renderPage(item.dataset.page)));
+        renderPage('dashboard');
+      }
+      init();
     })();
   </script>
 </body>
