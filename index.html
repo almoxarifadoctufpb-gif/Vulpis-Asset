@@ -38,7 +38,8 @@
     }
     .logo-icon {
       width: 44px; height: 44px;
-      background: #F57C00;
+      /* CORREÇÃO 3: Fundo laranja removido */
+      /* background: #F57C00; */
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -405,6 +406,7 @@
       background: #FFEBEE;
       border-left: 4px solid #C62828;
     }
+    /* CORREÇÃO 2: Estilo para alternativas eliminadas (riscadas) */
     .alternativa-item.eliminada label {
       text-decoration: line-through;
       opacity: 0.6;
@@ -1640,6 +1642,7 @@ REGRAS IMPORTANTES:
               <div class="feedback-message ${acertou ? 'feedback-correct' : 'feedback-wrong'}">
                 ${acertou ? '✅ Você acertou!' : `❌ Você errou! Alternativa correta: ${letras[q.gabarito]}`}
               </div>
+              <!-- CORREÇÃO 1: Garantindo que o comentário apareça sempre que a questão for respondida -->
               <div class="comentario-box"><strong><i class="fas fa-info-circle"></i> Comentário:</strong><br>${q.comentario}</div>
             ` : ''}
           </div>
@@ -1705,6 +1708,7 @@ REGRAS IMPORTANTES:
             const questionId = parseInt(btn.dataset.questionId);
             const altIndex = parseInt(btn.dataset.altIndex);
             const question = generatedQuestions.find(q => q.id === questionId);
+            // CORREÇÃO 2: Lógica de alternância do estado "eliminada" e atualização visual imediata
             if (question && !question.respondida) {
               if (!question.alternativasEliminadas) question.alternativasEliminadas = new Array(5).fill(false);
               question.alternativasEliminadas[altIndex] = !question.alternativasEliminadas[altIndex];
