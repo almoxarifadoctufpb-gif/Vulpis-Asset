@@ -129,7 +129,6 @@
     }
     .timer-btn.play { background: #E65100; color: white; }
     .timer-btn:hover { opacity: 0.9; transform: scale(0.97); }
-    .timer-btn img { width: 24px; height: 24px; filter: brightness(0) invert(1); }
     .page-title {
       font-family: 'Poppins', sans-serif;
       font-size: 2rem;
@@ -300,6 +299,7 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.02);
       border: 1px solid #F0F0F0;
       overflow-x: auto;
+      position: relative;
     }
     .table-header {
       display: grid;
@@ -831,50 +831,30 @@
       padding-top: 24px;
     }
 
-    /* Novos estilos para a seção de interesses na aba Disciplinas */
-    .interesses-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .interesse-item {
-      display: flex;
+    /* Estilo para o ícone de cronômetro no seletor */
+    .timer-icon {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      background: #FAFAFA;
-      border-radius: 16px;
-      border: 1px solid #F0F0F0;
-      transition: background 0.2s;
+      margin-right: 8px;
     }
-    .interesse-item:hover {
-      background: #FEF0E6;
+    .timer-icon img {
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
     }
-    .interesse-item input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #E65100;
-      cursor: pointer;
+
+    /* Imagem decorativa de livros na página Disciplinas */
+    .disciplines-decoration {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 120px;
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 1;
     }
-    .interesse-item label {
-      font-weight: 500;
-      color: #3A3A3A;
-      cursor: pointer;
-      flex: 1;
-    }
-    .imagem-decorativa {
-      max-width: 180px;
-      margin-left: 24px;
-      border-radius: 24px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-    }
-    @media (max-width: 768px) {
-      .imagem-decorativa {
-        max-width: 120px;
-        margin-left: 0;
-        margin-top: 16px;
-      }
+    .disciplines-table {
+      position: relative;
     }
 
     /* Rodapé global com créditos */
@@ -1050,8 +1030,8 @@ REGRAS IMPORTANTES:
         ]
       };
 
-      // Lista das disciplinas que devem aparecer pré-selecionadas por padrão
-      const DEFAULT_INTERESSES = [
+      // Lista das disciplinas que devem ser criadas por padrão (com métricas zeradas)
+      const DEFAULT_DISCIPLINES = [
         "Língua Portuguesa", "Direito Administrativo", "Direito Constitucional",
         "Raciocínio Lógico", "Informática", "Matemática", "Atualidades",
         "Administração Financeira e Orçamentária - AFO", "Administração Geral",
@@ -1113,8 +1093,7 @@ REGRAS IMPORTANTES:
         legislations: [],
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: [],
-        videos: [],
-        interessesSelecionados: [...DEFAULT_INTERESSES] // Inicialmente todas selecionadas
+        videos: []
       };
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
@@ -1134,18 +1113,11 @@ REGRAS IMPORTANTES:
             if(state.disciplines.length) nextId = Math.max(...state.disciplines.map(d=>d.id), 0) + 1; 
             state.legislations = state.legislations || [];
             state.videos = state.videos || [];
-            state.interessesSelecionados = state.interessesSelecionados || [...DEFAULT_INTERESSES];
           } catch(e){}
         }
         if(!state.disciplines.length) {
           // Cria as 11 disciplinas padrão com métricas zeradas
-          const defaultDisciplines = [
-            "Língua Portuguesa", "Direito Administrativo", "Direito Constitucional",
-            "Raciocínio Lógico", "Informática", "Matemática", "Atualidades",
-            "Administração Financeira e Orçamentária - AFO", "Administração Geral",
-            "Administração Pública", "Administração de Materiais"
-          ];
-          state.disciplines = defaultDisciplines.map(name => ({
+          state.disciplines = DEFAULT_DISCIPLINES.map(name => ({
             id: nextId++,
             name,
             timeSeconds: 0,
@@ -1227,13 +1199,16 @@ REGRAS IMPORTANTES:
         return `
           <div class="global-timer">
             <div class="timer-left">
+              <div class="timer-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/4291/4291500.png" alt="Cronômetro" onerror="this.style.display='none';">
+              </div>
               <select id="disciplineSelect" class="timer-select">
                 <option value="">Selecione a disciplina</option>
               </select>
               <span class="timer-display" id="timerDisplay">${formatTime(timerSeconds)}</span>
             </div>
             <div class="timer-controls">
-              <button class="timer-btn" id="timerStart" title="Iniciar"><img src="https://cdn-icons-png.flaticon.com/512/4291/4291500.png" alt="Cronômetro" style="width:24px; height:24px; filter: brightness(0) invert(1);"></button>
+              <button class="timer-btn play" id="timerStart" title="Iniciar"><i class="fas fa-play"></i></button>
               <button class="timer-btn" id="timerPause" title="Pausar"><i class="fas fa-pause"></i></button>
               <button class="timer-btn" id="timerStop" title="Finalizar e salvar"><i class="fas fa-stop"></i></button>
             </div>
@@ -1478,69 +1453,29 @@ REGRAS IMPORTANTES:
         return worst;
       }
 
-      // ========== DISCIPLINAS (com alterações) ==========
+      // ========== DISCIPLINAS (com alterações visuais) ==========
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
             <div>
-              <div class="page-title" style="display:flex; align-items:center; gap:16px;">
-                Disciplinas
-                <img src="https://cdn-icons-png.flaticon.com/512/4524/4524556.png" alt="Livros" class="imagem-decorativa" onerror="this.style.display='none';">
-              </div>
+              <div class="page-title">Disciplinas</div>
               <div class="greeting">Gerencie suas matérias e tópicos</div>
             </div>
             <button class="btn-primary" id="addDisciplineBtn"><i class="fas fa-plus-circle"></i> Adicionar disciplina</button>
           </div>
-          
-          <!-- Seção de interesses (checkboxes das disciplinas padrão) -->
-          <div class="card" style="margin: 24px 0;">
-            <div class="card-header"><i class="fas fa-star"></i> Disciplinas de interesse (pré-selecionadas)</div>
-            <p style="color:#757575; margin-bottom:16px;">Marque as disciplinas que você está estudando atualmente. O progresso será registrado automaticamente.</p>
-            <div class="interesses-grid" id="interessesGrid"></div>
-          </div>
 
-          <div class="disciplines-table">
+          <div class="disciplines-table" style="position: relative;">
+            <!-- Imagem decorativa de livros (posicionada discretamente no canto) -->
+            <img src="https://cdn-icons-png.flaticon.com/512/4524/4524556.png" alt="Livros" class="disciplines-decoration" onerror="this.style.display='none';">
             <div class="table-header"><span>Disciplina</span><span>Tempo</span><span>Questões</span><span>Certas</span><span>Erradas</span><span>% Acerto</span><span>Ações</span></div>
             <div id="disciplinesList"></div>
           </div>
         `;
         contentDiv.innerHTML = html;
-        renderInteressesGrid();
         renderDisciplinesList();
         attachTimerEvents();
         document.getElementById('addDisciplineBtn').addEventListener('click', openDisciplineModal);
-      }
-      
-      function renderInteressesGrid() {
-        const grid = document.getElementById('interessesGrid');
-        // Usa as disciplinas padrão da constante DEFAULT_INTERESSES
-        const todasInteresses = DEFAULT_INTERESSES;
-        grid.innerHTML = todasInteresses.map(nome => {
-          const checked = state.interessesSelecionados.includes(nome) ? 'checked' : '';
-          return `
-            <div class="interesse-item">
-              <input type="checkbox" id="interesse_${nome.replace(/\s+/g,'_')}" value="${nome}" ${checked}>
-              <label for="interesse_${nome.replace(/\s+/g,'_')}">${nome}</label>
-            </div>
-          `;
-        }).join('');
-        
-        // Atualiza o state quando os checkboxes mudam
-        grid.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-          cb.addEventListener('change', (e) => {
-            const nome = e.target.value;
-            if (e.target.checked) {
-              if (!state.interessesSelecionados.includes(nome)) {
-                state.interessesSelecionados.push(nome);
-              }
-            } else {
-              state.interessesSelecionados = state.interessesSelecionados.filter(n => n !== nome);
-            }
-            saveToStorage();
-            // Opcional: não é necessário recarregar a tabela, apenas persistir preferência
-          });
-        });
       }
 
       function renderDisciplinesList() {
