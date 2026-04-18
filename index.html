@@ -871,6 +871,261 @@
       backdrop-filter: blur(4px);
       pointer-events: none;
     }
+
+    /* ========== NOVOS ESTILOS PARA LEGISLAÇÃO ========== */
+    .legislacao-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .legislacao-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .legislacao-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.06);
+      border-color: #E0E0E0;
+    }
+
+    .legislacao-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .legislacao-card-header h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #212121;
+      line-height: 1.3;
+      margin-right: 8px;
+    }
+
+    .legislacao-card-actions {
+      display: flex;
+      gap: 8px;
+      color: #9E9E9E;
+    }
+
+    .legislacao-card-actions i {
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 12px;
+      transition: all 0.15s;
+      font-size: 1.1rem;
+    }
+
+    .legislacao-card-actions i:hover {
+      background: #F0F0F0;
+      color: #E65100;
+    }
+
+    .status-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: #F5F5F5;
+      color: #5A5A5A;
+      transition: all 0.2s;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .status-badge i {
+      font-size: 1rem;
+    }
+
+    .status-badge.completed {
+      background: #E8F5E9;
+      color: #2E7D32;
+      border-color: #C8E6C9;
+    }
+
+    .status-badge.in-progress {
+      background: #FFF3E0;
+      color: #F57C00;
+      border-color: #FFE0B2;
+    }
+
+    .status-badge.pending {
+      background: #F5F5F5;
+      color: #9E9E9E;
+    }
+
+    .progress-section {
+      margin: 20px 0 16px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .progress-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #5A5A5A;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-value {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #212121;
+    }
+
+    .progress-bar-custom {
+      background: #E9E9E9;
+      height: 10px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .progress-fill-custom {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.4s ease;
+      background: #F57C00;
+    }
+
+    .progress-fill-custom.high { background: #2E7D32; }
+    .progress-fill-custom.medium { background: #F57C00; }
+    .progress-fill-custom.low { background: #9E9E9E; }
+
+    .questoes-input-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+      padding-top: 16px;
+      border-top: 1px solid #F0F0F0;
+    }
+
+    .questoes-input-area input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid #E0E0E0;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .questoes-input-area input:focus {
+      border-color: #F57C00;
+      outline: none;
+    }
+
+    .questoes-input-area button {
+      padding: 10px 18px;
+      background: #F5F5F5;
+      border: none;
+      border-radius: 20px;
+      font-weight: 500;
+      color: #212121;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .questoes-input-area button:hover {
+      background: #E0E0E0;
+    }
+
+    .legislacao-empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #757575;
+      background: white;
+      border-radius: 32px;
+      border: 1px solid #F0F0F0;
+    }
+
+    .legislacao-empty-state i {
+      font-size: 56px;
+      color: #D0D0D0;
+      margin-bottom: 20px;
+    }
+
+    .legislacao-empty-state h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #212121;
+    }
+
+    .legislacao-empty-state button {
+      margin-top: 24px;
+    }
+
+    .legislacao-decoration {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 150px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .legislacao-filters {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: 8px 18px;
+      border-radius: 40px;
+      background: white;
+      border: 1px solid #E0E0E0;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #5A5A5A;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-chip.active {
+      background: #E65100;
+      color: white;
+      border-color: #E65100;
+    }
+
+    .filter-chip:hover:not(.active) {
+      background: #F5F5F5;
+    }
   </style>
 </head>
 <body>
@@ -1549,6 +1804,217 @@ REGRAS IMPORTANTES:
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
       }
 
+      // ========== LEGISLAÇÃO (REFATORADA VISUALMENTE) ==========
+      function renderLegislacao() {
+        const html = `
+          <div style="position: relative;">
+            <div class="page-title">📜 Legislação</div>
+            <div class="greeting"><i class="fas fa-gavel"></i> Gerencie e acompanhe seu progresso nas principais normas para concursos</div>
+            
+            <div style="display:flex; gap:16px; margin-bottom: 20px;">
+              <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar Legislação</button>
+              <button class="btn-secondary" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
+            </div>
+
+            <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card">
+              <p><i class="fas fa-info-circle"></i> <strong>Guia de Estudo de Legislação:</strong> 1) Leitura completa da lei seca. 2) Leitura de resumos e esquemas. 3) Revisões periódicas. 4) Resolução de questões. Marque seu progresso abaixo.</p>
+            </div>
+
+            <!-- Filtros visuais por status -->
+            <div class="legislacao-filters" id="legislacaoFilters">
+              <span class="filter-chip active" data-filter="all">Todas</span>
+              <span class="filter-chip" data-filter="in-progress">Em andamento</span>
+              <span class="filter-chip" data-filter="completed">Concluídas</span>
+              <span class="filter-chip" data-filter="pending">Não iniciadas</span>
+            </div>
+          </div>
+
+          <div id="legislacaoList"></div>
+          
+          <!-- Imagem decorativa -->
+          <img src="https://cdn-icons-png.flaticon.com/512/3510/3510354.png" alt="Decoração legislação" class="legislacao-decoration" onerror="this.style.display='none';">
+        `;
+        contentDiv.innerHTML = html;
+        
+        document.getElementById('addLegislacaoBtn').addEventListener('click', () => openLegislacaoModal());
+        document.getElementById('toggleGuiaBtn').addEventListener('click', () => {
+          const guia = document.getElementById('guiaLegislacao');
+          guia.style.display = guia.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Configurar filtros
+        let currentFilter = 'all';
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            currentFilter = chip.dataset.filter;
+            renderLegislacaoList(currentFilter);
+          });
+        });
+
+        renderLegislacaoList('all');
+      }
+
+      function getLegislacaoStatus(leg) {
+        // Status baseado no progresso de leitura/resumo/revisão e questões
+        const leitura = leg.leituraCompleta;
+        const resumo = leg.resumoLido;
+        const revisado = leg.revisado;
+        const questoesProgress = leg.questoes.feitas / leg.questoes.meta;
+        
+        if (leitura && resumo && questoesProgress >= 0.8) return 'completed';
+        if (leitura || resumo || questoesProgress > 0) return 'in-progress';
+        return 'pending';
+      }
+
+      function renderLegislacaoList(filter = 'all') {
+        const container = document.getElementById('legislacaoList');
+        if (!state.legislations.length) {
+          container.innerHTML = `
+            <div class="legislacao-empty-state">
+              <i class="fas fa-scale-balanced"></i>
+              <h3>Nenhuma legislação cadastrada ainda</h3>
+              <p>Adicione normas importantes como a Constituição Federal, leis específicas e resumos.</p>
+              <button class="btn-primary" id="emptyAddLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar legislação</button>
+            </div>
+          `;
+          document.getElementById('emptyAddLegislacaoBtn')?.addEventListener('click', () => openLegislacaoModal());
+          return;
+        }
+
+        let filteredLegislations = state.legislations;
+        if (filter !== 'all') {
+          filteredLegislations = state.legislations.filter(leg => getLegislacaoStatus(leg) === filter);
+        }
+
+        if (filteredLegislations.length === 0) {
+          container.innerHTML = `
+            <div class="legislacao-empty-state">
+              <i class="fas fa-filter"></i>
+              <h3>Nenhuma legislação neste filtro</h3>
+              <p>Tente selecionar outra categoria ou adicione novas normas.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="legislacao-grid">
+            ${filteredLegislations.map(leg => {
+              const progresso = (leg.questoes.feitas / leg.questoes.meta) * 100;
+              const status = getLegislacaoStatus(leg);
+              
+              // Definir classes de cor para a barra de progresso
+              let barColorClass = 'low';
+              if (progresso >= 70) barColorClass = 'high';
+              else if (progresso >= 30) barColorClass = 'medium';
+
+              // Status badges visuais
+              const leituraClass = leg.leituraCompleta ? 'completed' : (leg.leituraCompleta === false ? 'pending' : 'pending');
+              const resumoClass = leg.resumoLido ? 'completed' : 'pending';
+              const revisadoClass = leg.revisado ? 'completed' : 'pending';
+
+              return `
+                <div class="legislacao-card" data-leg-id="${leg.id}">
+                  <div class="legislacao-card-header">
+                    <h3>${leg.nome}</h3>
+                    <div class="legislacao-card-actions">
+                      <i class="fas fa-edit" data-action="editLegislacao" data-id="${leg.id}" title="Editar"></i>
+                      <i class="fas fa-trash-alt" data-action="deleteLegislacao" data-id="${leg.id}" title="Excluir"></i>
+                    </div>
+                  </div>
+                  
+                  <div class="status-badges">
+                    <span class="status-badge ${leituraClass}" data-field="leituraCompleta" data-id="${leg.id}">
+                      <i class="fas fa-${leg.leituraCompleta ? 'check-circle' : 'book'}"></i> Leitura
+                    </span>
+                    <span class="status-badge ${resumoClass}" data-field="resumoLido" data-id="${leg.id}">
+                      <i class="fas fa-${leg.resumoLido ? 'check-circle' : 'file-alt'}"></i> Resumo
+                    </span>
+                    <span class="status-badge ${revisadoClass}" data-field="revisado" data-id="${leg.id}">
+                      <i class="fas fa-${leg.revisado ? 'check-circle' : 'sync-alt'}"></i> Revisão
+                    </span>
+                  </div>
+
+                  <div class="progress-section">
+                    <div class="progress-header">
+                      <span class="progress-label"><i class="fas fa-question-circle"></i> Questões</span>
+                      <span class="progress-value">${leg.questoes.feitas} / ${leg.questoes.meta}</span>
+                    </div>
+                    <div class="progress-bar-custom">
+                      <div class="progress-fill-custom ${barColorClass}" style="width: ${progresso}%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; font-size: 0.85rem; color: #757575;">${progresso.toFixed(0)}% concluído</div>
+                  </div>
+
+                  <div class="questoes-input-area">
+                    <input type="number" min="0" max="${leg.questoes.meta}" value="${leg.questoes.feitas}" data-id="${leg.id}" data-field="questoesFeitas" placeholder="Qtd.">
+                    <button data-id="${leg.id}" data-action="updateQuestoes"><i class="fas fa-save"></i> Atualizar</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+
+        // Anexar eventos para os badges de status (toggle)
+        container.querySelectorAll('.status-badge[data-field]').forEach(badge => {
+          badge.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(badge.dataset.id);
+            const field = badge.dataset.field;
+            const leg = state.legislations.find(l => l.id === id);
+            if (leg) {
+              leg[field] = !leg[field];
+              saveToStorage();
+              const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+              renderLegislacaoList(activeFilter);
+            }
+          });
+        });
+
+        // Anexar eventos para atualizar questões
+        container.querySelectorAll('[data-action="updateQuestoes"]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(btn.dataset.id);
+            const input = btn.parentElement.querySelector('input');
+            const newVal = parseInt(input.value);
+            const leg = state.legislations.find(l => l.id === id);
+            if (leg && !isNaN(newVal) && newVal >= 0 && newVal <= leg.questoes.meta) {
+              leg.questoes.feitas = newVal;
+              saveToStorage();
+              const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+              renderLegislacaoList(activeFilter);
+            } else {
+              alert(`Insira um valor entre 0 e ${leg.questoes.meta}`);
+            }
+          });
+        });
+
+        // Anexar eventos de editar e excluir
+        container.querySelectorAll('[data-action="editLegislacao"]').forEach(i => {
+          i.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(i.dataset.id);
+            const leg = state.legislations.find(l => l.id === id);
+            if (leg) openLegislacaoModal(leg);
+          });
+        });
+        container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => {
+          i.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(i.dataset.id);
+            if (confirm('Excluir esta legislação?')) {
+              state.legislations = state.legislations.filter(l => l.id !== id);
+              saveToStorage();
+              const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+              renderLegislacaoList(activeFilter);
+            }
+          });
+        });
+      }
+
       // ========== DEMAIS PÁGINAS (preservadas) ==========
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
@@ -1854,100 +2320,6 @@ REGRAS IMPORTANTES:
       }
       function abrirModeloModal() { document.getElementById('modeloQuestaoModal').style.display = 'flex'; }
 
-      function renderLegislacao() {
-        const html = `
-          <div class="page-title">Legislação</div>
-          <div class="greeting"><i class="fas fa-gavel"></i> Acompanhe suas leituras e revisões</div>
-          <div style="display:flex; gap:16px; margin-bottom:24px;">
-            <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus"></i> Adicionar Legislação</button>
-            <button class="btn-secondary" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
-          </div>
-          <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card">
-            <p><i class="fas fa-info-circle"></i> <strong>Guia de Estudo de Legislação:</strong> 1) Leitura completa da lei seca. 2) Leitura de resumos e esquemas. 3) Revisões periódicas. 4) Resolução de questões. Marque seu progresso abaixo.</p>
-          </div>
-          <div id="legislacaoList"></div>
-        `;
-        contentDiv.innerHTML = html;
-        document.getElementById('addLegislacaoBtn').addEventListener('click', () => openLegislacaoModal());
-        document.getElementById('toggleGuiaBtn').addEventListener('click', () => {
-          const guia = document.getElementById('guiaLegislacao');
-          guia.style.display = guia.style.display === 'none' ? 'block' : 'none';
-        });
-        renderLegislacaoList();
-      }
-      function renderLegislacaoList() {
-        const container = document.getElementById('legislacaoList');
-        if (!state.legislations.length) {
-          container.innerHTML = '<div class="empty-state"><i class="fas fa-gavel"></i><h3>Nenhuma legislação cadastrada</h3></div>';
-          return;
-        }
-        container.innerHTML = state.legislations.map(l => {
-          const progresso = (l.questoes.feitas / l.questoes.meta) * 100;
-          return `
-            <div class="card" style="margin-bottom:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="font-family:Poppins;">${l.nome}</h3>
-                <div class="actions">
-                  <i class="fas fa-edit" data-action="editLegislacao" data-id="${l.id}"></i>
-                  <i class="fas fa-trash-alt" data-action="deleteLegislacao" data-id="${l.id}"></i>
-                </div>
-              </div>
-              <div style="display:flex; gap:20px; margin:16px 0;">
-                <label><input type="checkbox" data-id="${l.id}" data-field="leituraCompleta" ${l.leituraCompleta?'checked':''}> Leitura completa</label>
-                <label><input type="checkbox" data-id="${l.id}" data-field="resumoLido" ${l.resumoLido?'checked':''}> Resumo lido</label>
-                <label><input type="checkbox" data-id="${l.id}" data-field="revisado" ${l.revisado?'checked':''}> Revisado</label>
-              </div>
-              <div>
-                <div style="display:flex; justify-content:space-between;"><span>Questões: ${l.questoes.feitas} / ${l.questoes.meta}</span><span>${progresso.toFixed(0)}%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
-                <div style="margin-top:12px;"><input type="number" min="0" max="${l.questoes.meta}" value="${l.questoes.feitas}" data-id="${l.id}" data-field="questoesFeitas" style="width:80px; padding:8px; border-radius:12px; border:1px solid #E0E0E0;"> <button class="btn-sm btn-sm-primary" data-id="${l.id}" data-action="updateQuestoes">Atualizar</button></div>
-              </div>
-            </div>
-          `;
-        }).join('');
-        document.querySelectorAll('[data-field]').forEach(el => el.addEventListener('change', handleLegislacaoChange));
-        document.querySelectorAll('[data-action="updateQuestoes"]').forEach(btn => btn.addEventListener('click', (e) => {
-          const id = parseInt(btn.dataset.id);
-          const input = btn.parentElement.querySelector('input');
-          const newVal = parseInt(input.value);
-          const leg = state.legislations.find(l => l.id === id);
-          if (leg && !isNaN(newVal) && newVal >= 0 && newVal <= leg.questoes.meta) {
-            leg.questoes.feitas = newVal;
-            saveToStorage();
-            renderLegislacaoList();
-          }
-        }));
-        document.querySelectorAll('[data-action="editLegislacao"]').forEach(i => i.addEventListener('click', (e) => {
-          const id = parseInt(i.dataset.id);
-          const leg = state.legislations.find(l => l.id === id);
-          if (leg) openLegislacaoModal(leg);
-        }));
-        document.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => {
-          const id = parseInt(i.dataset.id);
-          if (confirm('Excluir esta legislação?')) {
-            state.legislations = state.legislations.filter(l => l.id !== id);
-            saveToStorage();
-            renderLegislacaoList();
-          }
-        }));
-      }
-      function handleLegislacaoChange(e) {
-        const id = parseInt(e.target.dataset.id);
-        const field = e.target.dataset.field;
-        const leg = state.legislations.find(l => l.id === id);
-        if (leg) {
-          leg[field] = e.target.checked;
-          saveToStorage();
-        }
-      }
-      function openLegislacaoModal(leg = null) {
-        const modal = document.getElementById('legislacaoModal');
-        document.getElementById('legislacaoModalTitle').textContent = leg ? 'Editar Legislação' : 'Nova Legislação';
-        document.getElementById('legislacaoNomeInput').value = leg ? leg.nome : '';
-        document.getElementById('legislacaoEditId').value = leg ? leg.id : '';
-        modal.style.display = 'flex';
-      }
-
       function renderDesempenho() {
         let totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -2238,6 +2610,13 @@ REGRAS IMPORTANTES:
         document.getElementById('disciplineModal').style.display = 'flex';
       }
       function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; document.getElementById('topicModal').style.display = 'flex'; }
+      function openLegislacaoModal(leg = null) {
+        const modal = document.getElementById('legislacaoModal');
+        document.getElementById('legislacaoModalTitle').textContent = leg ? 'Editar Legislação' : 'Nova Legislação';
+        document.getElementById('legislacaoNomeInput').value = leg ? leg.nome : '';
+        document.getElementById('legislacaoEditId').value = leg ? leg.id : '';
+        modal.style.display = 'flex';
+      }
       
       function setupModals() {
         const modalDisc = document.getElementById('disciplineModal');
@@ -2272,7 +2651,10 @@ REGRAS IMPORTANTES:
             state.legislations.push({ id: nextId++, nome, leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 0, meta: 50 } });
           }
           saveToStorage();
-          if (currentPage === 'legislacao') renderLegislacao();
+          if (currentPage === 'legislacao') {
+            const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+            renderLegislacaoList(activeFilter);
+          }
           modalLeg.style.display = 'none';
         });
         const helpModal = document.getElementById('dashboardHelpModal');
