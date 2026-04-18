@@ -502,7 +502,132 @@ REGRAS IMPORTANTES:
   <script>
     (function(){
       'use strict';
-      // ---------- LISTA DAS 50 DISCIPLINAS ----------
+      
+      // ---------- LISTA PADRONIZADA DE DISCIPLINAS (organizada por áreas) ----------
+      const DISCIPLINAS_PADRAO = {
+        "Núcleo Comum": [
+          "Língua Portuguesa",
+          "Raciocínio Lógico",
+          "Matemática",
+          "Noções de Informática",
+          "Direito Constitucional",
+          "Direito Administrativo",
+          "Matemática Financeira",
+          "Atualidades",
+          "Ética no Serviço Público",
+          "Lei de Improbidade Administrativa",
+          "Lei de Licitações e Contratos",
+          "Lei de Acesso à Informação",
+          "Administração Geral",
+          "Administração Pública",
+          "Contabilidade Geral",
+          "Estatística"
+        ],
+        "Área Jurídica": [
+          "Direito Civil",
+          "Direito Penal",
+          "Direito Processual Civil",
+          "Direito Processual Penal",
+          "Direito do Trabalho",
+          "Direito Processual do Trabalho",
+          "Direito Tributário",
+          "Direito Empresarial",
+          "Direito Previdenciário",
+          "Direito Ambiental",
+          "Direito Internacional",
+          "Direitos Humanos",
+          "Direito do Consumidor",
+          "Estatuto da Criança e do Adolescente",
+          "Legislação Penal Especial"
+        ],
+        "Área Fiscal": [
+          "Legislação Tributária Federal",
+          "Legislação Tributária Estadual",
+          "Legislação Tributária Municipal",
+          "Contabilidade Avançada",
+          "Contabilidade de Custos",
+          "Contabilidade Pública",
+          "Auditoria Contábil",
+          "Auditoria Fiscal",
+          "Legislação Aduaneira",
+          "Comércio Internacional",
+          "Economia",
+          "Finanças Públicas",
+          "Tecnologia da Informação Fiscal"
+        ],
+        "Área de Controle": [
+          "Administração Financeira e Orçamentária",
+          "Contabilidade Pública Aplicada",
+          "Auditoria Governamental",
+          "Controle Externo",
+          "Gestão de Pessoas",
+          "Políticas Públicas",
+          "Lei de Responsabilidade Fiscal",
+          "Economia do Setor Público",
+          "Regimento Interno",
+          "Lei Orgânica",
+          "Análise de Dados",
+          "Controle da Administração Pública"
+        ],
+        "Área Administrativa": [
+          "Arquivologia",
+          "Redação Oficial",
+          "Gestão de Materiais",
+          "Atendimento ao Público",
+          "Noções de Direito Financeiro",
+          "Gestão de Projetos",
+          "Gestão de Conflitos",
+          "Inglês Instrumental"
+        ]
+      };
+
+      // Função reutilizável para preencher qualquer <select> de disciplina
+      function preencherDisciplinas(selectId, disciplinasPersonalizadas = []) {
+        const selectEl = document.getElementById(selectId);
+        if (!selectEl) return;
+        
+        // Limpa o select mantendo apenas a primeira opção "Selecione..." se existir
+        const placeholder = selectEl.options[0]?.value === "" ? selectEl.options[0] : null;
+        selectEl.innerHTML = '';
+        if (placeholder) selectEl.appendChild(placeholder.cloneNode(true));
+        else {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.textContent = 'Selecione a disciplina';
+          selectEl.appendChild(opt);
+        }
+
+        // Adiciona as disciplinas padronizadas com optgroup
+        for (const [area, disciplinas] of Object.entries(DISCIPLINAS_PADRAO)) {
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = area;
+          disciplinas.forEach(nome => {
+            const option = document.createElement('option');
+            option.value = nome;
+            option.textContent = nome;
+            optgroup.appendChild(option);
+          });
+          selectEl.appendChild(optgroup);
+        }
+
+        // Adiciona disciplinas personalizadas que não estão na lista padrao (se houver)
+        const nomesPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
+        const personalizadasFiltradas = disciplinasPersonalizadas.filter(d => !nomesPadrao.includes(d.name));
+        if (personalizadasFiltradas.length > 0) {
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = '📌 Personalizadas';
+          personalizadasFiltradas.forEach(d => {
+            const option = document.createElement('option');
+            option.value = d.id;   // importante: usamos o ID para vincular ao state
+            option.textContent = d.name;
+            option.dataset.custom = 'true';
+            optgroup.appendChild(option);
+          });
+          selectEl.appendChild(optgroup);
+        }
+      }
+
+      // ---------- LISTA DAS 50 DISCIPLINAS (mantida para o datalist) ----------
       const DISCIPLINAS_PREDEF = [
         "Língua Portuguesa","Direito Constitucional","Direito Administrativo","Raciocínio Lógico-Matemático","Informática",
         "Direito Processual Civil","Direito Processual Penal","Direito Civil","Direito Penal","Direito do Trabalho",
@@ -602,7 +727,6 @@ REGRAS IMPORTANTES:
             <div class="timer-left">
               <select id="disciplineSelect" class="timer-select">
                 <option value="">Selecione a disciplina</option>
-                ${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}
               </select>
               <span class="timer-display" id="timerDisplay">${formatTime(timerSeconds)}</span>
             </div>
@@ -625,10 +749,31 @@ REGRAS IMPORTANTES:
         document.getElementById('timerStart').addEventListener('click', startTimer);
         document.getElementById('timerPause').addEventListener('click', pauseTimer);
         document.getElementById('timerStop').addEventListener('click', stopTimer);
+        
+        // Preenche o select de disciplina do cronômetro
+        preencherDisciplinas('disciplineSelect', state.disciplines);
       }
       function startTimer() {
         const sel = document.getElementById('disciplineSelect'); if(!sel) return;
-        const discId = parseInt(sel.value); if(!discId) { alert('Selecione uma disciplina'); return; }
+        const selectedValue = sel.value;
+        if(!selectedValue) { alert('Selecione uma disciplina'); return; }
+        
+        // Verifica se é uma disciplina personalizada (ID numérico) ou nome da lista padrão
+        let discId;
+        if (sel.options[sel.selectedIndex]?.dataset?.custom === 'true') {
+          discId = parseInt(selectedValue);
+        } else {
+          // Procura pelo nome na state.disciplines; se não existir, cria automaticamente
+          const discName = selectedValue;
+          let disc = state.disciplines.find(d => d.name === discName);
+          if (!disc) {
+            disc = { id: nextId++, name: discName, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
+            state.disciplines.push(disc);
+            saveToStorage();
+          }
+          discId = disc.id;
+        }
+        
         activeDisciplineId = discId; timerRunning = true;
         if(timerInterval) clearInterval(timerInterval);
         timerInterval = setInterval(() => { timerSeconds++; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = formatTime(timerSeconds); }, 1000);
@@ -843,7 +988,7 @@ REGRAS IMPORTANTES:
           <div class="card" style="margin-bottom: 32px;">
             <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
             <div style="display:grid; gap:16px; margin-top:20px;">
-              <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select>
+              <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option></select>
               <select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select>
               <div style="display:flex; gap:12px;">
                 <button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
@@ -871,20 +1016,82 @@ REGRAS IMPORTANTES:
         `;
         contentDiv.innerHTML = html;
         attachTimerEvents();
+        
+        // Preenche o select de disciplina da página de questões
+        preencherDisciplinas('qDiscipline', state.disciplines);
+        
         const discSelect = document.getElementById('qDiscipline'), topicSelect = document.getElementById('qTopic');
         discSelect.addEventListener('change', () => {
-          const discId = parseInt(discSelect.value); const disc = state.disciplines.find(d=>d.id===discId);
+          const selectedValue = discSelect.value;
+          if (!selectedValue) {
+            topicSelect.innerHTML = '<option value="">Tópico (opcional)</option>';
+            topicSelect.disabled = true;
+            return;
+          }
+          
+          // Encontra a disciplina no state (pode ser pelo nome ou ID)
+          let disc;
+          if (discSelect.options[discSelect.selectedIndex]?.dataset?.custom === 'true') {
+            disc = state.disciplines.find(d => d.id === parseInt(selectedValue));
+          } else {
+            disc = state.disciplines.find(d => d.name === selectedValue);
+            // Se não existir, cria automaticamente
+            if (!disc) {
+              disc = { id: nextId++, name: selectedValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
+              state.disciplines.push(disc);
+              saveToStorage();
+            }
+          }
+          
           topicSelect.innerHTML = '<option value="">Tópico (opcional)</option>';
           topicSelect.disabled = !disc || !disc.topics.length;
-          if(disc && disc.topics.length) disc.topics.forEach(t => { topicSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`; });
+          if (disc && disc.topics.length) {
+            disc.topics.forEach(t => {
+              topicSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+            });
+          }
         });
+        
         function register(correct) {
-          const discId = parseInt(discSelect.value); if(!discId) { alert('Selecione a disciplina'); return; }
-          const topicId = topicSelect.value ? parseInt(topicSelect.value) : null; const disc = state.disciplines.find(d=>d.id===discId);
-          if(topicId) { const topic = disc.topics.find(t=>t.id===topicId); if(topic) { topic.questions = (topic.questions||0)+1; if(correct) topic.correct = (topic.correct||0)+1; else topic.wrong = (topic.wrong||0)+1; } }
-          else { if(disc.topics.length) { alert('Esta disciplina possui tópicos. Selecione um tópico.'); return; } disc.questions = (disc.questions||0)+1; if(correct) disc.correct = (disc.correct||0)+1; else disc.wrong = (disc.wrong||0)+1; }
-          recordQuestionHistory(discId, topicId, correct); saveToStorage(); renderQuestoes();
+          const discSelect = document.getElementById('qDiscipline');
+          const selectedValue = discSelect.value;
+          if (!selectedValue) { alert('Selecione a disciplina'); return; }
+          
+          let disc, discId;
+          if (discSelect.options[discSelect.selectedIndex]?.dataset?.custom === 'true') {
+            discId = parseInt(selectedValue);
+            disc = state.disciplines.find(d => d.id === discId);
+          } else {
+            disc = state.disciplines.find(d => d.name === selectedValue);
+            if (!disc) {
+              disc = { id: nextId++, name: selectedValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
+              state.disciplines.push(disc);
+              saveToStorage();
+            }
+            discId = disc.id;
+          }
+          
+          const topicId = topicSelect.value ? parseInt(topicSelect.value) : null;
+          
+          if (topicId) {
+            const topic = disc.topics.find(t => t.id === topicId);
+            if (topic) {
+              topic.questions = (topic.questions||0)+1;
+              if (correct) topic.correct = (topic.correct||0)+1;
+              else topic.wrong = (topic.wrong||0)+1;
+            }
+          } else {
+            if (disc.topics.length) { alert('Esta disciplina possui tópicos. Selecione um tópico.'); return; }
+            disc.questions = (disc.questions||0)+1;
+            if (correct) disc.correct = (disc.correct||0)+1;
+            else disc.wrong = (disc.wrong||0)+1;
+          }
+          
+          recordQuestionHistory(discId, topicId, correct);
+          saveToStorage();
+          renderQuestoes();
         }
+        
         document.getElementById('registerCorrect').addEventListener('click', ()=> register(true));
         document.getElementById('registerWrong').addEventListener('click', ()=> register(false));
         document.getElementById('gerarQuestoesBtn').addEventListener('click', gerarQuestoesHandler);
@@ -1015,14 +1222,37 @@ REGRAS IMPORTANTES:
       }
 
       // ---------- MODAIS ----------
-      function openDisciplineModal() { document.getElementById('disciplineNameInput').value = ''; document.getElementById('disciplineModal').style.display = 'flex'; }
+      function openDisciplineModal() {
+        // Preenche o datalist com todas as disciplinas padronizadas + personalizadas
+        const datalist = document.getElementById('disciplinesDatalist');
+        datalist.innerHTML = '';
+        const todasPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
+        todasPadrao.forEach(nome => {
+          const opt = document.createElement('option');
+          opt.value = nome;
+          datalist.appendChild(opt);
+        });
+        state.disciplines.forEach(d => {
+          if (!todasPadrao.includes(d.name)) {
+            const opt = document.createElement('option');
+            opt.value = d.name;
+            datalist.appendChild(opt);
+          }
+        });
+        document.getElementById('disciplineModal').style.display = 'flex';
+      }
       function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; document.getElementById('topicModal').style.display = 'flex'; }
       function setupModals() {
         const modalDisc = document.getElementById('disciplineModal');
         document.getElementById('cancelModal').addEventListener('click', ()=> modalDisc.style.display='none');
         document.getElementById('saveDiscipline').addEventListener('click', ()=>{
           const name = document.getElementById('disciplineNameInput').value.trim();
-          if(name) { state.disciplines.push({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false }); saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalDisc.style.display='none'; }
+          if(name) { 
+            state.disciplines.push({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false }); 
+            saveToStorage(); 
+            if(currentPage==='disciplinas') renderDisciplinas(); 
+            modalDisc.style.display='none'; 
+          }
         });
         const modalTopic = document.getElementById('topicModal');
         document.getElementById('cancelTopicModal').addEventListener('click', ()=> modalTopic.style.display='none');
@@ -1049,8 +1279,12 @@ REGRAS IMPORTANTES:
       function init() {
         loadFromStorage();
         setupModals();
+        
+        // Preenche o datalist inicial
         const datalist = document.getElementById('disciplinesDatalist');
-        DISCIPLINAS_PREDEF.forEach(name => { const opt = document.createElement('option'); opt.value = name; datalist.appendChild(opt); });
+        const todasPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
+        todasPadrao.forEach(name => { const opt = document.createElement('option'); opt.value = name; datalist.appendChild(opt); });
+        
         document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => renderPage(item.dataset.page)));
         renderPage('dashboard');
       }
