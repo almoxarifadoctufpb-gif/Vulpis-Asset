@@ -421,6 +421,99 @@
     .question-actions { display: flex; gap: 12px; margin-top: 20px; }
     .section-divider { margin: 40px 0 24px; border-top: 2px dashed #E0E0E0; }
     .copy-feedback { color: #2E7D32; font-size: 0.9rem; margin-left: 12px; }
+
+    /* Estilos específicos para legislação */
+    .legislation-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+    }
+    .legislation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .legislation-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    .status-badge {
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-em-andamento { background: #FFF3E0; color: #E65100; }
+    .status-quase-concluido { background: #E8F5E9; color: #2E7D32; }
+    .status-concluido { background: #C8E6C9; color: #1B5E20; }
+    .legislation-progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .checklist-item label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .questions-control {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .questions-meta-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .questions-meta-input input {
+      width: 80px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid #E0E0E0;
+    }
+    .questions-progress-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mini-progress-bar {
+      width: 150px;
+      height: 8px;
+      background: #E9E9E9;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .mini-progress-fill {
+      height: 100%;
+      background: #F57C00;
+      border-radius: 10px;
+    }
+    .congrats-message {
+      margin-top: 16px;
+      padding: 16px;
+      background: #E8F5E9;
+      border-radius: 16px;
+      color: #2E7D32;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 6px solid #2E7D32;
+    }
   </style>
 </head>
 <body>
@@ -436,6 +529,7 @@
       <div class="nav-item" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
       <div class="nav-item" data-page="disciplinas"><i class="fas fa-book-open"></i> Disciplinas</div>
       <div class="nav-item" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
+      <div class="nav-item" data-page="legislacao"><i class="fas fa-gavel"></i> Legislação</div>
       <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
       <div class="nav-item" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
     </div>
@@ -498,95 +592,58 @@ REGRAS IMPORTANTES:
       </div>
     </div>
   </div>
+  <!-- Modal para adicionar/editar legislação -->
+  <div class="modal" id="legislacaoModal">
+    <div class="modal-card">
+      <h3 style="font-family: Poppins; margin-bottom: 16px;" id="legislacaoModalTitle">Nova Legislação</h3>
+      <label>Nome da legislação</label>
+      <input type="text" id="legislacaoNomeInput" placeholder="Ex: Constituição Federal, Lei 8.112/90...">
+      <input type="hidden" id="legislacaoEditId">
+      <div class="flex-buttons">
+        <button class="btn-primary" style="background: #9E9E9E;" id="cancelLegislacaoModal">Cancelar</button>
+        <button class="btn-primary" id="saveLegislacao">Salvar</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     (function(){
       'use strict';
       
-      // ---------- LISTA PADRONIZADA DE DISCIPLINAS (organizada por áreas) ----------
+      // ---------- LISTA PADRONIZADA DE DISCIPLINAS ----------
       const DISCIPLINAS_PADRAO = {
         "Núcleo Comum": [
-          "Língua Portuguesa",
-          "Raciocínio Lógico",
-          "Matemática",
-          "Noções de Informática",
-          "Direito Constitucional",
-          "Direito Administrativo",
-          "Matemática Financeira",
-          "Atualidades",
-          "Ética no Serviço Público",
-          "Lei de Improbidade Administrativa",
-          "Lei de Licitações e Contratos",
-          "Lei de Acesso à Informação",
-          "Administração Geral",
-          "Administração Pública",
-          "Contabilidade Geral",
-          "Estatística"
+          "Língua Portuguesa", "Raciocínio Lógico", "Matemática", "Noções de Informática", "Direito Constitucional",
+          "Direito Administrativo", "Matemática Financeira", "Atualidades", "Ética no Serviço Público",
+          "Lei de Improbidade Administrativa", "Lei de Licitações e Contratos", "Lei de Acesso à Informação",
+          "Administração Geral", "Administração Pública", "Contabilidade Geral", "Estatística"
         ],
         "Área Jurídica": [
-          "Direito Civil",
-          "Direito Penal",
-          "Direito Processual Civil",
-          "Direito Processual Penal",
-          "Direito do Trabalho",
-          "Direito Processual do Trabalho",
-          "Direito Tributário",
-          "Direito Empresarial",
-          "Direito Previdenciário",
-          "Direito Ambiental",
-          "Direito Internacional",
-          "Direitos Humanos",
-          "Direito do Consumidor",
-          "Estatuto da Criança e do Adolescente",
-          "Legislação Penal Especial"
+          "Direito Civil", "Direito Penal", "Direito Processual Civil", "Direito Processual Penal", "Direito do Trabalho",
+          "Direito Processual do Trabalho", "Direito Tributário", "Direito Empresarial", "Direito Previdenciário",
+          "Direito Ambiental", "Direito Internacional", "Direitos Humanos", "Direito do Consumidor",
+          "Estatuto da Criança e do Adolescente", "Legislação Penal Especial"
         ],
         "Área Fiscal": [
-          "Legislação Tributária Federal",
-          "Legislação Tributária Estadual",
-          "Legislação Tributária Municipal",
-          "Contabilidade Avançada",
-          "Contabilidade de Custos",
-          "Contabilidade Pública",
-          "Auditoria Contábil",
-          "Auditoria Fiscal",
-          "Legislação Aduaneira",
-          "Comércio Internacional",
-          "Economia",
-          "Finanças Públicas",
+          "Legislação Tributária Federal", "Legislação Tributária Estadual", "Legislação Tributária Municipal",
+          "Contabilidade Avançada", "Contabilidade de Custos", "Contabilidade Pública", "Auditoria Contábil",
+          "Auditoria Fiscal", "Legislação Aduaneira", "Comércio Internacional", "Economia", "Finanças Públicas",
           "Tecnologia da Informação Fiscal"
         ],
         "Área de Controle": [
-          "Administração Financeira e Orçamentária",
-          "Contabilidade Pública Aplicada",
-          "Auditoria Governamental",
-          "Controle Externo",
-          "Gestão de Pessoas",
-          "Políticas Públicas",
-          "Lei de Responsabilidade Fiscal",
-          "Economia do Setor Público",
-          "Regimento Interno",
-          "Lei Orgânica",
-          "Análise de Dados",
-          "Controle da Administração Pública"
+          "Administração Financeira e Orçamentária", "Contabilidade Pública Aplicada", "Auditoria Governamental",
+          "Controle Externo", "Gestão de Pessoas", "Políticas Públicas", "Lei de Responsabilidade Fiscal",
+          "Economia do Setor Público", "Regimento Interno", "Lei Orgânica", "Análise de Dados", "Controle da Administração Pública"
         ],
         "Área Administrativa": [
-          "Arquivologia",
-          "Redação Oficial",
-          "Gestão de Materiais",
-          "Atendimento ao Público",
-          "Noções de Direito Financeiro",
-          "Gestão de Projetos",
-          "Gestão de Conflitos",
-          "Inglês Instrumental"
+          "Arquivologia", "Redação Oficial", "Gestão de Materiais", "Atendimento ao Público", "Noções de Direito Financeiro",
+          "Gestão de Projetos", "Gestão de Conflitos", "Inglês Instrumental"
         ]
       };
 
-      // Função reutilizável para preencher qualquer <select> de disciplina
       function preencherDisciplinas(selectId, disciplinasPersonalizadas = []) {
         const selectEl = document.getElementById(selectId);
         if (!selectEl) return;
-        
-        // Limpa o select mantendo apenas a primeira opção "Selecione..." se existir
         const placeholder = selectEl.options[0]?.value === "" ? selectEl.options[0] : null;
         selectEl.innerHTML = '';
         if (placeholder) selectEl.appendChild(placeholder.cloneNode(true));
@@ -596,8 +653,6 @@ REGRAS IMPORTANTES:
           opt.textContent = 'Selecione a disciplina';
           selectEl.appendChild(opt);
         }
-
-        // Adiciona as disciplinas padronizadas com optgroup
         for (const [area, disciplinas] of Object.entries(DISCIPLINAS_PADRAO)) {
           const optgroup = document.createElement('optgroup');
           optgroup.label = area;
@@ -609,8 +664,6 @@ REGRAS IMPORTANTES:
           });
           selectEl.appendChild(optgroup);
         }
-
-        // Adiciona disciplinas personalizadas que não estão na lista padrao (se houver)
         const nomesPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
         const personalizadasFiltradas = disciplinasPersonalizadas.filter(d => !nomesPadrao.includes(d.name));
         if (personalizadasFiltradas.length > 0) {
@@ -618,7 +671,7 @@ REGRAS IMPORTANTES:
           optgroup.label = '📌 Personalizadas';
           personalizadasFiltradas.forEach(d => {
             const option = document.createElement('option');
-            option.value = d.id;   // importante: usamos o ID para vincular ao state
+            option.value = d.id;
             option.textContent = d.name;
             option.dataset.custom = 'true';
             optgroup.appendChild(option);
@@ -626,20 +679,6 @@ REGRAS IMPORTANTES:
           selectEl.appendChild(optgroup);
         }
       }
-
-      // ---------- LISTA DAS 50 DISCIPLINAS (mantida para o datalist) ----------
-      const DISCIPLINAS_PREDEF = [
-        "Língua Portuguesa","Direito Constitucional","Direito Administrativo","Raciocínio Lógico-Matemático","Informática",
-        "Direito Processual Civil","Direito Processual Penal","Direito Civil","Direito Penal","Direito do Trabalho",
-        "Direito Processual do Trabalho","Legislação Especial","Administração Geral e Pública","AFO","Gestão de Pessoas",
-        "Atualidades","Ética no Serviço Público","Direitos das Pessoas com Deficiência","Direito Eleitoral","Direito Previdenciário",
-        "Direito Tributário","ECA","Direito Ambiental","Direito do Consumidor","Contabilidade Geral","Contabilidade Pública",
-        "Auditoria Governamental","Noções de Estatística","Matemática Financeira","Arquivologia","Língua Inglesa",
-        "Legislação Aduaneira","Direito Empresarial","Legislação Extravagante","Noções de Sustentabilidade","Direitos Humanos",
-        "Acessibilidade","Economia e Finanças Públicas","Fluência em Dados","Ciência Política","Técnica Legislativa",
-        "Regimento Interno","Tecnologia da Informação","Contabilidade de Custos","História e Geografia","Auditoria",
-        "Noções de Perícia em Processo Civil","Comércio Internacional","Licitações e Contratos","Direito Processual do Trabalho"
-      ];
 
       // Banco mock de questões
       const MOCK_QUESTIONS = [
@@ -649,33 +688,34 @@ REGRAS IMPORTANTES:
           "C) A lei penal não retroagirá, salvo para beneficiar o réu, mas a lei processual penal poderá retroagir para prejudicar o acusado.",
           "D) A prática do racismo constitui crime inafiançável e imprescritível, sujeito à pena de detenção, nos termos da lei.",
           "E) Ninguém será privado de direitos por motivo de crença religiosa ou de convicção filosófica ou política, salvo se as invocar para eximir-se de obrigação legal a todos imposta e recusar-se a cumprir prestação alternativa."
-        ], gabarito: 0, comentario: "Alternativa A correta (art. 5º, XI, CF). B errada: associação paramilitar é vedada. C errada: lei processual não retroage para prejudicar. D errada: pena de reclusão. E errada: a exceção não é absoluta." },
+        ], gabarito: 0, comentario: "Alternativa A correta (art. 5º, XI, CF)." },
         { tema: "direito constitucional", enunciado: "Sobre os direitos políticos, é correto afirmar que:", alternativas: [
           "A) O alistamento eleitoral e o voto são obrigatórios para os maiores de dezoito anos e facultativos para os analfabetos, os maiores de setenta anos e os maiores de dezesseis e menores de dezoito anos.",
           "B) São inelegíveis os inalistáveis e os analfabetos, em qualquer hipótese.",
           "C) A idade mínima para concorrer ao cargo de Senador é de trinta anos, e para Governador, vinte e um anos.",
           "D) O mandato eletivo poderá ser impugnado ante a Justiça Eleitoral no prazo de trinta dias contados da diplomação, instruída a ação com provas de abuso do poder econômico, corrupção ou fraude.",
           "E) A ação de impugnação de mandato tramitará em segredo de justiça."
-        ], gabarito: 3, comentario: "Alternativa D correta (art. 14, §10). A errada: voto facultativo para analfabetos, maiores de 70 e entre 16 e 18. B errada: analfabetos são inelegíveis mas podem votar. C errada: Governador idade mínima 30. E errada: não tramita em segredo." },
+        ], gabarito: 3, comentario: "Alternativa D correta (art. 14, §10)." },
         { tema: "português", enunciado: "Assinale a frase em que a concordância verbal está de acordo com a norma-padrão:", alternativas: [
           "A) Fazem dois anos que não o vejo.",
           "B) Haviam muitos candidatos na sala.",
           "C) Tratam-se de questões complexas.",
           "D) Mais de um aluno compareceu à cerimônia.",
           "E) A maioria dos alunos reclamaram da prova."
-        ], gabarito: 3, comentario: "Alternativa D correta: 'Mais de um' leva verbo no singular. A errada: 'Fazer' impessoal (Faz). B errada: 'Haver' impessoal (Havia). C errada: 'Tratar-se de' invariável (Trata-se). E errada: preferência por singular com 'maioria'." },
+        ], gabarito: 3, comentario: "Alternativa D correta." },
         { tema: "raciocínio lógico", enunciado: "Em uma sala, todos os alunos que gostam de matemática também gostam de física. Sabe-se que alguns alunos gostam de química. Se essas informações são verdadeiras, conclui-se que:", alternativas: [
           "A) Nenhum aluno que gosta de química gosta de física.",
           "B) Todo aluno que gosta de física gosta de matemática.",
           "C) Algum aluno que gosta de química pode não gostar de matemática.",
           "D) Todos os alunos que não gostam de matemática não gostam de física.",
           "E) Pelo menos um aluno que gosta de matemática também gosta de química."
-        ], gabarito: 2, comentario: "Matemática → Física. Química não tem restrição. Portanto C é possível. A, B, D e E não podem ser garantidos." }
+        ], gabarito: 2, comentario: "Matemática → Física. C é possível." }
       ];
 
       // ---------- ESTADO GLOBAL ----------
       let state = {
         disciplines: [],
+        legislations: [], // NOVO: array de legislações
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: []
       };
@@ -688,7 +728,17 @@ REGRAS IMPORTANTES:
       function loadFromStorage() {
         const saved = localStorage.getItem('vulpis_state');
         if(saved) {
-          try { const parsed = JSON.parse(saved); state = { ...state, ...parsed }; if(state.disciplines.length) nextId = Math.max(...state.disciplines.map(d=>d.id), 0) + 1; } catch(e){}
+          try { 
+            const parsed = JSON.parse(saved); 
+            state = { ...state, ...parsed }; 
+            if(state.disciplines.length) nextId = Math.max(...state.disciplines.map(d=>d.id), 0) + 1; 
+            // Garante que legislations existe
+            state.legislations = state.legislations || [];
+            // Migração: garantir estrutura de questões em legislações antigas
+            state.legislations.forEach(leg => {
+              leg.questoes = leg.questoes || { feitas: 0, meta: 0 };
+            });
+          } catch(e){}
         }
         if(!state.disciplines.length) {
           state.disciplines = [
@@ -697,7 +747,15 @@ REGRAS IMPORTANTES:
             { id: nextId++, name: 'Português', timeSeconds: 5400, questions: 120, correct: 98, wrong: 22, topics: [] }
           ];
         }
+        if(!state.legislations.length) {
+          // Exemplos iniciais
+          state.legislations = [
+            { id: nextId++, nome: 'Constituição Federal', leituraCompleta: true, resumoLido: true, revisado: false, questoes: { feitas: 30, meta: 100 } },
+            { id: nextId++, nome: 'Lei 8.112/90', leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 5, meta: 50 } }
+          ];
+        }
         state.disciplines.forEach(d => { d.topics = d.topics || []; d.expanded = false; });
+        saveToStorage();
       }
       function saveToStorage() { localStorage.setItem('vulpis_state', JSON.stringify(state)); }
       function formatTime(sec) {
@@ -715,6 +773,7 @@ REGRAS IMPORTANTES:
           case 'dashboard': renderDashboard(); break;
           case 'disciplinas': renderDisciplinas(); break;
           case 'questoes': renderQuestoes(); break;
+          case 'legislacao': renderLegislacao(); break;
           case 'desempenho': renderDesempenho(); break;
           case 'perfil': renderPerfil(); break;
         }
@@ -749,21 +808,16 @@ REGRAS IMPORTANTES:
         document.getElementById('timerStart').addEventListener('click', startTimer);
         document.getElementById('timerPause').addEventListener('click', pauseTimer);
         document.getElementById('timerStop').addEventListener('click', stopTimer);
-        
-        // Preenche o select de disciplina do cronômetro
         preencherDisciplinas('disciplineSelect', state.disciplines);
       }
       function startTimer() {
         const sel = document.getElementById('disciplineSelect'); if(!sel) return;
         const selectedValue = sel.value;
         if(!selectedValue) { alert('Selecione uma disciplina'); return; }
-        
-        // Verifica se é uma disciplina personalizada (ID numérico) ou nome da lista padrão
         let discId;
         if (sel.options[sel.selectedIndex]?.dataset?.custom === 'true') {
           discId = parseInt(selectedValue);
         } else {
-          // Procura pelo nome na state.disciplines; se não existir, cria automaticamente
           const discName = selectedValue;
           let disc = state.disciplines.find(d => d.name === discName);
           if (!disc) {
@@ -773,7 +827,6 @@ REGRAS IMPORTANTES:
           }
           discId = disc.id;
         }
-        
         activeDisciplineId = discId; timerRunning = true;
         if(timerInterval) clearInterval(timerInterval);
         timerInterval = setInterval(() => { timerSeconds++; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = formatTime(timerSeconds); }, 1000);
@@ -792,7 +845,7 @@ REGRAS IMPORTANTES:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ---------- DASHBOARD ----------
+      // ---------- DASHBOARD (mantido) ----------
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -880,7 +933,7 @@ REGRAS IMPORTANTES:
         return worst;
       }
 
-      // ---------- DISCIPLINAS ----------
+      // ---------- DISCIPLINAS (mantido) ----------
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
@@ -969,7 +1022,7 @@ REGRAS IMPORTANTES:
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
       }
 
-      // ---------- QUESTÕES (com Elaboração e Modelo) ----------
+      // ---------- QUESTÕES (mantido) ----------
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q=>q.date === today);
@@ -1016,10 +1069,7 @@ REGRAS IMPORTANTES:
         `;
         contentDiv.innerHTML = html;
         attachTimerEvents();
-        
-        // Preenche o select de disciplina da página de questões
         preencherDisciplinas('qDiscipline', state.disciplines);
-        
         const discSelect = document.getElementById('qDiscipline'), topicSelect = document.getElementById('qTopic');
         discSelect.addEventListener('change', () => {
           const selectedValue = discSelect.value;
@@ -1028,21 +1078,17 @@ REGRAS IMPORTANTES:
             topicSelect.disabled = true;
             return;
           }
-          
-          // Encontra a disciplina no state (pode ser pelo nome ou ID)
           let disc;
           if (discSelect.options[discSelect.selectedIndex]?.dataset?.custom === 'true') {
             disc = state.disciplines.find(d => d.id === parseInt(selectedValue));
           } else {
             disc = state.disciplines.find(d => d.name === selectedValue);
-            // Se não existir, cria automaticamente
             if (!disc) {
               disc = { id: nextId++, name: selectedValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
               state.disciplines.push(disc);
               saveToStorage();
             }
           }
-          
           topicSelect.innerHTML = '<option value="">Tópico (opcional)</option>';
           topicSelect.disabled = !disc || !disc.topics.length;
           if (disc && disc.topics.length) {
@@ -1051,12 +1097,10 @@ REGRAS IMPORTANTES:
             });
           }
         });
-        
         function register(correct) {
           const discSelect = document.getElementById('qDiscipline');
           const selectedValue = discSelect.value;
           if (!selectedValue) { alert('Selecione a disciplina'); return; }
-          
           let disc, discId;
           if (discSelect.options[discSelect.selectedIndex]?.dataset?.custom === 'true') {
             discId = parseInt(selectedValue);
@@ -1070,9 +1114,7 @@ REGRAS IMPORTANTES:
             }
             discId = disc.id;
           }
-          
           const topicId = topicSelect.value ? parseInt(topicSelect.value) : null;
-          
           if (topicId) {
             const topic = disc.topics.find(t => t.id === topicId);
             if (topic) {
@@ -1086,12 +1128,10 @@ REGRAS IMPORTANTES:
             if (correct) disc.correct = (disc.correct||0)+1;
             else disc.wrong = (disc.wrong||0)+1;
           }
-          
           recordQuestionHistory(discId, topicId, correct);
           saveToStorage();
           renderQuestoes();
         }
-        
         document.getElementById('registerCorrect').addEventListener('click', ()=> register(true));
         document.getElementById('registerWrong').addEventListener('click', ()=> register(false));
         document.getElementById('gerarQuestoesBtn').addEventListener('click', gerarQuestoesHandler);
@@ -1186,7 +1226,191 @@ REGRAS IMPORTANTES:
       }
       function abrirModeloModal() { document.getElementById('modeloQuestaoModal').style.display = 'flex'; }
 
-      // ---------- DESEMPENHO ----------
+      // ---------- NOVA PÁGINA: LEGISLAÇÃO ----------
+      function renderLegislacao() {
+        const html = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><div class="page-title">Legislação</div><div class="greeting">Controle de leitura e questões</div></div>
+            <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar legislação</button>
+          </div>
+          <div id="legislacaoListContainer">
+            ${renderLegislacaoList()}
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('addLegislacaoBtn').addEventListener('click', openLegislacaoModal);
+        attachLegislacaoEvents();
+      }
+
+      function calcularProgressoLegislacao(leg) {
+        const itens = [
+          leg.leituraCompleta ? 1 : 0,
+          leg.resumoLido ? 1 : 0,
+          leg.revisado ? 1 : 0,
+          leg.questoes.meta > 0 ? Math.min(leg.questoes.feitas / leg.questoes.meta, 1) : 0
+        ];
+        const soma = itens.reduce((a,b) => a + b, 0);
+        return (soma / 4) * 100; // cada item 25%
+      }
+
+      function getStatusLegislacao(percentual) {
+        if (percentual >= 100) return { classe: 'status-concluido', texto: 'Concluído' };
+        if (percentual >= 75) return { classe: 'status-quase-concluido', texto: 'Quase concluído' };
+        return { classe: 'status-em-andamento', texto: 'Em andamento' };
+      }
+
+      function renderLegislacaoList() {
+        if (!state.legislations.length) {
+          return '<div class="empty-state"><i class="fas fa-gavel"></i><h3>Nenhuma legislação</h3><p>Adicione leis para controlar seu estudo.</p></div>';
+        }
+        return state.legislations.map(leg => {
+          const progresso = calcularProgressoLegislacao(leg);
+          const status = getStatusLegislacao(progresso);
+          const questoesProgresso = leg.questoes.meta > 0 ? (leg.questoes.feitas / leg.questoes.meta) * 100 : 0;
+          const congrats = progresso >= 100;
+          return `
+            <div class="legislation-card" data-id="${leg.id}">
+              <div class="legislation-header">
+                <span class="legislation-title">${leg.nome}</span>
+                <span class="status-badge ${status.classe}">${status.texto}</span>
+              </div>
+              <div class="legislation-progress-section">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="flex:1;"><div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div></div>
+                  <span style="font-weight:600;">${progresso.toFixed(0)}%</span>
+                </div>
+                <div class="checklist-item">
+                  <label><input type="checkbox" data-id="${leg.id}" data-field="leituraCompleta" ${leg.leituraCompleta ? 'checked' : ''}> Leitura completa da lei seca</label>
+                </div>
+                <div class="checklist-item">
+                  <label><input type="checkbox" data-id="${leg.id}" data-field="resumoLido" ${leg.resumoLido ? 'checked' : ''}> Leitura de resumo/esquema</label>
+                </div>
+                <div class="checklist-item">
+                  <label><input type="checkbox" data-id="${leg.id}" data-field="revisado" ${leg.revisado ? 'checked' : ''}> Revisão realizada</label>
+                </div>
+                <div style="margin-top: 8px;">
+                  <div style="font-weight:500; margin-bottom: 12px;"><i class="fas fa-question-circle"></i> Questões</div>
+                  <div class="questions-control">
+                    <div class="questions-meta-input">
+                      <label>Meta:</label>
+                      <input type="number" min="0" step="1" data-id="${leg.id}" data-field="metaQuestoes" value="${leg.questoes.meta || 0}" style="width:100px;">
+                    </div>
+                    <div class="questions-meta-input">
+                      <label>Feitas:</label>
+                      <input type="number" min="0" step="1" data-id="${leg.id}" data-field="feitasQuestoes" value="${leg.questoes.feitas || 0}">
+                    </div>
+                    <div class="questions-progress-display">
+                      <span>${leg.questoes.feitas} / ${leg.questoes.meta || 0}</span>
+                      <div class="mini-progress-bar"><div class="mini-progress-fill" style="width:${questoesProgresso}%"></div></div>
+                    </div>
+                  </div>
+                </div>
+                ${congrats ? `<div class="congrats-message"><i class="fas fa-trophy"></i> Parabéns! Você concluiu completamente essa legislação, incluindo teoria e prática!</div>` : ''}
+              </div>
+              <div style="display:flex; justify-content: flex-end; margin-top: 16px; gap:12px;">
+                <button class="btn-secondary" data-action="editLegislacao" data-id="${leg.id}"><i class="fas fa-edit"></i> Editar</button>
+                <button class="btn-secondary" data-action="deleteLegislacao" data-id="${leg.id}"><i class="fas fa-trash-alt"></i> Excluir</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function attachLegislacaoEvents() {
+        // Checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', (e) => {
+            const id = parseInt(cb.dataset.id);
+            const field = cb.dataset.field;
+            const leg = state.legislations.find(l => l.id === id);
+            if (leg) {
+              leg[field] = cb.checked;
+              saveToStorage();
+              renderLegislacao(); // re-render para atualizar progresso e status
+            }
+          });
+        });
+        // Inputs numéricos
+        document.querySelectorAll('input[type="number"]').forEach(inp => {
+          inp.addEventListener('change', (e) => {
+            const id = parseInt(inp.dataset.id);
+            const field = inp.dataset.field;
+            const leg = state.legislations.find(l => l.id === id);
+            if (leg) {
+              let val = parseInt(inp.value) || 0;
+              if (field === 'metaQuestoes') leg.questoes.meta = val;
+              else if (field === 'feitasQuestoes') leg.questoes.feitas = val;
+              saveToStorage();
+              renderLegislacao();
+            }
+          });
+        });
+        // Botões de ação
+        document.querySelectorAll('[data-action="editLegislacao"]').forEach(btn => {
+          btn.addEventListener('click', () => openLegislacaoModal(parseInt(btn.dataset.id)));
+        });
+        document.querySelectorAll('[data-action="deleteLegislacao"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.dataset.id);
+            if (confirm('Excluir esta legislação?')) {
+              state.legislations = state.legislations.filter(l => l.id !== id);
+              saveToStorage();
+              renderLegislacao();
+            }
+          });
+        });
+      }
+
+      function openLegislacaoModal(editId = null) {
+        const modal = document.getElementById('legislacaoModal');
+        const title = document.getElementById('legislacaoModalTitle');
+        const nomeInput = document.getElementById('legislacaoNomeInput');
+        const editIdInput = document.getElementById('legislacaoEditId');
+        if (editId) {
+          const leg = state.legislations.find(l => l.id === editId);
+          if (leg) {
+            title.textContent = 'Editar Legislação';
+            nomeInput.value = leg.nome;
+            editIdInput.value = editId;
+          }
+        } else {
+          title.textContent = 'Nova Legislação';
+          nomeInput.value = '';
+          editIdInput.value = '';
+        }
+        modal.style.display = 'flex';
+      }
+
+      function setupLegislacaoModal() {
+        const modal = document.getElementById('legislacaoModal');
+        document.getElementById('cancelLegislacaoModal').addEventListener('click', () => modal.style.display = 'none');
+        document.getElementById('saveLegislacao').addEventListener('click', () => {
+          const nome = document.getElementById('legislacaoNomeInput').value.trim();
+          if (!nome) { alert('Digite o nome da legislação'); return; }
+          const editId = document.getElementById('legislacaoEditId').value;
+          if (editId) {
+            const leg = state.legislations.find(l => l.id === parseInt(editId));
+            if (leg) leg.nome = nome;
+          } else {
+            state.legislations.push({
+              id: nextId++,
+              nome: nome,
+              leituraCompleta: false,
+              resumoLido: false,
+              revisado: false,
+              questoes: { feitas: 0, meta: 0 }
+            });
+          }
+          saveToStorage();
+          modal.style.display = 'none';
+          if (currentPage === 'legislacao') renderLegislacao();
+        });
+        window.addEventListener('click', (e) => {
+          if (e.target === modal) modal.style.display = 'none';
+        });
+      }
+
+      // ---------- DESEMPENHO (mantido) ----------
       function renderDesempenho() {
         const discStats = state.disciplines.map(d => {
           let t=0, q=0, c=0; if(d.topics.length) { d.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; }); }
@@ -1202,7 +1426,7 @@ REGRAS IMPORTANTES:
         attachTimerEvents();
       }
 
-      // ---------- PERFIL ----------
+      // ---------- PERFIL (mantido) ----------
       function renderPerfil() {
         const totalSec = state.disciplines.reduce((s,d)=> s + (d.topics.length ? d.topics.reduce((a,t)=>a+(t.timeSeconds||0),0) : (d.timeSeconds||0)), 0);
         const totalQ = state.disciplines.reduce((s,d)=> s + (d.topics.length ? d.topics.reduce((a,t)=>a+(t.questions||0),0) : (d.questions||0)), 0);
@@ -1221,9 +1445,8 @@ REGRAS IMPORTANTES:
         });
       }
 
-      // ---------- MODAIS ----------
+      // ---------- MODAIS (mantidos + legislação) ----------
       function openDisciplineModal() {
-        // Preenche o datalist com todas as disciplinas padronizadas + personalizadas
         const datalist = document.getElementById('disciplinesDatalist');
         datalist.innerHTML = '';
         const todasPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
@@ -1268,10 +1491,12 @@ REGRAS IMPORTANTES:
           const texto = document.getElementById('modeloPromptText').value;
           navigator.clipboard.writeText(texto).then(() => document.getElementById('copyFeedback').textContent = '✓ Modelo copiado!').catch(() => alert('Erro ao copiar'));
         });
+        setupLegislacaoModal(); // novo modal
         window.addEventListener('click', (e) => {
           if(e.target === modalDisc) modalDisc.style.display='none';
           if(e.target === modalTopic) modalTopic.style.display='none';
           if(e.target === modalModelo) modalModelo.style.display='none';
+          if(e.target === document.getElementById('legislacaoModal')) document.getElementById('legislacaoModal').style.display='none';
         });
       }
 
@@ -1279,12 +1504,9 @@ REGRAS IMPORTANTES:
       function init() {
         loadFromStorage();
         setupModals();
-        
-        // Preenche o datalist inicial
         const datalist = document.getElementById('disciplinesDatalist');
         const todasPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
         todasPadrao.forEach(name => { const opt = document.createElement('option'); opt.value = name; datalist.appendChild(opt); });
-        
         document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => renderPage(item.dataset.page)));
         renderPage('dashboard');
       }
