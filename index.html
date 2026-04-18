@@ -514,6 +514,58 @@
       gap: 12px;
       border-left: 6px solid #2E7D32;
     }
+
+    /* Estilos para o guia de legislação */
+    .guia-container {
+      background: white;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      max-height: calc(100vh - 180px);
+      overflow-y: auto;
+    }
+    .guia-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #F0F0F0;
+    }
+    .guia-content {
+      line-height: 1.7;
+      color: #2c3e50;
+    }
+    .guia-content h2 {
+      font-family: 'Poppins', sans-serif;
+      color: #E65100;
+      margin: 28px 0 16px 0;
+      font-size: 1.6rem;
+    }
+    .guia-content h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #F57C00;
+      margin: 24px 0 12px 0;
+      font-size: 1.3rem;
+    }
+    .guia-content p {
+      margin-bottom: 16px;
+    }
+    .guia-content ul, .guia-content ol {
+      margin-left: 24px;
+      margin-bottom: 20px;
+    }
+    .guia-content li {
+      margin-bottom: 8px;
+    }
+    .guia-content .highlight {
+      background: #FEF0E6;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border-left: 6px solid #E65100;
+      margin: 24px 0;
+    }
   </style>
 </head>
 <body>
@@ -715,7 +767,7 @@ REGRAS IMPORTANTES:
       // ---------- ESTADO GLOBAL ----------
       let state = {
         disciplines: [],
-        legislations: [], // NOVO: array de legislações
+        legislations: [],
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: []
       };
@@ -723,6 +775,7 @@ REGRAS IMPORTANTES:
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
       let currentPage = 'dashboard';
       let generatedQuestions = [];
+      let mostrarGuiaLegislacao = false; // controle de exibição do guia
 
       // ---------- INICIALIZAÇÃO ----------
       function loadFromStorage() {
@@ -732,9 +785,7 @@ REGRAS IMPORTANTES:
             const parsed = JSON.parse(saved); 
             state = { ...state, ...parsed }; 
             if(state.disciplines.length) nextId = Math.max(...state.disciplines.map(d=>d.id), 0) + 1; 
-            // Garante que legislations existe
             state.legislations = state.legislations || [];
-            // Migração: garantir estrutura de questões em legislações antigas
             state.legislations.forEach(leg => {
               leg.questoes = leg.questoes || { feitas: 0, meta: 0 };
             });
@@ -748,7 +799,6 @@ REGRAS IMPORTANTES:
           ];
         }
         if(!state.legislations.length) {
-          // Exemplos iniciais
           state.legislations = [
             { id: nextId++, nome: 'Constituição Federal', leituraCompleta: true, resumoLido: true, revisado: false, questoes: { feitas: 30, meta: 100 } },
             { id: nextId++, nome: 'Lei 8.112/90', leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 5, meta: 50 } }
@@ -854,7 +904,6 @@ REGRAS IMPORTANTES:
         });
         const avgPercent = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
         const today = new Date().toISOString().split('T')[0];
-        const todayQs = state.questionsHistory.filter(q => q.date === today).length;
         const progressPercent = Math.min(100, Math.round((totalSec/3600) / (state.user.dailyGoalHours * 7) * 100));
         const sortedByTime = [...state.disciplines].sort((a,b) => {
           const ta = a.topics.length ? a.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (a.timeSeconds||0);
@@ -1226,20 +1275,99 @@ REGRAS IMPORTANTES:
       }
       function abrirModeloModal() { document.getElementById('modeloQuestaoModal').style.display = 'flex'; }
 
-      // ---------- NOVA PÁGINA: LEGISLAÇÃO ----------
+      // ---------- PÁGINA: LEGISLAÇÃO (com Guia) ----------
       function renderLegislacao() {
         const html = `
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div><div class="page-title">Legislação</div><div class="greeting">Controle de leitura e questões</div></div>
-            <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar legislação</button>
+            <div style="display:flex; gap:12px;">
+              <button class="btn-secondary" id="guiaLegislacaoBtn"><i class="fas fa-book"></i> 📚 Como estudar legislação</button>
+              <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar legislação</button>
+            </div>
           </div>
-          <div id="legislacaoListContainer">
-            ${renderLegislacaoList()}
+          <div id="legislacaoContentArea">
+            ${mostrarGuiaLegislacao ? renderGuiaContent() : renderLegislacaoList()}
           </div>
         `;
         contentDiv.innerHTML = html;
         document.getElementById('addLegislacaoBtn').addEventListener('click', openLegislacaoModal);
-        attachLegislacaoEvents();
+        document.getElementById('guiaLegislacaoBtn').addEventListener('click', () => {
+          mostrarGuiaLegislacao = true;
+          renderLegislacao();
+        });
+        if (!mostrarGuiaLegislacao) {
+          attachLegislacaoEvents();
+        } else {
+          document.getElementById('voltarGuiaBtn')?.addEventListener('click', () => {
+            mostrarGuiaLegislacao = false;
+            renderLegislacao();
+          });
+        }
+      }
+
+      function renderGuiaContent() {
+        return `
+          <div class="guia-container">
+            <div class="guia-header">
+              <button class="btn-secondary" id="voltarGuiaBtn"><i class="fas fa-arrow-left"></i> ⬅️ Voltar</button>
+              <h2 style="font-family: Poppins; color: #E65100; margin:0;">📚 Guia de Estudo de Legislação</h2>
+            </div>
+            <div class="guia-content">
+              <p style="font-size:1.1rem;">Um método completo para dominar leis e decretos, unindo leitura, revisão e prática com questões.</p>
+              
+              <div class="highlight">
+                <strong>🎯 Objetivo:</strong> Transformar o estudo da legislação em um processo ativo e mensurável.
+              </div>
+
+              <h2>📖 Etapa 1: Leitura da Lei Seca</h2>
+              <p>A base de tudo. Leia o texto original da lei sem pressa, destacando os pontos principais.</p>
+              <ul>
+                <li><strong>Foco nos artigos mais cobrados:</strong> identifique os dispositivos que mais aparecem em provas.</li>
+                <li><strong>Anote dúvidas:</strong> termos jurídicos ou trechos confusos.</li>
+                <li><strong>Dica:</strong> utilize o cronômetro do Vulpis para marcar seu tempo de leitura.</li>
+              </ul>
+
+              <h2>📝 Etapa 2: Resumo e Esquemas</h2>
+              <p>Transforme a lei em material de revisão rápida.</p>
+              <ul>
+                <li>Crie resumos com suas palavras.</li>
+                <li>Monte mapas mentais ou tabelas comparativas.</li>
+                <li>Use cores e emojis para memorizar exceções.</li>
+              </ul>
+
+              <h2>🔁 Etapa 3: Revisão Programada</h2>
+              <p>A revisão espaçada é essencial para fixar conteúdo normativo.</p>
+              <ul>
+                <li>Primeira revisão: 24h após a leitura.</li>
+                <li>Segunda revisão: 7 dias depois.</li>
+                <li>Terceira revisão: 30 dias depois.</li>
+                <li>Marque a checkbox "Revisão realizada" após cada ciclo.</li>
+              </ul>
+
+              <h2>❓ Etapa 4: Questões de Fixação</h2>
+              <p>A prática com questões é o que realmente consolida o aprendizado.</p>
+              <ul>
+                <li>Defina uma meta de questões para cada legislação.</li>
+                <li>Resolva questões de concursos anteriores da banca.</li>
+                <li>Registre o número de acertos e erros (use a página "Questões" do Vulpis).</li>
+                <li>Acompanhe o progresso na barra de questões.</li>
+              </ul>
+
+              <h2>🧠 Estratégias Avançadas</h2>
+              <ul>
+                <li><strong>Lei seca + doutrina:</strong> combine a leitura da lei com breves explicações doutrinárias.</li>
+                <li><strong>Simulados temáticos:</strong> após estudar uma lei, faça um bloco de questões só sobre ela.</li>
+                <li><strong>Análise de erros:</strong> entenda por que errou cada questão e revise o artigo correspondente.</li>
+              </ul>
+
+              <h2>🏆 Conclusão</h2>
+              <p>Ao seguir essas etapas e manter o controle no Vulpis Asset, você terá uma visão clara do seu domínio sobre cada legislação. Quando a barra de progresso chegar a 100%, você estará pronto para enfrentar qualquer questão sobre o tema!</p>
+              <div class="highlight">
+                <i class="fas fa-check-circle" style="color:#2E7D32;"></i> <strong>Parabéns por investir em um estudo estratégico!</strong>
+              </div>
+            </div>
+          </div>
+        `;
       }
 
       function calcularProgressoLegislacao(leg) {
@@ -1250,7 +1378,7 @@ REGRAS IMPORTANTES:
           leg.questoes.meta > 0 ? Math.min(leg.questoes.feitas / leg.questoes.meta, 1) : 0
         ];
         const soma = itens.reduce((a,b) => a + b, 0);
-        return (soma / 4) * 100; // cada item 25%
+        return (soma / 4) * 100;
       }
 
       function getStatusLegislacao(percentual) {
@@ -1263,12 +1391,13 @@ REGRAS IMPORTANTES:
         if (!state.legislations.length) {
           return '<div class="empty-state"><i class="fas fa-gavel"></i><h3>Nenhuma legislação</h3><p>Adicione leis para controlar seu estudo.</p></div>';
         }
-        return state.legislations.map(leg => {
+        let html = '';
+        state.legislations.forEach(leg => {
           const progresso = calcularProgressoLegislacao(leg);
           const status = getStatusLegislacao(progresso);
           const questoesProgresso = leg.questoes.meta > 0 ? (leg.questoes.feitas / leg.questoes.meta) * 100 : 0;
           const congrats = progresso >= 100;
-          return `
+          html += `
             <div class="legislation-card" data-id="${leg.id}">
               <div class="legislation-header">
                 <span class="legislation-title">${leg.nome}</span>
@@ -1313,11 +1442,11 @@ REGRAS IMPORTANTES:
               </div>
             </div>
           `;
-        }).join('');
+        });
+        return html;
       }
 
       function attachLegislacaoEvents() {
-        // Checkboxes
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
           cb.addEventListener('change', (e) => {
             const id = parseInt(cb.dataset.id);
@@ -1326,11 +1455,10 @@ REGRAS IMPORTANTES:
             if (leg) {
               leg[field] = cb.checked;
               saveToStorage();
-              renderLegislacao(); // re-render para atualizar progresso e status
+              renderLegislacao();
             }
           });
         });
-        // Inputs numéricos
         document.querySelectorAll('input[type="number"]').forEach(inp => {
           inp.addEventListener('change', (e) => {
             const id = parseInt(inp.dataset.id);
@@ -1345,7 +1473,6 @@ REGRAS IMPORTANTES:
             }
           });
         });
-        // Botões de ação
         document.querySelectorAll('[data-action="editLegislacao"]').forEach(btn => {
           btn.addEventListener('click', () => openLegislacaoModal(parseInt(btn.dataset.id)));
         });
@@ -1491,7 +1618,7 @@ REGRAS IMPORTANTES:
           const texto = document.getElementById('modeloPromptText').value;
           navigator.clipboard.writeText(texto).then(() => document.getElementById('copyFeedback').textContent = '✓ Modelo copiado!').catch(() => alert('Erro ao copiar'));
         });
-        setupLegislacaoModal(); // novo modal
+        setupLegislacaoModal();
         window.addEventListener('click', (e) => {
           if(e.target === modalDisc) modalDisc.style.display='none';
           if(e.target === modalTopic) modalTopic.style.display='none';
