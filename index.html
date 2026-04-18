@@ -769,6 +769,66 @@
     }
     .resumo-card i { font-size: 2rem; color: #E65100; margin-bottom: 12px; }
     .resumo-card h4 { font-family: Poppins; margin-bottom: 8px; }
+
+    /* Estilos para a página de Mentoria */
+    .mentoria-container {
+      background: white;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    .mentoria-container h1 {
+      font-family: 'Poppins', sans-serif;
+      color: #E65100;
+      margin-bottom: 16px;
+    }
+    .mentoria-container h2 {
+      font-family: 'Poppins', sans-serif;
+      color: #F57C00;
+      margin: 24px 0 12px;
+      border-bottom: 2px solid #FEF0E6;
+      padding-bottom: 8px;
+    }
+    .mentoria-container h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #212121;
+      margin: 20px 0 10px;
+    }
+    .mentoria-container p {
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: #3A3A3A;
+    }
+    .mentoria-container ul, .mentoria-container ol {
+      margin-left: 24px;
+      margin-bottom: 16px;
+    }
+    .mentoria-container li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .mentoria-container blockquote {
+      background: #FEF0E6;
+      border-left: 6px solid #E65100;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      font-style: italic;
+    }
+    .mentoria-container .highlight {
+      background: #FFF3E0;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    .mentoria-video-section {
+      margin-top: 40px;
+      border-top: 2px solid #F0F0F0;
+      padding-top: 24px;
+    }
   </style>
 </head>
 <body>
@@ -788,6 +848,7 @@
       <div class="nav-item" data-page="aulas"><i class="fas fa-video"></i> Aulas</div>
       <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
       <div class="nav-item" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
+      <div class="nav-item" data-page="mentoria"><i class="fas fa-graduation-cap"></i> Mentoria</div>
       <div class="nav-item" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
     </div>
   </div>
@@ -1070,6 +1131,7 @@ REGRAS IMPORTANTES:
           case 'aulas': renderAulas(); break;
           case 'desempenho': renderDesempenho(); break;
           case 'manual-ia': renderManualIA(); break;
+          case 'mentoria': renderMentoria(); break;
           case 'perfil': renderPerfil(); break;
         }
       }
@@ -1910,6 +1972,141 @@ REGRAS IMPORTANTES:
       function renderPerfil() {
         contentDiv.innerHTML = `<div class="page-title">Perfil</div><p>Em desenvolvimento.</p>`;
       }
+
+      // ========== NOVA PÁGINA: MENTORIA ==========
+      function renderMentoria() {
+        const html = `
+          <div class="mentoria-container">
+            <h1><i class="fas fa-graduation-cap" style="color:#E65100; margin-right:12px;"></i>Mentoria de Estudos</h1>
+            <p style="font-size:1.1rem; margin-bottom:24px;">Um guia completo para transformar sua preparação para concursos em resultados reais.</p>
+            
+            <h2>🎯 1. O objetivo real dos estudos</h2>
+            <p>Estudar para concursos não é “ver conteúdo”, é <strong>construir desempenho em prova</strong>. Isso muda tudo: você não estuda para “entender”, você estuda para <strong>acertar questões sob pressão</strong>. O foco é resultado, não sensação de aprendizado.</p>
+            <blockquote>👉 <strong>Regra base:</strong> quem resolve questões evolui; quem só lê conteúdo estaciona.</blockquote>
+            
+            <h2>🧭 2. A estrutura ideal de estudo</h2>
+            <p>Um ciclo eficiente de estudos deve seguir 3 etapas:</p>
+            <ul>
+              <li><strong>📚 Conteúdo:</strong> Aula (vídeo ou PDF), leitura objetiva, sem perfeccionismo.</li>
+              <li><strong>🧠 Questões:</strong> Resolver imediatamente após o conteúdo. Começar errando faz parte – aqui nasce a aprendizagem real.</li>
+              <li><strong>🔁 Revisão:</strong> Revisar erros, repetir questões erradas, reforçar pontos fracos.</li>
+            </ul>
+            <p>Esse ciclo se repete continuamente.</p>
+            
+            <h2>⏱️ 3. Como organizar o tempo de estudo</h2>
+            <p>Um modelo simples e eficiente:</p>
+            <ul>
+              <li><strong>60% do tempo → questões</strong></li>
+              <li><strong>30% do tempo → conteúdo</strong></li>
+              <li><strong>10% do tempo → revisão</strong></li>
+            </ul>
+            <p>Isso evita o erro clássico: estudar muito e praticar pouco.</p>
+            
+            <h2>📊 4. Como usar desempenho (isso é chave)</h2>
+            <p>Você deve estudar guiado por dados:</p>
+            <ul>
+              <li>📉 Matérias com mais erro → prioridade máxima</li>
+              <li>📈 Matérias com alto acerto → manutenção</li>
+              <li>⚖️ Matérias médias → reforço leve</li>
+            </ul>
+            <blockquote>👉 Seu desempenho define sua rotina, não sua vontade do dia.</blockquote>
+            
+            <h2>🔥 5. Estratégia de evolução rápida</h2>
+            <p>Para evoluir mais rápido:</p>
+            <ul>
+              <li>Repetir questões erradas</li>
+              <li>Marcar padrões de erro (não só respostas)</li>
+              <li>Voltar no conteúdo apenas quando necessário</li>
+              <li>Evitar “estudo passivo” prolongado</li>
+            </ul>
+            
+            <h2>🧠 6. Mentalidade do aprovado</h2>
+            <p>O aprovado não é o que estuda mais. É o que:</p>
+            <ul>
+              <li>ajusta rota rápido</li>
+              <li>aceita errar no começo</li>
+              <li>mede evolução constantemente</li>
+              <li>mantém consistência</li>
+            </ul>
+            <blockquote>👉 Consistência vence intensidade.</blockquote>
+            
+            <h2>📅 7. Rotina simples recomendada</h2>
+            <p>Exemplo diário:</p>
+            <ul>
+              <li>1 bloco de conteúdo (curto)</li>
+              <li>2 a 3 blocos de questões</li>
+              <li>revisão dos erros do dia anterior</li>
+            </ul>
+            
+            <h2>📉 8. Erros mais comuns</h2>
+            <ul>
+              <li>Só assistir aula e não fazer questões</li>
+              <li>Não revisar erros</li>
+              <li>Estudar muitas matérias ao mesmo tempo</li>
+              <li>Ignorar desempenho</li>
+              <li>Estudar sem planejamento</li>
+            </ul>
+            
+            <h2>🧩 9. Como usar isso dentro do seu app</h2>
+            <p>Este manual pode virar uma funcionalidade:</p>
+            <ul>
+              <li>Aba “Mentoria”</li>
+              <li>Recomendações automáticas baseadas no dashboard</li>
+              <li>Alertas tipo: <em>“Você precisa revisar Direito Constitucional”</em></li>
+              <li>Trilha guiada de estudo</li>
+            </ul>
+            
+            <h2>🚀 10. Próximo nível (evolução do sistema)</h2>
+            <p>Esse manual pode evoluir para:</p>
+            <ul>
+              <li>versão personalizada por usuário</li>
+              <li>plano automático semanal</li>
+              <li>recomendação de aulas + questões</li>
+              <li>simulação de mentor virtual</li>
+            </ul>
+            
+            <div style="background:#FEF0E6; padding:20px; border-radius:20px; margin:30px 0;">
+              <h3 style="margin-top:0;">✔️ RESUMO FINAL</h3>
+              <p style="font-size:1.2rem; font-weight:500;">Estudar para concursos é:</p>
+              <p style="font-size:1.5rem; font-weight:700; color:#E65100;">Conteúdo + Questões + Revisão + Dados + Consistência</p>
+            </div>
+
+            <!-- Seção de vídeos da mentoria -->
+            <div class="mentoria-video-section">
+              <h2><i class="fas fa-video" style="margin-right:10px;"></i> Vídeos Recomendados</h2>
+              <p style="margin-bottom:20px;">Aprofunde os conceitos da mentoria com estas aulas selecionadas.</p>
+              
+              ${state.videos.length ? `
+                <div class="videos-grid">
+                  ${state.videos.slice(0,3).map(v => {
+                    const embedUrl = gerarEmbed(v.link_video);
+                    return `
+                      <div class="video-card">
+                        <div class="video-thumb"><iframe src="${embedUrl}" allowfullscreen loading="lazy"></iframe></div>
+                        <div class="video-card-content">
+                          <div class="video-card-title">${v.titulo}</div>
+                          ${v.disciplina ? `<span class="video-card-disciplina">${v.disciplina}</span>` : ''}
+                          <p style="font-size:0.9rem; color:#5A5A5A;">${v.descricao || ''}</p>
+                          <div class="video-card-actions">
+                            <a href="${v.link_video}" target="_blank" class="btn-sm btn-sm-primary"><i class="fas fa-external-link-alt"></i> Assistir</a>
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+                <p style="margin-top:16px;"><a href="#" id="verTodasAulasMentoria" style="color:#E65100;"><i class="fas fa-arrow-right"></i> Ver todas as aulas na seção Aulas</a></p>
+              ` : '<p>Nenhum vídeo cadastrado ainda. Adicione vídeos na seção "Aulas".</p>'}
+            </div>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('verTodasAulasMentoria')?.addEventListener('click', (e) => {
+          e.preventDefault();
+          renderPage('aulas');
+        });
+      }
+
       function renderAulas() {
         const disciplinasUnicas = [...new Set(state.videos.map(v => v.disciplina).filter(Boolean))];
         const filterHtml = `
