@@ -10,7 +10,7 @@
   <!-- Lottie para animação da raposa -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
   <style>
-    /* ===== ESTILOS GERAIS ===== */
+    /* ===== ESTILOS GERAIS (mantidos integralmente) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Roboto', sans-serif;
@@ -217,7 +217,9 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      animation: fadeIn 0.2s ease;
     }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .modal-card {
       background: white;
       border-radius: 32px;
@@ -362,11 +364,7 @@
       color: #757575;
     }
     .empty-state i { font-size: 48px; color: #E0E0E0; margin-bottom: 20px; }
-    .graph-bar-item { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-    .graph-label { width: 180px; font-weight: 500; }
-    .graph-bar-bg { flex:1; height: 12px; background: #E9E9E9; border-radius: 20px; }
-    .graph-bar-fill { height: 12px; border-radius: 20px; background: #F57C00; }
-    
+
     /* Estilos para questões */
     .question-card {
       background: white;
@@ -474,7 +472,7 @@
       border-color: #E65100;
     }
 
-    /* Raposa animada (container) */
+    /* Raposa animada */
     .fox-animation-container {
       position: fixed;
       bottom: 20px;
@@ -494,7 +492,7 @@
       50%{ transform: translateY(-10px); }
     }
 
-    /* Estilos para o manual de IA */
+    /* Manual IA */
     .manual-container {
       background: white;
       border-radius: 28px;
@@ -557,7 +555,7 @@
       border-radius: 4px;
     }
 
-    /* ---- ESTILOS PARA O MODAL DE AJUDA DO DASHBOARD ---- */
+    /* Modal de ajuda do Dashboard */
     .dashboard-help-modal .modal-card {
       width: 700px;
       max-width: 90vw;
@@ -615,36 +613,26 @@
       text-decoration: underline;
     }
     .help-btn-float {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      width: 56px;
-      height: 56px;
-      border-radius: 30px;
-      background: #E65100;
-      color: white;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
       border: none;
-      box-shadow: 0 8px 20px rgba(230,81,0,0.3);
+      color: #9E9E9E;
       font-size: 24px;
       cursor: pointer;
-      z-index: 998;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 10;
+      transition: color 0.2s;
     }
     .help-btn-float:hover {
-      transform: scale(1.05);
-      box-shadow: 0 12px 28px rgba(230,81,0,0.4);
+      color: #E65100;
     }
 
-    /* ===== ESTILOS PARA A PÁGINA DE AULAS (VÍDEOS) ===== */
-    .video-highlight {
-      margin-bottom: 32px;
-    }
+    /* Aulas */
+    .video-highlight { margin-bottom: 32px; }
     .video-wrapper {
       position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
+      padding-bottom: 56.25%;
       height: 0;
       border-radius: 24px;
       overflow: hidden;
@@ -665,10 +653,7 @@
       font-weight: 600;
       margin-bottom: 8px;
     }
-    .video-info p {
-      color: #5A5A5A;
-      font-size: 1rem;
-    }
+    .video-info p { color: #5A5A5A; font-size: 1rem; }
     .filter-bar {
       display: flex;
       align-items: center;
@@ -712,16 +697,8 @@
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
     }
-    .video-card-content {
-      padding: 18px;
-      flex: 1;
-    }
-    .video-card-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-      line-height: 1.4;
-    }
+    .video-card-content { padding: 18px; flex: 1; }
+    .video-card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 6px; line-height: 1.4; }
     .video-card-disciplina {
       display: inline-block;
       background: #FEF0E6;
@@ -731,11 +708,7 @@
       font-size: 0.8rem;
       margin-bottom: 16px;
     }
-    .video-card-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-    }
+    .video-card-actions { display: flex; gap: 10px; margin-top: 8px; }
     .btn-sm {
       padding: 8px 16px;
       border-radius: 30px;
@@ -750,12 +723,50 @@
       transition: 0.15s;
     }
     .btn-sm i { font-size: 0.9rem; }
-    .btn-sm-primary {
-      background: #E65100;
-      color: white;
-    }
+    .btn-sm-primary { background: #E65100; color: white; }
     .btn-sm-primary:hover { background: #bf4300; }
     .btn-sm-secondary:hover { background: #E9E9E9; }
+
+    /* Dashboard específico */
+    .dashboard-metric-large {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-bottom: 32px;
+    }
+    .metric-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 5rem;
+      font-weight: 700;
+      color: #212121;
+    }
+    .feedback-message-large {
+      font-size: 1.2rem;
+      color: #E65100;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .resumo-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .resumo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+      border-color: #E0E0E0;
+    }
+    .resumo-card i { font-size: 2rem; color: #E65100; margin-bottom: 12px; }
+    .resumo-card h4 { font-family: Poppins; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -780,23 +791,20 @@
   </div>
   <div class="main" id="app-content"></div>
   
-  <!-- Container para animação da raposa -->
+  <!-- Animação da raposa -->
   <div id="foxAnimationContainer" class="fox-animation-container" style="display: none;">
     <div class="fox-fallback">🦊</div>
   </div>
-
-  <!-- Botão flutuante de ajuda do dashboard -->
-  <button id="dashboardHelpFloatBtn" class="help-btn-float" title="O que é o Dashboard?" style="display: none;"><i class="fas fa-question"></i></button>
 
   <!-- Modal de ajuda do Dashboard -->
   <div class="modal dashboard-help-modal" id="dashboardHelpModal">
     <div class="modal-card">
       <div class="help-header">
-        <img class="help-image" src="https://cdn-icons-png.flaticon.com/512/12564/12564141.png" alt="Planejamento financeiro" onerror="this.src='https://cdn-icons-png.flaticon.com/512/12564/12564141.png'">
+        <img class="help-image" src="https://cdn-icons-png.flaticon.com/512/12564/12564141.png" alt="Planejamento financeiro">
         <h2>📊 O que é o Dashboard?</h2>
       </div>
       <div class="help-content">
-        <p>Um dashboard é, basicamente, uma tela que reúne as informações mais importantes de forma clara, rápida e visual. Em vez de você precisar analisar vários dados separados, ele organiza tudo em um só lugar, facilitando a compreensão do que está acontecendo. No contexto do seu aplicativo, o dashboard funciona como um <strong>resumo inteligente do seu desempenho nos estudos</strong>.</p>
+        <p>Um dashboard é uma tela que reúne as informações mais importantes de forma clara, rápida e visual. Em vez de você precisar analisar vários dados separados, ele organiza tudo em um só lugar, facilitando a compreensão do que está acontecendo. No contexto do seu aplicativo, o dashboard funciona como um <strong>resumo inteligente do seu desempenho nos estudos</strong>.</p>
         <p>Pense nele como o painel de um carro: você não precisa entender toda a mecânica para saber se está tudo bem, basta olhar os indicadores. Da mesma forma, o dashboard mostra, de forma simples, quantas questões você acertou, quantas errou e como está sua evolução. Isso permite que você tome decisões rápidas, como revisar um conteúdo ou continuar avançando.</p>
         <p>No seu app, o dashboard tem um papel ainda mais importante, porque ele transforma números em informação útil. Em vez de apenas dizer quantas questões foram feitas, ele apresenta gráficos, porcentagens e indicadores visuais que ajudam você a identificar padrões, como matérias em que você tem mais dificuldade ou progresso ao longo do tempo.</p>
         <p>Mais do que apenas observar, o grande diferencial está em como você usa essas informações. Se o dashboard mostra que seu índice de erros está alto em determinada disciplina, isso é um sinal claro de que aquele conteúdo precisa de revisão. Se você percebe que está acertando mais com o passar do tempo, isso indica que sua estratégia está funcionando e deve ser mantida. Assim, você deixa de estudar “no escuro” e passa a estudar com base em dados reais.</p>
@@ -804,9 +812,7 @@
         <p>No fim das contas, o dashboard não é só uma tela bonita com gráficos — ele é uma <strong>ferramenta de decisão</strong>. Ele te mostra onde você está, para onde está indo e o que precisa ajustar, ajudando você a evoluir de forma mais consciente e consistente nos estudos.</p>
       </div>
       <div class="help-footer">
-        <div class="credits">
-          Sticker por <a href="https://www.flaticon.com/br/sticker-gratis/planejamento-financeiro_12564141" target="_blank">Freepik - Flaticon</a>
-        </div>
+        <div class="credits">Sticker por <a href="https://www.flaticon.com/br/sticker-gratis/planejamento-financeiro_12564141" target="_blank">Freepik - Flaticon</a></div>
         <button class="btn-primary" id="closeDashboardHelpBtn">Entendi</button>
       </div>
     </div>
@@ -955,7 +961,6 @@ REGRAS IMPORTANTES:
         }
       }
 
-      // Banco mock de questões (fallback)
       const MOCK_QUESTIONS = [
         { tema: "direito constitucional", enunciado: "Acerca dos direitos e garantias fundamentais previstos na Constituição Federal de 1988, assinale a alternativa correta:", alternativas: [
           "A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial.",
@@ -972,7 +977,7 @@ REGRAS IMPORTANTES:
         legislations: [],
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: [],
-        videos: [] // array para armazenar os vídeos (mock inicial)
+        videos: []
       };
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
@@ -980,11 +985,9 @@ REGRAS IMPORTANTES:
       let generatedQuestions = [];
       let currentQuestionPage = 1;
       let questionsPerPage = 10;
-      let mostrarGuiaLegislacao = false;
       let foxAnimationInitialized = false;
-      let videoDestaqueAtual = null; // guarda o vídeo em destaque
+      let videoDestaqueAtual = null;
 
-      // ---------- INICIALIZAÇÃO ----------
       function loadFromStorage() {
         const saved = localStorage.getItem('vulpis_state');
         if(saved) {
@@ -1010,15 +1013,13 @@ REGRAS IMPORTANTES:
           ];
         }
         if(!state.videos.length) {
-          // Mock inicial de vídeos (estrutura pronta para Supabase)
           state.videos = [
-            { id: 1, titulo: "Começando com o pé direito 🚀 | Aula essencial pra destravar seus estudos", descricao: "Uma aula ideal pra você pegar ritmo e entender como estudar de forma mais eficiente.", disciplina: "Direito Constitucional", link_video: "https://youtu.be/uzMFx2pDqZc?si=0fy01E1snvCoMSTM", ordem: 1 },
-            { id: 2, titulo: "Controle de Constitucionalidade", descricao: "Entenda ADI, ADC e ADPF de uma vez por todas.", disciplina: "Direito Constitucional", link_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", ordem: 2 },
-            { id: 3, titulo: "Raciocínio Lógico para Concursos", descricao: "Aula completa sobre proposições e tabela-verdade.", disciplina: "Raciocínio Lógico", link_video: "https://youtu.be/uzMFx2pDqZc", ordem: 3 },
-            { id: 4, titulo: "Interpretação de Texto", descricao: "Técnicas para acertar mais questões de português.", disciplina: "Português", link_video: "https://www.youtube.com/watch?v=abc123", ordem: 4 }
+            { id: 1, titulo: "Começando com o pé direito 🚀", descricao: "Aula essencial pra destravar seus estudos.", disciplina: "Direito Constitucional", link_video: "https://youtu.be/uzMFx2pDqZc", ordem: 1 },
+            { id: 2, titulo: "Controle de Constitucionalidade", descricao: "Entenda ADI, ADC e ADPF.", disciplina: "Direito Constitucional", link_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", ordem: 2 },
+            { id: 3, titulo: "Raciocínio Lógico para Concursos", descricao: "Proposições e tabela-verdade.", disciplina: "Raciocínio Lógico", link_video: "https://youtu.be/uzMFx2pDqZc", ordem: 3 },
+            { id: 4, titulo: "Interpretação de Texto", descricao: "Técnicas para português.", disciplina: "Português", link_video: "https://www.youtube.com/watch?v=abc123", ordem: 4 }
           ];
         }
-        // Define vídeo destaque como o primeiro da lista (id 1)
         videoDestaqueAtual = state.videos.find(v => v.id === 1) || state.videos[0];
         state.disciplines.forEach(d => { d.topics = d.topics || []; d.expanded = false; });
         saveToStorage();
@@ -1029,40 +1030,36 @@ REGRAS IMPORTANTES:
         return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       }
       function formatHoursMinutes(sec) { const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60); return `${h}h ${m}m`; }
-
-      // Função para converter link do YouTube em embed
       function gerarEmbed(url) {
         if (!url) return '';
-        // Padrões: youtu.be/ID ou youtube.com/watch?v=ID
         let videoId = url.split('v=')[1]?.split('&')[0] || url.split('youtu.be/')[1]?.split('?')[0];
         if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-        return url; // fallback
+        return url;
       }
 
-      // ---------- RENDER PRINCIPAL ----------
       const contentDiv = document.getElementById('app-content');
       function renderPage(page) {
         currentPage = page;
         document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
         const foxContainer = document.getElementById('foxAnimationContainer');
-        const helpFloatBtn = document.getElementById('dashboardHelpFloatBtn');
-        
         if (page === 'questoes') {
           foxContainer.style.display = 'block';
           if (!foxAnimationInitialized) {
-            initFoxAnimation();
+            if (typeof lottie !== 'undefined') {
+              lottie.loadAnimation({
+                container: foxContainer,
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json'
+              });
+              foxContainer.querySelector('.fox-fallback').style.display = 'none';
+            }
             foxAnimationInitialized = true;
           }
         } else {
           foxContainer.style.display = 'none';
         }
-
-        if (page === 'dashboard') {
-          helpFloatBtn.style.display = 'flex';
-        } else {
-          helpFloatBtn.style.display = 'none';
-        }
-
         switch(page) {
           case 'dashboard': renderDashboard(); break;
           case 'disciplinas': renderDisciplinas(); break;
@@ -1075,21 +1072,6 @@ REGRAS IMPORTANTES:
         }
       }
 
-      function initFoxAnimation() {
-        const container = document.getElementById('foxAnimationContainer');
-        if (typeof lottie !== 'undefined') {
-          lottie.loadAnimation({
-            container: container,
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json'
-          });
-          container.querySelector('.fox-fallback').style.display = 'none';
-        }
-      }
-
-      // ---------- CRONOMETRO ----------
       function renderGlobalTimer() {
         return `
           <div class="global-timer">
@@ -1155,7 +1137,7 @@ REGRAS IMPORTANTES:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ---------- DASHBOARD (mantido) ----------
+      // ========== DASHBOARD MELHORADO ==========
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -1163,70 +1145,176 @@ REGRAS IMPORTANTES:
           else { totalSec += d.timeSeconds||0; totalQ += d.questions||0; totalCorrect += d.correct||0; }
         });
         const avgPercent = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
-        const progressPercent = Math.min(100, Math.round((totalSec/3600) / (state.user.dailyGoalHours * 7) * 100));
+        const wrongCount = totalQ - totalCorrect;
+        const feedbackMessage = getFeedbackMessage(parseFloat(avgPercent));
         const sortedByTime = [...state.disciplines].sort((a,b) => {
           const ta = a.topics.length ? a.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (a.timeSeconds||0);
           const tb = b.topics.length ? b.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (b.timeSeconds||0);
           return tb - ta;
         });
-        const bestDisc = getBestDiscipline();
-        const worstDisc = getWorstDiscipline();
+        const weekHours = [2.5, 3.0, 1.8, 4.2, 3.5, 5.0, 2.0];
+        const weekDays = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'];
+
+        const legislacaoCount = state.legislations.length;
+        const legislacaoLidas = state.legislations.filter(l => l.leituraCompleta).length;
+        const desempenhoGeral = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
+        const questoesFeitas = totalQ;
 
         const html = `
           ${renderGlobalTimer()}
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div class="page-title">Olá, ${state.user.name.split(' ')[0]} 👋</div>
-              <div class="greeting"><i class="fas fa-chart-line" style="color:#F57C00;"></i> Você está ${progressPercent >= 70 ? 'evoluindo muito bem!' : 'no caminho certo!'}</div>
+          <div style="position: relative;">
+            <button class="help-btn-float" id="dashboardHelpBtn" title="O que é o Dashboard?"><i class="far fa-question-circle"></i></button>
+            <div class="page-title">Dashboard</div>
+            <div class="greeting">Olá, ${state.user.name.split(' ')[0]}! Veja seu resumo de estudos.</div>
+          </div>
+          
+          <!-- TOPO: Métrica principal + Donut Chart -->
+          <div class="card" style="margin-bottom: 32px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+              <div style="text-align: center; flex: 1;">
+                <div style="font-size: 1rem; color: #757575;">Taxa de Acerto</div>
+                <div class="metric-number">${avgPercent}%</div>
+                <div class="feedback-message-large">${feedbackMessage}</div>
+              </div>
+              <div style="flex: 1; min-width: 250px;">
+                <canvas id="donutChart" width="200" height="200" style="max-width:200px; margin: 0 auto; display: block;"></canvas>
+                <div class="donut-legend">
+                  <div class="legend-item"><span class="color-dot" style="background:#2E7D32;"></span> Acertos: ${totalCorrect}</div>
+                  <div class="legend-item"><span class="color-dot" style="background:#C62828;"></span> Erros: ${wrongCount}</div>
+                </div>
+              </div>
             </div>
-            <div class="badge" style="padding:10px 20px; font-size:1rem;"><i class="fas fa-trophy"></i> Sequência: 7 dias 🔥</div>
           </div>
-          <div class="dashboard-grid">
-            <div class="card"><div class="card-header"><i class="fas fa-bullseye"></i> Taxa de acerto</div><div class="card-value">${avgPercent}%</div><div class="progress-bar"><div class="progress-fill" style="width:${avgPercent}%"></div></div><div class="card-label">+2.5% vs última semana</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-clock"></i> Tempo estudado (semana)</div><div class="card-value">${formatHoursMinutes(totalSec)}</div><div class="progress-bar"><div class="progress-fill" style="width:${(totalSec/3600)/(state.user.dailyGoalHours*7)*100}%"></div></div><div class="card-label">Meta: ${state.user.dailyGoalHours*7}h</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-fire"></i> Streak atual</div><div class="card-value">7 dias</div><div class="card-label">🔥 Seu recorde: 12 dias</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-chart-bar"></i> Evolução</div><div class="card-value" style="color:#2E7D32;">+12%</div><div class="card-label">vs semana passada</div></div>
+
+          <!-- MEIO: Desempenho por disciplina -->
+          <div class="section-header">
+            <h2 style="font-family: Poppins; font-size:1.5rem;">Desempenho por Disciplina</h2>
           </div>
-          <div class="card" style="margin-bottom:24px;">
-            <div class="card-header"><i class="fas fa-calendar-week"></i> Horas estudadas na semana</div>
-            <div class="week-bars">
-              ${['S','T','Q','Q','S','S','D'].map((d,i) => {
-                let h = [2.5, 3.0, 1.8, 4.2, 3.5, 5.0, 2.0][i];
-                return `<div class="bar-day"><div class="bar" style="height:${h*12}px;"></div><span class="day-label">${d}</span><span style="font-size:0.7rem;">${h}h</span></div>`;
-              }).join('')}
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:24px;">
-            <div class="card-header"><i class="fas fa-tasks"></i> Desempenho por disciplina</div>
-            ${sortedByTime.slice(0,5).map(d => {
+          <div class="card" style="margin-bottom: 24px;">
+            ${sortedByTime.map(d => {
               let t=0, q=0, c=0;
               if(d.topics.length) { d.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; }); }
               else { t=d.timeSeconds||0; q=d.questions||0; c=d.correct||0; }
               const rate = q ? (c/q)*100 : 0;
+              const barColor = rate >= 70 ? '#2E7D32' : (rate >= 50 ? '#F57C00' : '#C62828');
               return `
                 <div class="perf-item">
-                  <div class="perf-info"><div class="perf-name">${d.name}</div><div class="perf-stats">${formatHoursMinutes(t)} · ${q} questões</div></div>
-                  <div class="perf-bar-container"><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:${rate}%; background:${rate>=70?'#2E7D32':(rate>=50?'#F57C00':'#C62828')};"></div></div></div>
+                  <div class="perf-info"><div class="perf-name">${d.name}</div><div class="perf-stats">${q} questões</div></div>
+                  <div class="perf-bar-container"><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:${rate}%; background:${barColor};"></div></div></div>
                   <span style="font-weight:600;">${rate.toFixed(0)}%</span>
                 </div>
               `;
             }).join('')}
+            ${state.disciplines.length === 0 ? '<p style="text-align:center; color:#9E9E9E;">Nenhuma disciplina cadastrada.</p>' : ''}
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-            <div class="card alert-card"><div class="card-header"><i class="fas fa-exclamation-triangle" style="color:#C62828;"></i> Pontos de atenção</div>${worstDisc ? `<p>📉 Menor desempenho: <strong>${worstDisc.name}</strong> (${worstDisc.rate.toFixed(0)}% de acerto).</p>` : '<p>✅ Nenhum ponto crítico.</p>'}</div>
-            <div class="card insight-card"><div class="card-header"><i class="fas fa-lightbulb" style="color:#E65100;"></i> Insight inteligente</div><p>🧠 Você estuda melhor às <strong>terças e quintas</strong>.</p><p>📚 Consistência excelente!</p></div>
+
+          <!-- AÇÕES RÁPIDAS -->
+          <div class="action-buttons">
+            <button class="btn-primary" id="gotoQuestoesBtn"><i class="fas fa-pencil-alt"></i> Resolver questões agora</button>
+            <button class="btn-secondary" id="revisarPioresBtn"><i class="fas fa-sync-alt"></i> Revisar conteúdos com mais erros</button>
+          </div>
+
+          <!-- HISTÓRICO SEMANAL -->
+          <div class="card" style="margin-bottom: 32px;">
+            <div class="card-header"><i class="fas fa-calendar-week"></i> Horas estudadas na semana</div>
+            <div class="week-bars">
+              ${weekDays.map((day, i) => {
+                const h = weekHours[i];
+                return `<div class="bar-day"><div class="bar" style="height:${h*12}px;"></div><span class="day-label">${day}</span><span style="font-size:0.7rem;">${h}h</span></div>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- SEÇÕES ADICIONAIS (Legislação, Desempenho, Manual IA) - RECUPERADAS -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px;">
+            <!-- Card Legislação -->
+            <div class="resumo-card" data-page="legislacao">
+              <i class="fas fa-gavel"></i>
+              <h4>Legislação</h4>
+              <p style="color: #5A5A5A; margin-bottom: 8px;">${legislacaoCount} normas cadastradas</p>
+              <div class="progress-bar" style="margin: 8px 0;"><div class="progress-fill" style="width: ${legislacaoCount ? (legislacaoLidas/legislacaoCount)*100 : 0}%"></div></div>
+              <small style="color: #757575;">${legislacaoLidas} lidas na íntegra</small>
+            </div>
+            <!-- Card Desempenho -->
+            <div class="resumo-card" data-page="desempenho">
+              <i class="fas fa-chart-line"></i>
+              <h4>Desempenho</h4>
+              <p style="font-size: 2rem; font-weight: 700; color: #212121;">${desempenhoGeral}%</p>
+              <p style="color: #5A5A5A;">${questoesFeitas} questões respondidas</p>
+              <small style="color: #757575;">Evolução vs. semana anterior: +5%</small>
+            </div>
+            <!-- Card Manual IA -->
+            <div class="resumo-card" data-page="manual-ia">
+              <i class="fas fa-robot"></i>
+              <h4>Manual de IA</h4>
+              <p style="color: #5A5A5A;">Aprenda a gerar questões com ChatGPT e similares.</p>
+              <small style="color: #E65100; font-weight: 500;">Modelo de prompt disponível</small>
+            </div>
           </div>
         `;
         contentDiv.innerHTML = html;
         attachTimerEvents();
         
-        const hasSeenDashboardHelp = localStorage.getItem('vulpis_dashboard_help_seen');
-        if (!hasSeenDashboardHelp) {
+        // Donut chart
+        if (totalQ > 0) {
+          const canvas = document.getElementById('donutChart');
+          if (canvas) {
+            const ctx = canvas.getContext('2d');
+            const centerX = 100, centerY = 100, radius = 80;
+            const correctAngle = (totalCorrect / totalQ) * 2 * Math.PI;
+            ctx.clearRect(0, 0, 200, 200);
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#C62828';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, 0, correctAngle);
+            ctx.fillStyle = '#2E7D32';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+          }
+        }
+
+        // Eventos
+        document.getElementById('gotoQuestoesBtn')?.addEventListener('click', () => renderPage('questoes'));
+        document.getElementById('revisarPioresBtn')?.addEventListener('click', () => {
+          const worst = getWorstDiscipline();
+          if (worst) {
+            alert(`Sugestão: revise ${worst.name} (taxa de acerto: ${worst.rate.toFixed(0)}%)`);
+            renderPage('disciplinas');
+          } else {
+            alert('Nenhuma disciplina com baixo desempenho identificada.');
+          }
+        });
+        document.getElementById('dashboardHelpBtn')?.addEventListener('click', () => {
+          document.getElementById('dashboardHelpModal').style.display = 'flex';
+        });
+        document.querySelectorAll('.resumo-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const page = card.dataset.page;
+            if (page) renderPage(page);
+          });
+        });
+
+        const hasSeenHelp = localStorage.getItem('vulpis_dashboard_help_seen');
+        if (!hasSeenHelp) {
           setTimeout(() => {
             document.getElementById('dashboardHelpModal').style.display = 'flex';
             localStorage.setItem('vulpis_dashboard_help_seen', 'true');
           }, 300);
         }
+      }
+
+      function getFeedbackMessage(percent) {
+        if (percent >= 80) return 'Excelente! Continue assim! 🔥';
+        if (percent >= 60) return 'Você está evoluindo bem! 📈';
+        if (percent >= 40) return 'Bom progresso, foque nas revisões. 💪';
+        return 'Hora de revisar os conteúdos! 📚';
       }
       function getBestDiscipline() {
         let best = null, bestRate = -1;
@@ -1249,99 +1337,7 @@ REGRAS IMPORTANTES:
         return worst;
       }
 
-      // ---------- PÁGINA DE AULAS (VÍDEOS) ----------
-      function renderAulas() {
-        const disciplinasUnicas = [...new Set(state.videos.map(v => v.disciplina).filter(Boolean))];
-        const filterHtml = `
-          <div class="filter-bar">
-            <select id="filtroDisciplinaAulas" class="filter-select">
-              <option value="">Todas as disciplinas</option>
-              ${disciplinasUnicas.map(d => `<option value="${d}">${d}</option>`).join('')}
-            </select>
-            <span style="color:#757575;"><i class="fas fa-filter"></i> Filtrar por disciplina</span>
-          </div>
-        `;
-
-        let videosFiltrados = state.videos;
-        // Se houver filtro aplicado (será controlado via evento), usamos o valor do select
-
-        const highlightVideo = videoDestaqueAtual || state.videos[0];
-        const embedHighlight = gerarEmbed(highlightVideo.link_video);
-
-        const videosListHtml = (videos) => {
-          if (!videos.length) return '<div class="empty-state"><i class="fas fa-video-slash"></i><h3>Nenhuma aula encontrada</h3></div>';
-          return `
-            <div class="videos-grid">
-              ${videos.map(v => {
-                const embedUrl = gerarEmbed(v.link_video);
-                return `
-                  <div class="video-card" data-video-id="${v.id}">
-                    <div class="video-thumb">
-                      <iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                    </div>
-                    <div class="video-card-content">
-                      <div class="video-card-title">${v.titulo}</div>
-                      ${v.disciplina ? `<span class="video-card-disciplina"><i class="fas fa-tag"></i> ${v.disciplina}</span>` : ''}
-                      <p style="font-size:0.9rem; color:#5A5A5A; margin-bottom:12px;">${v.descricao || ''}</p>
-                      <div class="video-card-actions">
-                        <button class="btn-sm btn-sm-primary assistir-destaque-btn" data-video-id="${v.id}"><i class="fas fa-play"></i> Assistir em destaque</button>
-                        <button class="btn-sm btn-sm-secondary"><i class="far fa-bookmark"></i></button>
-                      </div>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          `;
-        };
-
-        const html = `
-          <div class="page-title">🎬 Aulas</div>
-          <div class="greeting"><i class="fas fa-video"></i> Assista às melhores aulas e acelere seu aprendizado</div>
-          
-          <div class="video-highlight">
-            <div class="video-wrapper">
-              <iframe src="${embedHighlight}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="video-info">
-              <h3>${highlightVideo.titulo}</h3>
-              <p>${highlightVideo.descricao || ''}</p>
-            </div>
-          </div>
-
-          ${filterHtml}
-          <div id="videosListContainer">
-            ${videosListHtml(videosFiltrados)}
-          </div>
-        `;
-        contentDiv.innerHTML = html;
-
-        // Eventos da página de aulas
-        const filtroSelect = document.getElementById('filtroDisciplinaAulas');
-        filtroSelect.addEventListener('change', (e) => {
-          const disciplina = e.target.value;
-          const videosFiltrados = disciplina ? state.videos.filter(v => v.disciplina === disciplina) : state.videos;
-          document.getElementById('videosListContainer').innerHTML = videosListHtml(videosFiltrados);
-          attachAulasEvents();
-        });
-
-        attachAulasEvents();
-      }
-
-      function attachAulasEvents() {
-        document.querySelectorAll('.assistir-destaque-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const videoId = parseInt(btn.dataset.videoId);
-            const video = state.videos.find(v => v.id === videoId);
-            if (video) {
-              videoDestaqueAtual = video;
-              renderAulas(); // recarrega a página com o novo destaque
-            }
-          });
-        });
-      }
-
-      // ---------- DEMAIS PÁGINAS (mantidas, apenas incluindo chamadas) ----------
+      // ========== DEMAIS PÁGINAS (preservadas) ==========
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
@@ -1586,7 +1582,6 @@ REGRAS IMPORTANTES:
         }
         return questions.slice(0, 50);
       }
-
       function processarQuestoesInput() {
         const input = document.getElementById('questoesInput').value.trim();
         if (!input) {
@@ -1601,7 +1596,6 @@ REGRAS IMPORTANTES:
         attachAnswerAndScissorEvents();
         attachPaginationEvents();
       }
-
       function renderQuestionCardsWithPagination() {
         if (!generatedQuestions.length) return '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão</h3></div>';
         const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
@@ -1615,7 +1609,6 @@ REGRAS IMPORTANTES:
         }
         return html;
       }
-
       function renderSingleQuestionCard(q, globalIndex) {
         const letras = ['A', 'B', 'C', 'D', 'E'];
         const respondida = q.respondida, acertou = q.correta, respostaIdx = q.respostaUsuario;
@@ -1652,7 +1645,6 @@ REGRAS IMPORTANTES:
           </div>
         `;
       }
-
       function attachAnswerAndScissorEvents() {
         document.querySelectorAll('.responder-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
@@ -1667,7 +1659,6 @@ REGRAS IMPORTANTES:
             question.respondida = true;
             question.respostaUsuario = respostaIdx;
             question.correta = acertou;
-            // Integração com desempenho (opcional)
             const discSelect = document.getElementById('qDiscipline');
             const topicSelect = document.getElementById('qTopic');
             if (discSelect && discSelect.value) {
@@ -1724,7 +1715,6 @@ REGRAS IMPORTANTES:
           });
         });
       }
-
       function attachPaginationEvents() {
         document.querySelectorAll('.pagination button').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -1738,25 +1728,251 @@ REGRAS IMPORTANTES:
           });
         });
       }
-
       function abrirModeloModal() { document.getElementById('modeloQuestaoModal').style.display = 'flex'; }
 
-      // Legislação, Desempenho, Manual IA, Perfil mantidos resumidamente (já implementados anteriormente)
       function renderLegislacao() {
-        // (código existente mantido, omitido por brevidade, mas funcional)
-        contentDiv.innerHTML = `<div class="page-title">Legislação</div><p>Em desenvolvimento.</p>`;
+        const html = `
+          <div class="page-title">Legislação</div>
+          <div class="greeting"><i class="fas fa-gavel"></i> Acompanhe suas leituras e revisões</div>
+          <div style="display:flex; gap:16px; margin-bottom:24px;">
+            <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus"></i> Adicionar Legislação</button>
+            <button class="btn-secondary" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
+          </div>
+          <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card">
+            <p><i class="fas fa-info-circle"></i> <strong>Guia de Estudo de Legislação:</strong> 1) Leitura completa da lei seca. 2) Leitura de resumos e esquemas. 3) Revisões periódicas. 4) Resolução de questões. Marque seu progresso abaixo.</p>
+          </div>
+          <div id="legislacaoList"></div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('addLegislacaoBtn').addEventListener('click', () => openLegislacaoModal());
+        document.getElementById('toggleGuiaBtn').addEventListener('click', () => {
+          const guia = document.getElementById('guiaLegislacao');
+          guia.style.display = guia.style.display === 'none' ? 'block' : 'none';
+        });
+        renderLegislacaoList();
       }
+      function renderLegislacaoList() {
+        const container = document.getElementById('legislacaoList');
+        if (!state.legislations.length) {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-gavel"></i><h3>Nenhuma legislação cadastrada</h3></div>';
+          return;
+        }
+        container.innerHTML = state.legislations.map(l => {
+          const progresso = (l.questoes.feitas / l.questoes.meta) * 100;
+          return `
+            <div class="card" style="margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="font-family:Poppins;">${l.nome}</h3>
+                <div class="actions">
+                  <i class="fas fa-edit" data-action="editLegislacao" data-id="${l.id}"></i>
+                  <i class="fas fa-trash-alt" data-action="deleteLegislacao" data-id="${l.id}"></i>
+                </div>
+              </div>
+              <div style="display:flex; gap:20px; margin:16px 0;">
+                <label><input type="checkbox" data-id="${l.id}" data-field="leituraCompleta" ${l.leituraCompleta?'checked':''}> Leitura completa</label>
+                <label><input type="checkbox" data-id="${l.id}" data-field="resumoLido" ${l.resumoLido?'checked':''}> Resumo lido</label>
+                <label><input type="checkbox" data-id="${l.id}" data-field="revisado" ${l.revisado?'checked':''}> Revisado</label>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between;"><span>Questões: ${l.questoes.feitas} / ${l.questoes.meta}</span><span>${progresso.toFixed(0)}%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
+                <div style="margin-top:12px;"><input type="number" min="0" max="${l.questoes.meta}" value="${l.questoes.feitas}" data-id="${l.id}" data-field="questoesFeitas" style="width:80px; padding:8px; border-radius:12px; border:1px solid #E0E0E0;"> <button class="btn-sm btn-sm-primary" data-id="${l.id}" data-action="updateQuestoes">Atualizar</button></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        document.querySelectorAll('[data-field]').forEach(el => el.addEventListener('change', handleLegislacaoChange));
+        document.querySelectorAll('[data-action="updateQuestoes"]').forEach(btn => btn.addEventListener('click', (e) => {
+          const id = parseInt(btn.dataset.id);
+          const input = btn.parentElement.querySelector('input');
+          const newVal = parseInt(input.value);
+          const leg = state.legislations.find(l => l.id === id);
+          if (leg && !isNaN(newVal) && newVal >= 0 && newVal <= leg.questoes.meta) {
+            leg.questoes.feitas = newVal;
+            saveToStorage();
+            renderLegislacaoList();
+          }
+        }));
+        document.querySelectorAll('[data-action="editLegislacao"]').forEach(i => i.addEventListener('click', (e) => {
+          const id = parseInt(i.dataset.id);
+          const leg = state.legislations.find(l => l.id === id);
+          if (leg) openLegislacaoModal(leg);
+        }));
+        document.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => {
+          const id = parseInt(i.dataset.id);
+          if (confirm('Excluir esta legislação?')) {
+            state.legislations = state.legislations.filter(l => l.id !== id);
+            saveToStorage();
+            renderLegislacaoList();
+          }
+        }));
+      }
+      function handleLegislacaoChange(e) {
+        const id = parseInt(e.target.dataset.id);
+        const field = e.target.dataset.field;
+        const leg = state.legislations.find(l => l.id === id);
+        if (leg) {
+          leg[field] = e.target.checked;
+          saveToStorage();
+        }
+      }
+      function openLegislacaoModal(leg = null) {
+        const modal = document.getElementById('legislacaoModal');
+        document.getElementById('legislacaoModalTitle').textContent = leg ? 'Editar Legislação' : 'Nova Legislação';
+        document.getElementById('legislacaoNomeInput').value = leg ? leg.nome : '';
+        document.getElementById('legislacaoEditId').value = leg ? leg.id : '';
+        modal.style.display = 'flex';
+      }
+
       function renderDesempenho() {
-        contentDiv.innerHTML = `<div class="page-title">Desempenho</div><p>Em desenvolvimento.</p>`;
+        let totalQ = 0, totalCorrect = 0;
+        state.disciplines.forEach(d => {
+          if(d.topics.length) { d.topics.forEach(t => { totalQ += t.questions||0; totalCorrect += t.correct||0; }); }
+          else { totalQ += d.questions||0; totalCorrect += d.correct||0; }
+        });
+        const avg = totalQ ? ((totalCorrect/totalQ)*100).toFixed(1) : '0.0';
+        const html = `
+          <div class="page-title">Desempenho Detalhado</div>
+          <div class="greeting"><i class="fas fa-chart-line"></i> Acompanhe sua evolução</div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value">${totalCorrect}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value">${totalQ - totalCorrect}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa Global</div><div class="card-value">${avg}%</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-calendar"></i> Dias estudados</div><div class="card-value">${new Set(state.questionsHistory.map(q=>q.date)).size}</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><i class="fas fa-history"></i> Últimas questões</div>
+            ${state.questionsHistory.slice(-10).reverse().map(q => {
+              const disc = state.disciplines.find(d => d.id === q.disciplineId);
+              const discName = disc ? disc.name : 'Desconhecida';
+              return `<div style="padding:8px 0; border-bottom:1px solid #F0F0F0;"><i class="fas fa-${q.correct ? 'check-circle' : 'times-circle'}" style="color:${q.correct ? '#2E7D32' : '#C62828'};"></i> ${discName} - ${q.date}</div>`;
+            }).join('')}
+            ${state.questionsHistory.length === 0 ? '<p style="color:#9E9E9E;">Nenhuma questão registrada ainda.</p>' : ''}
+          </div>
+        `;
+        contentDiv.innerHTML = html;
       }
+
       function renderManualIA() {
-        contentDiv.innerHTML = `<div class="page-title">Manual IA</div><p>Em desenvolvimento.</p>`;
+        const html = `
+          <div class="manual-container">
+            <h1 style="font-family:Poppins;"><i class="fas fa-robot" style="color:#E65100;"></i> Manual de IA para Concursos</h1>
+            <p style="margin-bottom:24px;">Aprenda a usar inteligência artificial para gerar questões personalizadas e acelerar seus estudos.</p>
+            <h2>📋 Modelo de Prompt Padrão</h2>
+            <div class="prompt-box">
+              <pre>Gere uma questão de concurso público no seguinte formato EXATO:
+
+(Questão de Treino)
+[Digite aqui o enunciado claro e objetivo]
+
+a) [Alternativa A]
+b) [Alternativa B]
+c) [Alternativa C]
+d) [Alternativa D]
+e) [Alternativa E]
+
+Gabarito: [Letra correta]
+
+Comentário:
+[Explique de forma clara e objetiva o motivo da alternativa correta e por que as demais estão erradas]
+
+REGRAS IMPORTANTES:
+* Sempre gerar 5 alternativas (a até e)
+* Apenas UMA alternativa correta
+* Linguagem no padrão de concursos
+* Comentário explicativo obrigatório
+* Não alterar o formato acima</pre>
+            </div>
+            <button class="btn-primary" id="copiarModeloManualBtn"><i class="fas fa-copy"></i> Copiar modelo</button>
+            <span id="copyFeedbackManual" class="copy-feedback"></span>
+            <h2>💡 Dicas de Uso</h2>
+            <ul style="margin-left:20px; line-height:1.8;">
+              <li>Especifique a disciplina e o assunto desejado no início do prompt.</li>
+              <li>Peça para a IA gerar várias questões de uma vez.</li>
+              <li>Após gerar, cole o texto na aba "Questões" e clique em "Processar questões".</li>
+              <li>Use o botão "Modelo de Questão" na aba Questões para acessar rapidamente.</li>
+            </ul>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('copiarModeloManualBtn').addEventListener('click', () => {
+          const texto = document.querySelector('.prompt-box pre').innerText;
+          navigator.clipboard.writeText(texto).then(() => {
+            document.getElementById('copyFeedbackManual').textContent = '✓ Modelo copiado!';
+          });
+        });
       }
+
       function renderPerfil() {
         contentDiv.innerHTML = `<div class="page-title">Perfil</div><p>Em desenvolvimento.</p>`;
       }
+      function renderAulas() {
+        const disciplinasUnicas = [...new Set(state.videos.map(v => v.disciplina).filter(Boolean))];
+        const filterHtml = `
+          <div class="filter-bar">
+            <select id="filtroDisciplinaAulas" class="filter-select">
+              <option value="">Todas as disciplinas</option>
+              ${disciplinasUnicas.map(d => `<option value="${d}">${d}</option>`).join('')}
+            </select>
+          </div>
+        `;
+        const highlightVideo = videoDestaqueAtual || state.videos[0];
+        const embedHighlight = gerarEmbed(highlightVideo.link_video);
+        const videosListHtml = (videos) => {
+          if (!videos.length) return '<div class="empty-state"><i class="fas fa-video-slash"></i><h3>Nenhuma aula encontrada</h3></div>';
+          return `
+            <div class="videos-grid">
+              ${videos.map(v => {
+                const embedUrl = gerarEmbed(v.link_video);
+                return `
+                  <div class="video-card">
+                    <div class="video-thumb"><iframe src="${embedUrl}" allowfullscreen loading="lazy"></iframe></div>
+                    <div class="video-card-content">
+                      <div class="video-card-title">${v.titulo}</div>
+                      ${v.disciplina ? `<span class="video-card-disciplina">${v.disciplina}</span>` : ''}
+                      <p style="font-size:0.9rem; color:#5A5A5A;">${v.descricao || ''}</p>
+                      <div class="video-card-actions">
+                        <button class="btn-sm btn-sm-primary assistir-destaque-btn" data-video-id="${v.id}"><i class="fas fa-play"></i> Destaque</button>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        };
+        const html = `
+          <div class="page-title">🎬 Aulas</div>
+          <div class="greeting"><i class="fas fa-video"></i> Assista às melhores aulas</div>
+          <div class="video-highlight">
+            <div class="video-wrapper"><iframe src="${embedHighlight}" allowfullscreen></iframe></div>
+            <div class="video-info"><h3>${highlightVideo.titulo}</h3><p>${highlightVideo.descricao || ''}</p></div>
+          </div>
+          ${filterHtml}
+          <div id="videosListContainer">${videosListHtml(state.videos)}</div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('filtroDisciplinaAulas').addEventListener('change', (e) => {
+          const disciplina = e.target.value;
+          const filtrados = disciplina ? state.videos.filter(v => v.disciplina === disciplina) : state.videos;
+          document.getElementById('videosListContainer').innerHTML = videosListHtml(filtrados);
+          document.querySelectorAll('.assistir-destaque-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const videoId = parseInt(btn.dataset.videoId);
+              const video = state.videos.find(v => v.id === videoId);
+              if (video) { videoDestaqueAtual = video; renderAulas(); }
+            });
+          });
+        });
+        document.querySelectorAll('.assistir-destaque-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const videoId = parseInt(btn.dataset.videoId);
+            const video = state.videos.find(v => v.id === videoId);
+            if (video) { videoDestaqueAtual = video; renderAulas(); }
+          });
+        });
+      }
 
-      // ---------- MODAIS ----------
       function openDisciplineModal() {
         const datalist = document.getElementById('disciplinesDatalist');
         datalist.innerHTML = '';
@@ -1765,6 +1981,7 @@ REGRAS IMPORTANTES:
         document.getElementById('disciplineModal').style.display = 'flex';
       }
       function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; document.getElementById('topicModal').style.display = 'flex'; }
+      
       function setupModals() {
         const modalDisc = document.getElementById('disciplineModal');
         document.getElementById('cancelModal').addEventListener('click', ()=> modalDisc.style.display='none');
@@ -1785,19 +2002,33 @@ REGRAS IMPORTANTES:
         document.getElementById('copiarModeloBtn').addEventListener('click', () => {
           navigator.clipboard.writeText(document.getElementById('modeloPromptText').value).then(() => document.getElementById('copyFeedback').textContent = '✓ Modelo copiado!');
         });
-        // Modal de ajuda dashboard
+        const modalLeg = document.getElementById('legislacaoModal');
+        document.getElementById('cancelLegislacaoModal').addEventListener('click', ()=> modalLeg.style.display='none');
+        document.getElementById('saveLegislacao').addEventListener('click', ()=>{
+          const nome = document.getElementById('legislacaoNomeInput').value.trim();
+          const editId = document.getElementById('legislacaoEditId').value;
+          if (!nome) return;
+          if (editId) {
+            const leg = state.legislations.find(l => l.id === parseInt(editId));
+            if (leg) { leg.nome = nome; }
+          } else {
+            state.legislations.push({ id: nextId++, nome, leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 0, meta: 50 } });
+          }
+          saveToStorage();
+          if (currentPage === 'legislacao') renderLegislacao();
+          modalLeg.style.display = 'none';
+        });
         const helpModal = document.getElementById('dashboardHelpModal');
         document.getElementById('closeDashboardHelpBtn').addEventListener('click', ()=> helpModal.style.display='none');
-        document.getElementById('dashboardHelpFloatBtn').addEventListener('click', ()=> helpModal.style.display='flex');
         window.addEventListener('click', (e) => {
           if(e.target === modalDisc) modalDisc.style.display='none';
           if(e.target === modalTopic) modalTopic.style.display='none';
           if(e.target === modalModelo) modalModelo.style.display='none';
+          if(e.target === modalLeg) modalLeg.style.display='none';
           if(e.target === helpModal) helpModal.style.display='none';
         });
       }
 
-      // ---------- INICIALIZAÇÃO ----------
       function init() {
         loadFromStorage();
         setupModals();
