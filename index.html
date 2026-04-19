@@ -72,7 +72,7 @@
       transition: all 0.2s ease;
       cursor: pointer;
     }
-    .nav-item i { width: 24px; font-size: 1.3rem; }
+    .nav-item i, .nav-item img { width: 24px; font-size: 1.3rem; }
     .nav-item.active {
       background: #FEF0E6;
       color: #E65100;
@@ -580,14 +580,6 @@
       color: #212121;
       margin: 0;
       flex: 1;
-    }
-    .help-image {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      border-radius: 20px;
-      background: #FEF0E6;
-      padding: 8px;
     }
     .help-content {
       font-size: 1rem;
@@ -1469,7 +1461,7 @@
   </style>
 </head>
 <body>
-  <!-- LANDING PAGE -->
+  <!-- LANDING PAGE (sem imagens Flaticon ou homem meditando) -->
   <div id="landingPage" class="landing-page">
     <div class="container">
       <!-- Hero -->
@@ -1578,8 +1570,12 @@
         <div class="nav-item" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
         <div class="nav-item" data-page="disciplinas"><i class="fas fa-book-open"></i> Disciplinas</div>
         <div class="nav-item" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
-        <div class="nav-item" data-page="legislacao"><i class="fas fa-gavel"></i> Legislação</div>
-        <div class="nav-item" data-page="aulas"><i class="fas fa-video"></i> Aulas</div>
+        <div class="nav-item" data-page="legislacao">
+          <img src="https://cdn-icons-png.flaticon.com/512/6983/6983044.png" alt="Legislação" style="width:24px; height:24px; object-fit:contain;"> Legislação
+        </div>
+        <div class="nav-item" data-page="aulas">
+          <img src="https://cdn-icons-png.flaticon.com/512/1294/1294269.png" alt="Aulas" style="width:24px; height:24px; object-fit:contain;"> Aulas
+        </div>
         <div class="nav-item" data-page="leitura"><i class="fas fa-book-reader"></i> Leitura</div>
         <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
         <div class="nav-item" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
@@ -1598,11 +1594,10 @@
   <!-- Rodapé com créditos (discreto) -->
   <div class="global-footer">Ícones por Flaticon</div>
 
-  <!-- Modal de ajuda do Dashboard -->
+  <!-- Modal de ajuda do Dashboard (imagem Flaticon removida) -->
   <div class="modal dashboard-help-modal" id="dashboardHelpModal">
     <div class="modal-card">
       <div class="help-header">
-        <img class="help-image" src="https://cdn-icons-png.flaticon.com/512/12564/12564141.png" alt="Planejamento financeiro">
         <h2>📊 O que é o Dashboard?</h2>
       </div>
       <div class="help-content">
@@ -1614,7 +1609,6 @@
         <p>No fim das contas, o dashboard não é só uma tela bonita com gráficos — ele é uma <strong>ferramenta de decisão</strong>. Ele te mostra onde você está, para onde está indo e o que precisa ajustar, ajudando você a evoluir de forma mais consciente e consistente nos estudos.</p>
       </div>
       <div class="help-footer">
-        <div class="credits">Sticker por <a href="https://www.flaticon.com/br/sticker-gratis/planejamento-financeiro_12564141" target="_blank">Freepik - Flaticon</a></div>
         <button class="btn-primary" id="closeDashboardHelpBtn">Entendi</button>
       </div>
     </div>
@@ -2639,7 +2633,7 @@ REGRAS IMPORTANTES:
         const textoInput = document.getElementById('questoesInput');
         processarBtn.addEventListener('click', () => {
           const rawText = textoInput.value.trim();
-          if (!rawText) { alert('Cole o texto das questões no formato especificado.'); return; }
+          if (!rawText) { alert('Por favor, insira uma questão antes de processar.'); return; }
           generatedQuestions = parseQuestions(rawText);
           currentQuestionPage = 1;
           if (generatedQuestions.length === 0) alert('Nenhuma questão válida encontrada. Verifique o formato.');
@@ -2678,10 +2672,10 @@ REGRAS IMPORTANTES:
         return html;
       }
 
-      // ========== LEITURA INTELIGENTE (simplificado) ==========
+      // ========== LEITURA INTELIGENTE (com botão Voltar para Início) ==========
       let leituraState = { pdfDoc: null, disciplinaId: null, nomeArquivo: '', tempoSessao: 0, timerInterval: null, timerRunning: false, currentPage: 1, totalPages: 0, inactivityTimer: null, ultimaAtividade: Date.now(), modoFoco: false, destaquesTemp: [], anotacoesTemp: [] };
       function renderLeitura() {
-        const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
+        const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary" id="voltarInicioBtn"><i class="fas fa-arrow-left"></i> Voltar para Início</button><button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
         contentDiv.innerHTML = html;
         const disciplinaSelect = document.getElementById('leituraDisciplinaSelect');
         const abrirBtn = document.getElementById('abrirPdfBtn');
@@ -2697,6 +2691,8 @@ REGRAS IMPORTANTES:
         const anotacaoBtn = document.getElementById('adicionarAnotacaoBtn');
         const modoFocoBtn = document.getElementById('modoFocoBtn');
         const concluirBtn = document.getElementById('concluirLeituraBtn');
+        const voltarInicioBtn = document.getElementById('voltarInicioBtn');
+        voltarInicioBtn.addEventListener('click', () => renderPage('dashboard'));
         function resetInactivityTimer() { leituraState.ultimaAtividade = Date.now(); if (leituraState.inactivityTimer) clearTimeout(leituraState.inactivityTimer); leituraState.inactivityTimer = setTimeout(() => { if (leituraState.timerRunning) { pausarTimerLeitura(true); mostrarMensagemFlutuante('Leitura pausada por inatividade', '#F57C00'); } }, 60000); }
         ['mousemove', 'keydown', 'click', 'scroll'].forEach(ev => document.addEventListener(ev, resetInactivityTimer));
         document.addEventListener('visibilitychange', () => { if (document.hidden && leituraState.timerRunning) { pausarTimerLeitura(true); mostrarMensagemFlutuante('Leitura pausada (aba inativa)', '#F57C00'); } });
@@ -2728,19 +2724,12 @@ REGRAS IMPORTANTES:
       function renderPerfil() { contentDiv.innerHTML = `<div class="page-title">Perfil</div><div class="greeting">Em construção</div>`; }
 
       // ========== MENTORIA (NOVA FUNCIONALIDADE) ==========
-      let mentoriaEstado = { area: null, subarea: null }; // estado interno da navegação
-
+      let mentoriaEstado = { area: null, subarea: null };
       function renderMentoria() {
-        // Se não houver área selecionada, mostra áreas; se houver área mas não subárea, mostra subáreas; senão mostra mentores
-        if (!mentoriaEstado.area) {
-          renderAreasMentoria();
-        } else if (mentoriaEstado.area && !mentoriaEstado.subarea) {
-          renderSubareasMentoria(mentoriaEstado.area);
-        } else {
-          renderMentoresList(mentoriaEstado.area, mentoriaEstado.subarea);
-        }
+        if (!mentoriaEstado.area) renderAreasMentoria();
+        else if (mentoriaEstado.area && !mentoriaEstado.subarea) renderSubareasMentoria(mentoriaEstado.area);
+        else renderMentoresList(mentoriaEstado.area, mentoriaEstado.subarea);
       }
-
       function renderAreasMentoria() {
         const areasHtml = areasConcurso.map(area => `
           <div class="card" style="cursor: pointer; transition: all 0.2s;" data-area="${area.nome}">
@@ -2763,24 +2752,17 @@ REGRAS IMPORTANTES:
           </div>
         `;
         contentDiv.innerHTML = html;
-        // Adicionar eventos de clique nos cards
         document.querySelectorAll('[data-area]').forEach(card => {
-          card.addEventListener('click', (e) => {
-            const areaNome = card.dataset.area;
-            mentoriaEstado.area = areaNome;
+          card.addEventListener('click', () => {
+            mentoriaEstado.area = card.dataset.area;
             mentoriaEstado.subarea = null;
-            renderSubareasMentoria(areaNome);
+            renderSubareasMentoria(mentoriaEstado.area);
           });
         });
       }
-
       function renderSubareasMentoria(areaNome) {
         const area = areasConcurso.find(a => a.nome === areaNome);
-        if (!area) {
-          mentoriaEstado.area = null;
-          renderAreasMentoria();
-          return;
-        }
+        if (!area) { mentoriaEstado.area = null; renderAreasMentoria(); return; }
         const subareasHtml = area.subareas.map(sub => `
           <div class="card" style="cursor: pointer; transition: all 0.2s;" data-subarea="${sub}">
             <div class="card-header"><i class="fas fa-layer-group"></i> ${sub}</div>
@@ -2802,24 +2784,15 @@ REGRAS IMPORTANTES:
           </div>
         `;
         contentDiv.innerHTML = html;
-        document.getElementById('backToAreasMentoria').addEventListener('click', () => {
-          mentoriaEstado.area = null;
-          mentoriaEstado.subarea = null;
-          renderAreasMentoria();
-        });
+        document.getElementById('backToAreasMentoria').addEventListener('click', () => { mentoriaEstado = { area: null, subarea: null }; renderAreasMentoria(); });
         document.querySelectorAll('[data-subarea]').forEach(card => {
-          card.addEventListener('click', (e) => {
-            const subarea = card.dataset.subarea;
-            mentoriaEstado.subarea = subarea;
-            renderMentoresList(areaNome, subarea);
+          card.addEventListener('click', () => {
+            mentoriaEstado.subarea = card.dataset.subarea;
+            renderMentoresList(areaNome, mentoriaEstado.subarea);
           });
         });
       }
-
-      function filtrarMentores(area, subarea) {
-        return state.mentors.filter(m => m.area === area && m.subarea === subarea);
-      }
-
+      function filtrarMentores(area, subarea) { return state.mentors.filter(m => m.area === area && m.subarea === subarea); }
       function renderMentoresList(area, subarea) {
         const mentoresFiltrados = filtrarMentores(area, subarea);
         let mentoresHtml = '';
@@ -2855,19 +2828,13 @@ REGRAS IMPORTANTES:
           </div>
         `;
         contentDiv.innerHTML = html;
-        document.getElementById('backToSubareasMentoria').addEventListener('click', () => {
-          mentoriaEstado.subarea = null;
-          renderSubareasMentoria(area);
-        });
+        document.getElementById('backToSubareasMentoria').addEventListener('click', () => { mentoriaEstado.subarea = null; renderSubareasMentoria(area); });
         document.querySelectorAll('.solicitar-mentoria').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const mentorId = parseInt(btn.dataset.mentorId);
             const mentor = state.mentors.find(m => m.id === mentorId);
-            if (mentor) {
-              mostrarMensagemFlutuante(`✅ Solicitação enviada para ${mentor.nome}! Entraremos em contato em breve.`, '#2E7D32');
-            } else {
-              mostrarMensagemFlutuante('Erro ao enviar solicitação. Tente novamente.', '#C62828');
-            }
+            if (mentor) mostrarMensagemFlutuante(`✅ Solicitação enviada para ${mentor.nome}! Entraremos em contato em breve.`, '#2E7D32');
+            else mostrarMensagemFlutuante('Erro ao enviar solicitação. Tente novamente.', '#C62828');
           });
         });
       }
@@ -2896,7 +2863,7 @@ REGRAS IMPORTANTES:
           if (!nome) return;
           if (editId) {
             const leg = state.legislations.find(l => l.id === parseInt(editId));
-            if (leg) { leg.nome = nome; }
+            if (leg) leg.nome = nome;
           } else {
             state.legislations.push({ id: nextId++, nome, leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 0, meta: 50 } });
           }
@@ -2916,8 +2883,7 @@ REGRAS IMPORTANTES:
       function openDisciplineModal() {
         const datalist = document.getElementById('disciplinesDatalist');
         datalist.innerHTML = '';
-        const allDisciplineNames = state.disciplines.map(d => d.name);
-        allDisciplineNames.forEach(nome => { const opt = document.createElement('option'); opt.value = nome; datalist.appendChild(opt); });
+        state.disciplines.map(d => d.name).forEach(nome => { const opt = document.createElement('option'); opt.value = nome; datalist.appendChild(opt); });
         document.getElementById('disciplineModal').style.display = 'flex';
       }
       function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; document.getElementById('topicModal').style.display = 'flex'; }
