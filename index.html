@@ -2570,7 +2570,7 @@ REGRAS IMPORTANTES:
         
         for (let block of blocks) {
           try {
-            // Captura o enunciado: tudo até encontrar "a)" ou "a) " no início da linha
+            // Captura o enunciado: tudo até encontrar "a)" no início da linha
             let enunciadoMatch = block.match(/^([\s\S]*?)(?=\n\s*a\))/i);
             if (!enunciadoMatch) continue;
             let enunciado = enunciadoMatch[1].trim();
@@ -3001,7 +3001,7 @@ REGRAS IMPORTANTES:
         }
       }
 
-      // ========== LEITURA INTELIGENTE (NOVA FUNCIONALIDADE) ==========
+      // ========== LEITURA INTELIGENTE ==========
       let leituraState = {
         pdfDoc: null,
         disciplinaId: null,
@@ -3393,7 +3393,7 @@ REGRAS IMPORTANTES:
         atualizarListaAnotacoes();
       }
 
-      // ========== DEMAIS PÁGINAS (mantido) ==========
+      // ========== DEMAIS PÁGINAS ==========
       function renderDesempenho() { contentDiv.innerHTML = `<div class="page-title">Desempenho</div><div class="greeting">Em construção</div>`; }
       function renderManualIA() { contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`; }
       function renderMentoria() { contentDiv.innerHTML = `<div class="page-title">Mentoria</div><div class="greeting">Em construção</div>`; }
