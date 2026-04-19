@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Lottie para animação da raposa -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   <style>
     /* ===== ESTILOS GERAIS (mantidos integralmente) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1369,6 +1371,101 @@
       .benefits-grid { grid-template-columns: 1fr; }
       .hero-content h1 { font-size: 2.2rem; }
     }
+
+    /* ========== ESTILOS LEITURA INTELIGENTE ========== */
+    .leitura-container {
+      display: flex;
+      gap: 24px;
+      height: calc(100vh - 200px);
+      min-height: 600px;
+    }
+    .leitura-sidebar {
+      width: 340px;
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .leitura-viewer {
+      flex: 1;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #F0F0F0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pdf-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #F0F0F0;
+      background: #FAFAFA;
+    }
+    .pdf-pages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #F5F5F5;
+    }
+    .pdf-page {
+      margin-bottom: 24px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      background: white;
+      border-radius: 8px;
+    }
+    .progresso-leitura {
+      margin-top: 16px;
+    }
+    .highlight-control {
+      background: #FEF0E6;
+      border-radius: 16px;
+      padding: 18px;
+      margin: 20px 0;
+    }
+    .anotacao-item {
+      background: #FFF9C4;
+      padding: 14px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      border-left: 4px solid #FBC02D;
+    }
+    .modo-foco .sidebar {
+      display: none;
+    }
+    .modo-foco .leitura-viewer {
+      width: 100%;
+    }
+    .mensagem-flutuante {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #212121;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 9999;
+      animation: fadeInOut 3s ease forwards;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; bottom: 10px; }
+      15% { opacity: 1; bottom: 30px; }
+      85% { opacity: 1; bottom: 30px; }
+      100% { opacity: 0; bottom: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -1483,6 +1580,7 @@
         <div class="nav-item" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
         <div class="nav-item" data-page="legislacao"><i class="fas fa-gavel"></i> Legislação</div>
         <div class="nav-item" data-page="aulas"><i class="fas fa-video"></i> Aulas</div>
+        <div class="nav-item" data-page="leitura"><i class="fas fa-book-reader"></i> Leitura</div>
         <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
         <div class="nav-item" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
         <div class="nav-item" data-page="mentoria"><i class="fas fa-graduation-cap"></i> Mentoria</div>
@@ -1591,6 +1689,20 @@ REGRAS IMPORTANTES:
     </div>
   </div>
 
+  <!-- MODAL PARA ANOTAÇÕES (LEITURA) -->
+  <div class="modal" id="anotacaoModal">
+    <div class="modal-card">
+      <h3 style="font-family: Poppins; margin-bottom: 16px;"><i class="fas fa-pencil-alt" style="color:#E65100;"></i> Nova anotação</h3>
+      <label>Página <span id="anotacaoPaginaLabel"></span></label>
+      <textarea id="anotacaoTexto" rows="4" placeholder="Digite sua anotação..."></textarea>
+      <input type="hidden" id="anotacaoPagina">
+      <div class="flex-buttons">
+        <button class="btn-primary" style="background: #9E9E9E;" id="cancelAnotacao">Cancelar</button>
+        <button class="btn-primary" id="saveAnotacao">Salvar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function(){
       'use strict';
@@ -1686,6 +1798,7 @@ REGRAS IMPORTANTES:
       let state = {
         disciplines: [],
         legislations: [],
+        leituras: [],
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: [],
         videos: []
@@ -1738,6 +1851,7 @@ REGRAS IMPORTANTES:
             if(state.disciplines.length) nextId = Math.max(...state.disciplines.map(d=>d.id), 0) + 1; 
             state.legislations = state.legislations || [];
             state.videos = state.videos || [];
+            state.leituras = state.leituras || [];
           } catch(e){}
         }
         if(!state.disciplines.length) {
@@ -1764,6 +1878,9 @@ REGRAS IMPORTANTES:
             { id: 2, titulo: "Raciocínio Lógico: Tabela-Verdade", descricao: "Aprenda proposições, conectivos e construção de tabelas-verdade.", disciplina: "Raciocínio Lógico", link_video: "https://www.youtube.com/watch?v=VIDEO2", ordem: 2 },
             { id: 3, titulo: "Interpretação de Texto para Concursos", descricao: "Técnicas para compreensão e análise de textos.", disciplina: "Português", link_video: "https://www.youtube.com/watch?v=VIDEO3", ordem: 3 }
           ];
+        }
+        if(!state.leituras.length) {
+          state.leituras = [];
         }
         videoDestaqueAtual = state.videos.find(v => v.id === 1) || state.videos[0];
         state.disciplines.forEach(d => { d.topics = d.topics || []; d.expanded = false; });
@@ -1811,6 +1928,7 @@ REGRAS IMPORTANTES:
           case 'questoes': renderQuestoes(); break;
           case 'legislacao': renderLegislacao(); break;
           case 'aulas': renderAulas(); break;
+          case 'leitura': renderLeitura(); break;
           case 'desempenho': renderDesempenho(); break;
           case 'manual-ia': renderManualIA(); break;
           case 'mentoria': renderMentoria(); break;
@@ -1818,6 +1936,17 @@ REGRAS IMPORTANTES:
         }
       }
 
+      // ========== FUNÇÕES AUXILIARES GLOBAIS ==========
+      function mostrarMensagemFlutuante(texto, cor = '#212121') {
+        const msg = document.createElement('div');
+        msg.className = 'mensagem-flutuante';
+        msg.textContent = texto;
+        msg.style.background = cor;
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 3000);
+      }
+
+      // ========== TIMER GLOBAL (mantido) ==========
       function renderGlobalTimer() {
         return `
           <div class="global-timer">
@@ -2066,7 +2195,7 @@ REGRAS IMPORTANTES:
         return worst;
       }
 
-      // ========== DISCIPLINAS ==========
+      // ========== DISCIPLINAS (mantido) ==========
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
@@ -2161,7 +2290,7 @@ REGRAS IMPORTANTES:
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
       }
 
-      // ========== LEGISLAÇÃO ==========
+      // ========== LEGISLAÇÃO (mantido) ==========
       function renderLegislacao() {
         const html = `
           <div style="position: relative;">
@@ -2293,7 +2422,7 @@ REGRAS IMPORTANTES:
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
       }
 
-      // ========== AULAS ==========
+      // ========== AULAS (mantido) ==========
       function renderAulas() {
         const getEmbedUrl = (url) => {
           if (!url) return '';
@@ -2721,7 +2850,7 @@ REGRAS IMPORTANTES:
         renderQuestoes();
       }
 
-      // ========== QUESTÕES (CORRIGIDA) ==========
+      // ========== QUESTÕES (mantido) ==========
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q => q.date === today);
@@ -2864,7 +2993,399 @@ REGRAS IMPORTANTES:
         }
       }
 
-      // ========== DEMAIS PÁGINAS ==========
+      // ========== LEITURA INTELIGENTE (NOVA FUNCIONALIDADE) ==========
+      let leituraState = {
+        pdfDoc: null,
+        disciplinaId: null,
+        nomeArquivo: '',
+        tempoSessao: 0,
+        timerInterval: null,
+        timerRunning: false,
+        currentPage: 1,
+        totalPages: 0,
+        inactivityTimer: null,
+        ultimaAtividade: Date.now(),
+        modoFoco: false,
+        destaquesTemp: [],
+        anotacoesTemp: []
+      };
+
+      function renderLeitura() {
+        const html = `
+          <div class="page-title">📖 Leitura Inteligente</div>
+          <div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div>
+          
+          <div class="leitura-container" id="leituraContainer">
+            <div class="leitura-sidebar">
+              <div style="margin-bottom: 20px;">
+                <label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label>
+                <select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;">
+                  <option value="">Selecione a disciplina</option>
+                </select>
+              </div>
+              
+              <div style="margin-bottom: 20px;">
+                <button class="btn-primary" id="abrirPdfBtn" style="width:100%;">
+                  <i class="fas fa-folder-open"></i> Abrir PDF
+                </button>
+                <input type="file" id="pdfFileInput" accept=".pdf" style="display:none;">
+              </div>
+              
+              <div id="pdfInfo" style="display:none;">
+                <p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p>
+                <p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p>
+              </div>
+              
+              <div class="card" style="margin: 16px 0;">
+                <div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div>
+                <div class="card-value" id="leituraTimerDisplay">00:00:00</div>
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                  <button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button>
+                  <button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button>
+                  <button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button>
+                </div>
+              </div>
+              
+              <div class="highlight-control">
+                <p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p>
+                <button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled>
+                  <i class="fas fa-paint-brush"></i> Destacar seleção
+                </button>
+                <button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled>
+                  <i class="fas fa-pencil-alt"></i> Anotar
+                </button>
+                <button class="btn-secondary" id="modoFocoBtn" style="width:100%;">
+                  <i class="fas fa-eye"></i> Modo Foco
+                </button>
+              </div>
+              
+              <div style="margin-top: auto;">
+                <div class="progresso-leitura">
+                  <div class="progress-header">
+                    <span>Progresso de leitura</span>
+                    <span id="progressoPercent">0%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="progressoBarra" style="width:0%;"></div>
+                  </div>
+                </div>
+                <button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled>
+                  <i class="fas fa-check-circle"></i> Concluir leitura
+                </button>
+              </div>
+            </div>
+            
+            <div class="leitura-viewer">
+              <div class="pdf-toolbar">
+                <button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button>
+                <span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span>
+                <button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button>
+                <div style="flex:1;"></div>
+              </div>
+              <div class="pdf-pages-container" id="pdfContainer">
+                <div class="empty-state">
+                  <i class="fas fa-file-pdf"></i>
+                  <h3>Nenhum PDF carregado</h3>
+                  <p>Selecione uma disciplina e abra um arquivo PDF para começar.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px;">
+            <h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3>
+            <div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div>
+          </div>
+        `;
+        
+        contentDiv.innerHTML = html;
+        preencherDisciplinas('leituraDisciplinaSelect', state.disciplines);
+        initLeituraEvents();
+      }
+
+      function initLeituraEvents() {
+        const disciplinaSelect = document.getElementById('leituraDisciplinaSelect');
+        const abrirBtn = document.getElementById('abrirPdfBtn');
+        const fileInput = document.getElementById('pdfFileInput');
+        const timerDisplay = document.getElementById('leituraTimerDisplay');
+        const iniciarBtn = document.getElementById('leituraIniciarBtn');
+        const pausarBtn = document.getElementById('leituraPausarBtn');
+        const finalizarBtn = document.getElementById('leituraFinalizarBtn');
+        const anteriorBtn = document.getElementById('pdfAnterior');
+        const proximaBtn = document.getElementById('pdfProxima');
+        const container = document.getElementById('pdfContainer');
+        const destaqueBtn = document.getElementById('adicionarDestaqueBtn');
+        const anotacaoBtn = document.getElementById('adicionarAnotacaoBtn');
+        const modoFocoBtn = document.getElementById('modoFocoBtn');
+        const concluirBtn = document.getElementById('concluirLeituraBtn');
+        
+        function resetInactivityTimer() {
+          leituraState.ultimaAtividade = Date.now();
+          if (leituraState.inactivityTimer) clearTimeout(leituraState.inactivityTimer);
+          leituraState.inactivityTimer = setTimeout(() => {
+            if (leituraState.timerRunning) {
+              pausarTimerLeitura(true);
+              mostrarMensagemFlutuante('Leitura pausada por inatividade', '#F57C00');
+            }
+          }, 60000);
+        }
+        
+        ['mousemove', 'keydown', 'click', 'scroll'].forEach(ev => 
+          document.addEventListener(ev, resetInactivityTimer)
+        );
+        
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden && leituraState.timerRunning) {
+            pausarTimerLeitura(true);
+            mostrarMensagemFlutuante('Leitura pausada (aba inativa)', '#F57C00');
+          }
+        });
+        
+        function pausarTimerLeitura(automatico = false) {
+          if (leituraState.timerInterval) {
+            clearInterval(leituraState.timerInterval);
+            leituraState.timerInterval = null;
+          }
+          leituraState.timerRunning = false;
+          if (iniciarBtn) iniciarBtn.disabled = false;
+          if (pausarBtn) pausarBtn.disabled = true;
+        }
+        
+        function iniciarTimerLeitura() {
+          if (!leituraState.pdfDoc) {
+            alert('Carregue um PDF primeiro.');
+            return;
+          }
+          if (!leituraState.disciplinaId) {
+            alert('Selecione uma disciplina.');
+            return;
+          }
+          leituraState.timerRunning = true;
+          leituraState.timerInterval = setInterval(() => {
+            leituraState.tempoSessao++;
+            if (timerDisplay) timerDisplay.textContent = formatTime(leituraState.tempoSessao);
+          }, 1000);
+          iniciarBtn.disabled = true;
+          pausarBtn.disabled = false;
+          resetInactivityTimer();
+        }
+        
+        function finalizarLeitura() {
+          if (!leituraState.pdfDoc) return;
+          pausarTimerLeitura();
+          
+          const novaLeitura = {
+            id: Date.now(),
+            disciplinaId: leituraState.disciplinaId,
+            nomeArquivo: leituraState.nomeArquivo,
+            tempoTotal: leituraState.tempoSessao,
+            data: new Date().toISOString(),
+            progresso: calcularProgresso(),
+            concluido: false,
+            anotacoes: [...leituraState.anotacoesTemp],
+            destaques: [...leituraState.destaquesTemp]
+          };
+          
+          state.leituras.push(novaLeitura);
+          
+          const disc = state.disciplines.find(d => d.id === leituraState.disciplinaId);
+          if (disc) {
+            disc.timeSeconds = (disc.timeSeconds || 0) + leituraState.tempoSessao;
+          }
+          
+          saveToStorage();
+          mostrarMensagemFlutuante(`Leitura finalizada! ${formatHoursMinutes(leituraState.tempoSessao)} adicionados à disciplina.`, '#2E7D32');
+          
+          leituraState = {
+            pdfDoc: null,
+            disciplinaId: null,
+            nomeArquivo: '',
+            tempoSessao: 0,
+            timerInterval: null,
+            timerRunning: false,
+            currentPage: 1,
+            totalPages: 0,
+            inactivityTimer: null,
+            ultimaAtividade: Date.now(),
+            modoFoco: false,
+            destaquesTemp: [],
+            anotacoesTemp: []
+          };
+          renderLeitura();
+        }
+        
+        function calcularProgresso() {
+          const cont = document.getElementById('pdfContainer');
+          if (!cont) return 0;
+          const scrollTop = cont.scrollTop;
+          const scrollHeight = cont.scrollHeight - cont.clientHeight;
+          return scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        }
+        
+        function atualizarProgresso() {
+          const progresso = calcularProgresso();
+          const percentEl = document.getElementById('progressoPercent');
+          const barraEl = document.getElementById('progressoBarra');
+          if (percentEl) percentEl.textContent = `${Math.round(progresso)}%`;
+          if (barraEl) barraEl.style.width = `${progresso}%`;
+        }
+        
+        abrirBtn.addEventListener('click', () => {
+          const discValue = disciplinaSelect.value;
+          if (!discValue) {
+            alert('Selecione uma disciplina primeiro.');
+            return;
+          }
+          let disc;
+          if (disciplinaSelect.options[disciplinaSelect.selectedIndex]?.dataset?.custom === 'true') {
+            disc = state.disciplines.find(d => d.id === parseInt(discValue));
+          } else {
+            disc = state.disciplines.find(d => d.name === discValue);
+            if (!disc) {
+              disc = { id: nextId++, name: discValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
+              state.disciplines.push(disc);
+            }
+          }
+          leituraState.disciplinaId = disc.id;
+          fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file && file.type === 'application/pdf') {
+            leituraState.nomeArquivo = file.name;
+            document.getElementById('pdfNome').textContent = file.name;
+            document.getElementById('pdfInfo').style.display = 'block';
+            
+            const fileReader = new FileReader();
+            fileReader.onload = function() {
+              const typedarray = new Uint8Array(this.result);
+              pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+                leituraState.pdfDoc = pdf;
+                leituraState.totalPages = pdf.numPages;
+                document.getElementById('totalPaginas').textContent = pdf.numPages;
+                document.getElementById('pdfPaginas').textContent = pdf.numPages;
+                
+                document.getElementById('pdfAnterior').disabled = false;
+                document.getElementById('pdfProxima').disabled = false;
+                document.getElementById('adicionarDestaqueBtn').disabled = false;
+                document.getElementById('adicionarAnotacaoBtn').disabled = false;
+                document.getElementById('concluirLeituraBtn').disabled = false;
+                document.getElementById('leituraIniciarBtn').disabled = false;
+                document.getElementById('leituraPausarBtn').disabled = false;
+                document.getElementById('leituraFinalizarBtn').disabled = false;
+                
+                renderPagina(1);
+                iniciarTimerLeitura();
+              }).catch(err => {
+                alert('Erro ao carregar PDF: ' + err.message);
+              });
+            };
+            fileReader.readAsArrayBuffer(file);
+          } else {
+            alert('Por favor, selecione um arquivo PDF.');
+          }
+        });
+        
+        async function renderPagina(num) {
+          if (!leituraState.pdfDoc) return;
+          const container = document.getElementById('pdfContainer');
+          container.innerHTML = '';
+          leituraState.currentPage = num;
+          document.getElementById('paginaAtual').textContent = num;
+          
+          try {
+            const page = await leituraState.pdfDoc.getPage(num);
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            canvas.className = 'pdf-page';
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport }).promise;
+            container.appendChild(canvas);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+        
+        anteriorBtn.addEventListener('click', () => {
+          if (leituraState.currentPage > 1) renderPagina(leituraState.currentPage - 1);
+        });
+        proximaBtn.addEventListener('click', () => {
+          if (leituraState.currentPage < leituraState.totalPages) renderPagina(leituraState.currentPage + 1);
+        });
+        
+        const pdfContainerEl = document.getElementById('pdfContainer');
+        pdfContainerEl.addEventListener('scroll', atualizarProgresso);
+        
+        iniciarBtn.addEventListener('click', iniciarTimerLeitura);
+        pausarBtn.addEventListener('click', () => pausarTimerLeitura());
+        finalizarBtn.addEventListener('click', finalizarLeitura);
+        
+        destaqueBtn.addEventListener('click', () => {
+          leituraState.destaquesTemp.push({ texto: `Destaque na pág. ${leituraState.currentPage}`, pagina: leituraState.currentPage, cor: '#FFEB3B' });
+          mostrarMensagemFlutuante('Destaque adicionado!');
+        });
+        
+        anotacaoBtn.addEventListener('click', () => {
+          document.getElementById('anotacaoPagina').value = leituraState.currentPage;
+          document.getElementById('anotacaoPaginaLabel').textContent = leituraState.currentPage;
+          document.getElementById('anotacaoModal').style.display = 'flex';
+        });
+        
+        document.getElementById('saveAnotacao').addEventListener('click', () => {
+          const texto = document.getElementById('anotacaoTexto').value.trim();
+          const pagina = parseInt(document.getElementById('anotacaoPagina').value);
+          if (texto) {
+            leituraState.anotacoesTemp.push({ texto, pagina, timestamp: new Date().toISOString() });
+            atualizarListaAnotacoes();
+            document.getElementById('anotacaoModal').style.display = 'none';
+            document.getElementById('anotacaoTexto').value = '';
+          }
+        });
+        
+        document.getElementById('cancelAnotacao').addEventListener('click', () => {
+          document.getElementById('anotacaoModal').style.display = 'none';
+        });
+        
+        function atualizarListaAnotacoes() {
+          const containerLista = document.getElementById('anotacoesList');
+          if (leituraState.anotacoesTemp.length === 0) {
+            containerLista.innerHTML = '<p style="color:#9E9E9E;">Nenhuma anotação ainda.</p>';
+          } else {
+            containerLista.innerHTML = leituraState.anotacoesTemp.map(a => 
+              `<div class="anotacao-item"><strong>Pág. ${a.pagina}:</strong> ${a.texto}</div>`
+            ).join('');
+          }
+        }
+        
+        modoFocoBtn.addEventListener('click', () => {
+          leituraState.modoFoco = !leituraState.modoFoco;
+          document.querySelector('.app-container').classList.toggle('modo-foco');
+          modoFocoBtn.innerHTML = leituraState.modoFoco ? 
+            '<i class="fas fa-compress"></i> Sair do Modo Foco' : 
+            '<i class="fas fa-eye"></i> Modo Foco';
+        });
+        
+        concluirBtn.addEventListener('click', () => {
+          if (confirm('Marcar leitura como concluída e salvar progresso?')) {
+            if (state.leituras.length > 0) {
+              const ultima = state.leituras[state.leituras.length - 1];
+              if (ultima.nomeArquivo === leituraState.nomeArquivo) {
+                ultima.concluido = true;
+                ultima.progresso = calcularProgresso();
+              }
+            }
+            finalizarLeitura();
+            mostrarMensagemFlutuante('Leitura concluída! Deseja gerar questões sobre este conteúdo? (Em breve)', '#E65100');
+          }
+        });
+        
+        atualizarListaAnotacoes();
+      }
+
+      // ========== DEMAIS PÁGINAS (mantido) ==========
       function renderDesempenho() { contentDiv.innerHTML = `<div class="page-title">Desempenho</div><div class="greeting">Em construção</div>`; }
       function renderManualIA() { contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`; }
       function renderMentoria() { contentDiv.innerHTML = `<div class="page-title">Mentoria</div><div class="greeting">Em construção</div>`; }
