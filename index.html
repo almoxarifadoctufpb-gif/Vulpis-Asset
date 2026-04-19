@@ -230,6 +230,8 @@
       padding: 32px;
       width: 480px;
       box-shadow: 0 30px 40px rgba(0,0,0,0.1);
+      max-height: 85vh;
+      overflow-y: auto;
     }
     .modal-card input, .modal-card select, .modal-card textarea {
       width: 100%;
@@ -450,7 +452,9 @@
       border-radius: 16px;
       margin-top: 16px;
       border-left: 4px solid #F57C00;
+      text-align: justify;
     }
+    .comentario-box p { text-align: justify; margin-bottom: 8px; }
     .comentario-box strong { color: #E65100; }
     .question-actions { display: flex; gap: 12px; margin-top: 20px; }
     .section-divider { margin: 40px 0 24px; border-top: 2px dashed #E0E0E0; }
@@ -1458,6 +1462,51 @@
       85% { opacity: 1; bottom: 30px; }
       100% { opacity: 0; bottom: 10px; }
     }
+
+    /* Novos modais: Tutorial e Prompts */
+    .tutorial-modal .modal-card {
+      width: 900px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+    }
+    .prompts-modal .modal-card {
+      width: 800px;
+      max-width: 95vw;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 24px;
+    }
+    .prompt-card {
+      background: #F9F9F9;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #EEEEEE;
+    }
+    .prompt-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .prompt-card-header h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      color: #E65100;
+    }
+    .prompt-text {
+      background: white;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem;
+      border-left: 4px solid #F57C00;
+      margin: 12px 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
   </style>
 </head>
 <body>
@@ -1594,7 +1643,7 @@
   <!-- Rodapé com créditos (discreto) -->
   <div class="global-footer">Ícones por Flaticon</div>
 
-  <!-- Modal de ajuda do Dashboard (imagem Flaticon removida) -->
+  <!-- Modal de ajuda do Dashboard -->
   <div class="modal dashboard-help-modal" id="dashboardHelpModal">
     <div class="modal-card">
       <div class="help-header">
@@ -1611,6 +1660,55 @@
       <div class="help-footer">
         <button class="btn-primary" id="closeDashboardHelpBtn">Entendi</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal Tutorial (Aprenda a usar) -->
+  <div class="modal tutorial-modal" id="tutorialModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="font-family: Poppins; color: #E65100;"><i class="fas fa-graduation-cap"></i> Guia Completo: Gerando Questões com IA</h2>
+        <button class="btn-secondary" id="closeTutorialBtn" style="border-radius: 30px;"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="help-content" style="max-height: 70vh; overflow-y: auto; padding-right: 8px;">
+        <h3>🌟 Introdução</h3>
+        <p>Estudar para concursos exige constância e resolução de muitas questões. Ferramentas como ChatGPT, Gemini, DeepSeek e NotebookLM podem criar questões inéditas personalizadas. O segredo está em ensinar a IA a escrever no formato exato que o Vulpis Asset consegue ler.</p>
+        <h3>🔧 O "Molde" Mágico</h3>
+        <pre style="background:#F5F5F5; padding:16px; border-radius:16px; font-family: monospace;">(Questão de Treino)
+[Enunciado da pergunta]
+
+a) [Alternativa A]
+b) [Alternativa B]
+c) [Alternativa C]
+d) [Alternativa D]
+e) [Alternativa E]
+
+Gabarito: X
+
+Comentário:
+[Explicação detalhada]</pre>
+        <p><strong>Regras de ouro:</strong> Use exatamente esse formato, sem negrito ou asteriscos.</p>
+        <h3>📓 Google NotebookLM</h3>
+        <p>1. Crie um caderno e faça upload dos seus PDFs.<br>2. No chat, cole o "Molde Mágico".<br>3. Diga: "Com base nas fontes, gere 5 questões seguindo rigorosamente o formato acima."<br>4. Copie e cole no Vulpis.</p>
+        <h3>🤖 DeepSeek</h3>
+        <p>1. Acesse chat.deepseek.com e desligue a busca na internet.<br>2. Cole o prompt reforçado (disponível nos Prompts Prontos).<br>3. Ele entregará o texto limpo, pronto para uso.</p>
+        <h3>🟢 ChatGPT</h3>
+        <p>1. Cole o "Molde Mágico".<br>2. Peça: "Gere 3 questões sobre [tema] no formato acima, sem introduções."<br>3. Se houver negrito, peça para remover.</p>
+        <h3>🌟 Google Gemini</h3>
+        <p>1. Use comandos em MAIÚSCULAS e seja firme.<br>2. Cole o prompt completo com regras explícitas.<br>3. Verifique se o "Gabarito:" está em linha separada.</p>
+        <p><strong>Dica final:</strong> Sempre confira se o texto começa com <code>(Questão de Treino)</code> e tem exatamente 5 alternativas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Prompts Prontos -->
+  <div class="modal prompts-modal" id="promptsModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="font-family: Poppins; color: #E65100;"><i class="fas fa-list-ul"></i> Prompts Prontos para IA</h2>
+        <button class="btn-secondary" id="closePromptsBtn" style="border-radius: 30px;"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="promptsListContainer" style="max-height: 70vh; overflow-y: auto; padding-right: 8px;"></div>
     </div>
   </div>
 
@@ -1635,38 +1733,6 @@
       <div class="flex-buttons">
         <button class="btn-primary" style="background: #9E9E9E;" id="cancelTopicModal">Cancelar</button>
         <button class="btn-primary" id="saveTopic">Adicionar</button>
-      </div>
-    </div>
-  </div>
-  <div class="modal" id="modeloQuestaoModal">
-    <div class="modal-card" style="width: 600px; max-width: 90vw;">
-      <h3 style="font-family: Poppins; margin-bottom: 16px;"><i class="fas fa-copy" style="color:#E65100;"></i> Modelo de Prompt</h3>
-      <textarea id="modeloPromptText" rows="12" readonly style="background:#F9F9F9; font-family: monospace;">Gere uma questão de concurso público no seguinte formato EXATO:
-
-(Questão de Treino)
-[Digite aqui o enunciado claro e objetivo]
-
-a) [Alternativa A]
-b) [Alternativa B]
-c) [Alternativa C]
-d) [Alternativa D]
-e) [Alternativa E]
-
-Gabarito: [Letra correta]
-
-Comentário:
-[Explique de forma clara e objetiva o motivo da alternativa correta e por que as demais estão erradas]
-
-REGRAS IMPORTANTES:
-* Sempre gerar 5 alternativas (a até e)
-* Apenas UMA alternativa correta
-* Linguagem no padrão de concursos
-* Comentário explicativo obrigatório
-* Não alterar o formato acima</textarea>
-      <div class="flex-buttons" style="margin-top: 20px;">
-        <button class="btn-secondary" id="fecharModeloModal">Fechar</button>
-        <button class="btn-primary" id="copiarModeloBtn"><i class="fas fa-copy"></i> Copiar modelo</button>
-        <span id="copyFeedback" class="copy-feedback"></span>
       </div>
     </div>
   </div>
@@ -1703,122 +1769,16 @@ REGRAS IMPORTANTES:
       
       // ========== DADOS PARA MENTORIA ==========
       const areasConcurso = [
-        {
-          nome: "Área Fiscal",
-          descricao: "Tributos, arrecadação e fiscalização",
-          subareas: [
-            "Fiscal Federal",
-            "Fiscal Estadual",
-            "Fiscal Municipal",
-            "Fiscalização",
-            "Arrecadação",
-            "Julgamento Tributário"
-          ]
-        },
-        {
-          nome: "Área de Controle",
-          descricao: "Auditoria e fiscalização",
-          subareas: [
-            "Controle Externo",
-            "Controle Interno"
-          ]
-        },
-        {
-          nome: "Área de Tribunais",
-          descricao: "Carreiras no Judiciário",
-          subareas: [
-            "TRF",
-            "TRT",
-            "TRE",
-            "TJ",
-            "Tribunais Superiores",
-            "Área Administrativa",
-            "Área Judiciária",
-            "Apoio Especializado"
-          ]
-        },
-        {
-          nome: "Área Administrativa",
-          descricao: "Gestão pública",
-          subareas: [
-            "Administração Direta",
-            "Administração Indireta",
-            "RH",
-            "Compras",
-            "Logística"
-          ]
-        },
-        {
-          nome: "Área Policial",
-          descricao: "Segurança pública",
-          subareas: [
-            "Polícia Federal",
-            "Polícia Civil",
-            "Polícia Militar",
-            "PRF",
-            "Inteligência",
-            "Perícia",
-            "Operações Especiais"
-          ]
-        },
-        {
-          nome: "Área Legislativa",
-          descricao: "Poder Legislativo",
-          subareas: [
-            "Federal",
-            "Estadual",
-            "Municipal",
-            "Técnica Legislativa",
-            "Consultoria"
-          ]
-        },
-        {
-          nome: "Área Bancária",
-          descricao: "Instituições financeiras",
-          subareas: [
-            "Banco do Brasil",
-            "Caixa",
-            "BNDES",
-            "Banco Central",
-            "Crédito",
-            "Investimentos"
-          ]
-        },
-        {
-          nome: "Área Militar",
-          descricao: "Carreiras militares",
-          subareas: [
-            "Exército",
-            "Marinha",
-            "Aeronáutica",
-            "Polícia Militar",
-            "Bombeiros",
-            "Praças",
-            "Oficiais"
-          ]
-        },
-        {
-          nome: "Área de Educação",
-          descricao: "Carreiras educacionais",
-          subareas: [
-            "Educação Básica",
-            "Educação Superior",
-            "Docência",
-            "TAE"
-          ]
-        },
-        {
-          nome: "Área de Saúde",
-          descricao: "Sistema de saúde",
-          subareas: [
-            "Atenção Primária",
-            "Atenção Secundária",
-            "Atenção Terciária",
-            "Médica",
-            "Enfermagem",
-            "Odontologia"
-          ]
-        }
+        { nome: "Área Fiscal", descricao: "Tributos, arrecadação e fiscalização", subareas: ["Fiscal Federal","Fiscal Estadual","Fiscal Municipal","Fiscalização","Arrecadação","Julgamento Tributário"] },
+        { nome: "Área de Controle", descricao: "Auditoria e fiscalização", subareas: ["Controle Externo","Controle Interno"] },
+        { nome: "Área de Tribunais", descricao: "Carreiras no Judiciário", subareas: ["TRF","TRT","TRE","TJ","Tribunais Superiores","Área Administrativa","Área Judiciária","Apoio Especializado"] },
+        { nome: "Área Administrativa", descricao: "Gestão pública", subareas: ["Administração Direta","Administração Indireta","RH","Compras","Logística"] },
+        { nome: "Área Policial", descricao: "Segurança pública", subareas: ["Polícia Federal","Polícia Civil","Polícia Militar","PRF","Inteligência","Perícia","Operações Especiais"] },
+        { nome: "Área Legislativa", descricao: "Poder Legislativo", subareas: ["Federal","Estadual","Municipal","Técnica Legislativa","Consultoria"] },
+        { nome: "Área Bancária", descricao: "Instituições financeiras", subareas: ["Banco do Brasil","Caixa","BNDES","Banco Central","Crédito","Investimentos"] },
+        { nome: "Área Militar", descricao: "Carreiras militares", subareas: ["Exército","Marinha","Aeronáutica","Polícia Militar","Bombeiros","Praças","Oficiais"] },
+        { nome: "Área de Educação", descricao: "Carreiras educacionais", subareas: ["Educação Básica","Educação Superior","Docência","TAE"] },
+        { nome: "Área de Saúde", descricao: "Sistema de saúde", subareas: ["Atenção Primária","Atenção Secundária","Atenção Terciária","Médica","Enfermagem","Odontologia"] }
       ];
 
       // ---------- ESTADO GLOBAL ----------
@@ -1829,7 +1789,7 @@ REGRAS IMPORTANTES:
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: [],
         videos: [],
-        mentors: []  // lista de mentores
+        mentors: []
       };
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
@@ -1840,7 +1800,6 @@ REGRAS IMPORTANTES:
       let foxAnimationInitialized = false;
       let videoDestaqueAtual = null;
 
-      // Controle de exibição landing/app
       const landingPage = document.getElementById('landingPage');
       const appContainer = document.getElementById('appContainer');
       
@@ -1855,11 +1814,6 @@ REGRAS IMPORTANTES:
         }
         const foxHero = document.getElementById('foxHeroContainer');
         if(foxHero) foxHero.style.display = 'none';
-      }
-
-      function showLanding() {
-        landingPage.classList.remove('landing-hidden');
-        appContainer.classList.add('hidden-app');
       }
 
       let appInitialized = false;
@@ -1889,42 +1843,29 @@ REGRAS IMPORTANTES:
             "Raciocínio Lógico", "Informática", "Matemática", "Atualidades",
             "Administração Financeira e Orçamentária - AFO", "Administração Geral",
             "Administração Pública", "Administração de Materiais"
-          ].map(name => ({
-            id: nextId++,
-            name,
-            timeSeconds: 0,
-            questions: 0,
-            correct: 0,
-            wrong: 0,
-            topics: [],
-            expanded: false
-          }));
+          ].map(name => ({ id: nextId++, name, timeSeconds:0, questions:0, correct:0, wrong:0, topics:[], expanded:false }));
         }
         if(!state.legislations.length) {
           state.legislations = [
-            { id: nextId++, nome: 'Constituição Federal', leituraCompleta: true, resumoLido: true, revisado: false, questoes: { feitas: 30, meta: 100 } },
-            { id: nextId++, nome: 'Lei 8.112/90', leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 5, meta: 50 } }
+            { id: nextId++, nome: 'Constituição Federal', leituraCompleta: true, resumoLido: true, revisado: false, questoes: { feitas:30, meta:100 } },
+            { id: nextId++, nome: 'Lei 8.112/90', leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas:5, meta:50 } }
           ];
         }
         if(!state.videos.length) {
           state.videos = [
-            { id: 1, titulo: "Introdução ao Direito Constitucional", descricao: "Aula essencial sobre princípios fundamentais e organização do Estado.", disciplina: "Direito Constitucional", link_video: "https://www.youtube.com/watch?v=VIDEO1", ordem: 1 },
-            { id: 2, titulo: "Raciocínio Lógico: Tabela-Verdade", descricao: "Aprenda proposições, conectivos e construção de tabelas-verdade.", disciplina: "Raciocínio Lógico", link_video: "https://www.youtube.com/watch?v=VIDEO2", ordem: 2 },
-            { id: 3, titulo: "Interpretação de Texto para Concursos", descricao: "Técnicas para compreensão e análise de textos.", disciplina: "Português", link_video: "https://www.youtube.com/watch?v=VIDEO3", ordem: 3 }
+            { id:1, titulo:"Introdução ao Direito Constitucional", descricao:"Aula essencial sobre princípios fundamentais e organização do Estado.", disciplina:"Direito Constitucional", link_video:"https://www.youtube.com/watch?v=VIDEO1", ordem:1 },
+            { id:2, titulo:"Raciocínio Lógico: Tabela-Verdade", descricao:"Aprenda proposições, conectivos e construção de tabelas-verdade.", disciplina:"Raciocínio Lógico", link_video:"https://www.youtube.com/watch?v=VIDEO2", ordem:2 },
+            { id:3, titulo:"Interpretação de Texto para Concursos", descricao:"Técnicas para compreensão e análise de textos.", disciplina:"Português", link_video:"https://www.youtube.com/watch?v=VIDEO3", ordem:3 }
           ];
         }
-        if(!state.leituras.length) {
-          state.leituras = [];
-        }
-        // Inicializar mentores com dados exemplo
         if(!state.mentors.length) {
           state.mentors = [
-            { id: 1, nome: "João Silva", area: "Área Fiscal", subarea: "Fiscal Estadual", experiencia: "Aprovado SEFAZ 2022", avaliacao: 4.9, descricao: "Especialista em estratégia de estudos para fiscos estaduais.", disponibilidade: true },
-            { id: 2, nome: "Maria Oliveira", area: "Área Fiscal", subarea: "Fiscal Federal", experiencia: "Auditora da Receita Federal", avaliacao: 5.0, descricao: "Mentoria focada em legislação tributária e direito aduaneiro.", disponibilidade: true },
-            { id: 3, nome: "Carlos Mendes", area: "Área de Controle", subarea: "Controle Externo", experiencia: "Aprovado no TCU", avaliacao: 4.8, descricao: "Técnicas de controle e auditoria governamental.", disponibilidade: true },
-            { id: 4, nome: "Ana Paula", area: "Área de Tribunais", subarea: "TRF", experiencia: "Analista Judiciário - TRF", avaliacao: 4.7, descricao: "Preparação para carreiras da Justiça Federal.", disponibilidade: false },
-            { id: 5, nome: "Roberto Lima", area: "Área Policial", subarea: "Polícia Federal", experiencia: "Delegado da PF", avaliacao: 5.0, descricao: "Mentoria completa para concurso da PF.", disponibilidade: true },
-            { id: 6, nome: "Fernanda Rios", area: "Área Bancária", subarea: "Banco do Brasil", experiencia: "Escriturária aprovada", avaliacao: 4.5, descricao: "Foco em matemática financeira e conhecimentos bancários.", disponibilidade: true }
+            { id:1, nome:"João Silva", area:"Área Fiscal", subarea:"Fiscal Estadual", experiencia:"Aprovado SEFAZ 2022", avaliacao:4.9, descricao:"Especialista em estratégia de estudos para fiscos estaduais.", disponibilidade:true },
+            { id:2, nome:"Maria Oliveira", area:"Área Fiscal", subarea:"Fiscal Federal", experiencia:"Auditora da Receita Federal", avaliacao:5.0, descricao:"Mentoria focada em legislação tributária e direito aduaneiro.", disponibilidade:true },
+            { id:3, nome:"Carlos Mendes", area:"Área de Controle", subarea:"Controle Externo", experiencia:"Aprovado no TCU", avaliacao:4.8, descricao:"Técnicas de controle e auditoria governamental.", disponibilidade:true },
+            { id:4, nome:"Ana Paula", area:"Área de Tribunais", subarea:"TRF", experiencia:"Analista Judiciário - TRF", avaliacao:4.7, descricao:"Preparação para carreiras da Justiça Federal.", disponibilidade:false },
+            { id:5, nome:"Roberto Lima", area:"Área Policial", subarea:"Polícia Federal", experiencia:"Delegado da PF", avaliacao:5.0, descricao:"Mentoria completa para concurso da PF.", disponibilidade:true },
+            { id:6, nome:"Fernanda Rios", area:"Área Bancária", subarea:"Banco do Brasil", experiencia:"Escriturária aprovada", avaliacao:4.5, descricao:"Foco em matemática financeira e conhecimentos bancários.", disponibilidade:true }
           ];
         }
         videoDestaqueAtual = state.videos.find(v => v.id === 1) || state.videos[0];
@@ -1936,12 +1877,6 @@ REGRAS IMPORTANTES:
         return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       }
       function formatHoursMinutes(sec) { const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60); return `${h}h ${m}m`; }
-      function gerarEmbed(url) {
-        if (!url) return '';
-        let videoId = url.split('v=')[1]?.split('&')[0] || url.split('youtu.be/')[1]?.split('?')[0];
-        if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-        return url;
-      }
 
       const contentDiv = document.getElementById('app-content');
       function renderPage(page) {
@@ -1950,17 +1885,9 @@ REGRAS IMPORTANTES:
         const foxContainer = document.getElementById('foxAnimationContainer');
         if (page === 'questoes') {
           foxContainer.style.display = 'block';
-          if (!foxAnimationInitialized) {
-            if (typeof lottie !== 'undefined') {
-              lottie.loadAnimation({
-                container: foxContainer,
-                renderer: 'svg',
-                loop: true,
-                autoplay: true,
-                path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json'
-              });
-              foxContainer.querySelector('.fox-fallback').style.display = 'none';
-            }
+          if (!foxAnimationInitialized && typeof lottie !== 'undefined') {
+            lottie.loadAnimation({ container: foxContainer, renderer: 'svg', loop: true, autoplay: true, path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json' });
+            foxContainer.querySelector('.fox-fallback').style.display = 'none';
             foxAnimationInitialized = true;
           }
         } else {
@@ -1980,7 +1907,6 @@ REGRAS IMPORTANTES:
         }
       }
 
-      // ========== FUNÇÕES AUXILIARES GLOBAIS ==========
       function mostrarMensagemFlutuante(texto, cor = '#212121') {
         const msg = document.createElement('div');
         msg.className = 'mensagem-flutuante';
@@ -1990,7 +1916,7 @@ REGRAS IMPORTANTES:
         setTimeout(() => msg.remove(), 3000);
       }
 
-      // ========== TIMER GLOBAL (mantido) ==========
+      // ========== TIMER GLOBAL ==========
       function renderGlobalTimer() {
         return `
           <div class="global-timer">
@@ -2051,7 +1977,7 @@ REGRAS IMPORTANTES:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ========== DASHBOARD (resumo) ==========
+      // ========== DASHBOARD ==========
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -2223,7 +2149,7 @@ REGRAS IMPORTANTES:
         }
       }
 
-      // ========== DISCIPLINAS (resumido) ==========
+      // ========== DISCIPLINAS ==========
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
@@ -2316,7 +2242,7 @@ REGRAS IMPORTANTES:
         saveToStorage();
       }
 
-      // ========== LEGISLAÇÃO (resumido) ==========
+      // ========== LEGISLAÇÃO ==========
       function renderLegislacao() {
         const html = `
           <div class="page-title">📜 Legislação</div>
@@ -2425,7 +2351,7 @@ REGRAS IMPORTANTES:
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
       }
 
-      // ========== AULAS (resumido) ==========
+      // ========== AULAS ==========
       function renderAulas() {
         const getEmbedUrl = (url) => {
           if (!url) return '';
@@ -2502,7 +2428,7 @@ REGRAS IMPORTANTES:
         reattachGridEvents();
       }
 
-      // ========== QUESTÕES (simplificado) ==========
+      // ========== QUESTÕES ==========
       function parseQuestions(rawText) {
         const questions = [];
         let normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -2616,7 +2542,46 @@ REGRAS IMPORTANTES:
         const correctToday = todayQs.filter(q => q.correct).length;
         const totalToday = todayQs.length;
         const rate = totalToday ? ((correctToday / totalToday) * 100).toFixed(1) : '0.0';
-        const html = `${renderGlobalTimer()}<div class="page-title">Questões</div><div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div><div class="dashboard-grid"><div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div></div><div class="card" style="margin-bottom: 32px;"><div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div><div style="display:grid; gap:16px; margin-top:20px;"><select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select><select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select><div style="display:flex; gap:12px;"><button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button><button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button></div></div></div><div class="section-divider"></div><div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;"><h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2><div style="display: flex; gap: 12px;"><button class="btn-secondary" id="modeloQuestaoBtn"><i class="far fa-file-alt"></i> Modelo de Questão</button></div></div><div class="card"><p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p><textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea><div style="display: flex; gap: 16px; margin-top: 16px;"><button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button></div></div><div id="generatedQuestionsContainer" style="margin-top: 24px;">${generatedQuestions.length ? renderQuestionCardsWithPagination() : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>'}</div>`;
+        const html = `
+          ${renderGlobalTimer()}
+          <div class="page-title">Questões</div>
+          <div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
+          </div>
+          <div class="card" style="margin-bottom: 32px;">
+            <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
+            <div style="display:grid; gap:16px; margin-top:20px;">
+              <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select>
+              <select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select>
+              <div style="display:flex; gap:12px;">
+                <button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
+                <button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button>
+              </div>
+            </div>
+          </div>
+          <div class="section-divider"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn-secondary" id="tutorialBtn"><i class="fas fa-graduation-cap"></i> 📘 Aprenda a usar</button>
+              <button class="btn-primary" id="promptsBtn"><i class="fas fa-list-ul"></i> 📋 Prompts prontos</button>
+            </div>
+          </div>
+          <div class="card">
+            <p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p>
+            <textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea>
+            <div style="display: flex; gap: 16px; margin-top: 16px;">
+              <button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button>
+            </div>
+          </div>
+          <div id="generatedQuestionsContainer" style="margin-top: 24px;">
+            ${generatedQuestions.length ? renderQuestionCardsWithPagination() : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>'}
+          </div>
+        `;
         contentDiv.innerHTML = html;
         attachTimerEvents();
         const qDiscipline = document.getElementById('qDiscipline');
@@ -2639,14 +2604,13 @@ REGRAS IMPORTANTES:
           if (generatedQuestions.length === 0) alert('Nenhuma questão válida encontrada. Verifique o formato.');
           refreshQuestionsDisplay();
         });
-        const modeloBtn = document.getElementById('modeloQuestaoBtn');
-        const modalModelo = document.getElementById('modeloQuestaoModal');
-        const copiarBtn = document.getElementById('copiarModeloBtn');
-        const fecharBtn = document.getElementById('fecharModeloModal');
-        const copyFeedback = document.getElementById('copyFeedback');
-        modeloBtn.addEventListener('click', () => modalModelo.style.display = 'flex');
-        copiarBtn.addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('modeloPromptText').value).then(() => { copyFeedback.textContent = '✓ Copiado com sucesso!'; setTimeout(() => copyFeedback.textContent = '', 2000); }).catch(() => alert('Não foi possível copiar.')); });
-        fecharBtn.addEventListener('click', () => modalModelo.style.display = 'none');
+        document.getElementById('tutorialBtn').addEventListener('click', () => {
+          document.getElementById('tutorialModal').style.display = 'flex';
+        });
+        document.getElementById('promptsBtn').addEventListener('click', () => {
+          renderPromptsModal();
+          document.getElementById('promptsModal').style.display = 'flex';
+        });
         if (generatedQuestions.length) attachQuestionEvents();
       }
       function registrarQuestaoManual(isCorrect) {
@@ -2672,7 +2636,48 @@ REGRAS IMPORTANTES:
         return html;
       }
 
-      // ========== LEITURA INTELIGENTE (com botão Voltar para Início) ==========
+      // Lista de prompts
+      const promptsList = [
+        { titulo: "📊 13. ENUNCIADO COM BASE NOS TEMAS MAIS COBRADOS", descricao: "Foca nos assuntos mais cobrados em prova.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [disciplina], focando nos assuntos mais cobrados em prova.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "📚 14. ENUNCIADO POR TÓPICOS ESPECÍFICOS", descricao: "Aborda tópicos específicos fornecidos.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [disciplina], abordando especificamente os seguintes tópicos: [lista de tópicos].\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🔥 15. ENUNCIADO COM ALTA INCIDÊNCIA + DIFICULDADE", descricao: "Tópicos mais cobrados e nível elevado.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [disciplina], focando nos tópicos mais cobrados e com nível de dificuldade elevado.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "📌 1. ENUNCIADO DIRETO (CONCEITUAL)", descricao: "Cobra definição, conceito puro.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado direto e conceitual.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "📊 2. ENUNCIADO INTERPRETATIVO", descricao: "Exige leitura e análise.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado interpretativo.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "⚖️ 3. ENUNCIADO COM LEGISLAÇÃO", descricao: "Baseado em lei seca.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado baseado na literalidade da lei.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🧩 4. ENUNCIADO COM PEGADINHA", descricao: "Foco em erro comum.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado contendo pegadinhas típicas de prova.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "📚 5. ENUNCIADO CONTEXTUALIZADO", descricao: "Situação aplicada.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado contextualizado.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🧠 6. ENUNCIADO COM CASO PRÁTICO", descricao: "Simulação real.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado em forma de caso prático.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🔍 7. ENUNCIADO ANALÍTICO", descricao: "Exige comparação / raciocínio.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado analítico.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "📈 8. ENUNCIADO DE ALTA DIFICULDADE", descricao: "Nível avançado.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado de alta complexidade.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🔁 9. ENUNCIADO BASEADO EM ERRO", descricao: "Aprendizado ativo.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado semelhante a erros comuns de candidatos.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "⚡ 10. ENUNCIADO CURTO (REVISÃO)", descricao: "Rápido e direto.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado curto.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🎯 11. ENUNCIADO FOCADO EM BANCA", descricao: "Padrão da banca.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado típico da banca.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
+        { titulo: "🧪 12. ENUNCIADO MISTO (NÍVEL PROVA REAL)", descricao: "O mais poderoso.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado contextualizado, interpretativo e com pegadinha.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` }
+      ];
+
+      function renderPromptsModal() {
+        const container = document.getElementById('promptsListContainer');
+        container.innerHTML = promptsList.map(p => `
+          <div class="prompt-card">
+            <div class="prompt-card-header">
+              <h4>${p.titulo}</h4>
+              <button class="btn-sm btn-primary copiar-prompt-btn" data-prompt="${encodeURIComponent(p.prompt)}"><i class="fas fa-copy"></i> Copiar</button>
+            </div>
+            <p style="color: #5A5A5A; margin-bottom: 8px;">${p.descricao}</p>
+            <div class="prompt-text">${p.prompt.replace(/\n/g, '<br>')}</div>
+          </div>
+        `).join('');
+        document.querySelectorAll('.copiar-prompt-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const promptText = decodeURIComponent(btn.dataset.prompt);
+            navigator.clipboard.writeText(promptText).then(() => {
+              mostrarMensagemFlutuante('✅ Prompt copiado!', '#2E7D32');
+            }).catch(() => alert('Não foi possível copiar.'));
+          });
+        });
+      }
+
+      // ========== LEITURA INTELIGENTE ==========
       let leituraState = { pdfDoc: null, disciplinaId: null, nomeArquivo: '', tempoSessao: 0, timerInterval: null, timerRunning: false, currentPage: 1, totalPages: 0, inactivityTimer: null, ultimaAtividade: Date.now(), modoFoco: false, destaquesTemp: [], anotacoesTemp: [] };
       function renderLeitura() {
         const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary" id="voltarInicioBtn"><i class="fas fa-arrow-left"></i> Voltar para Início</button><button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
@@ -2723,7 +2728,7 @@ REGRAS IMPORTANTES:
       function renderManualIA() { contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`; }
       function renderPerfil() { contentDiv.innerHTML = `<div class="page-title">Perfil</div><div class="greeting">Em construção</div>`; }
 
-      // ========== MENTORIA (NOVA FUNCIONALIDADE) ==========
+      // ========== MENTORIA ==========
       let mentoriaEstado = { area: null, subarea: null };
       function renderMentoria() {
         if (!mentoriaEstado.area) renderAreasMentoria();
@@ -2865,7 +2870,7 @@ REGRAS IMPORTANTES:
             const leg = state.legislations.find(l => l.id === parseInt(editId));
             if (leg) leg.nome = nome;
           } else {
-            state.legislations.push({ id: nextId++, nome, leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 0, meta: 50 } });
+            state.legislations.push({ id: nextId++, nome, leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas:0, meta:50 } });
           }
           saveToStorage();
           if (currentPage === 'legislacao') renderLegislacao();
@@ -2873,11 +2878,15 @@ REGRAS IMPORTANTES:
         });
         const helpModal = document.getElementById('dashboardHelpModal');
         document.getElementById('closeDashboardHelpBtn').addEventListener('click', ()=> helpModal.style.display='none');
+        document.getElementById('closeTutorialBtn').addEventListener('click', ()=> document.getElementById('tutorialModal').style.display='none');
+        document.getElementById('closePromptsBtn').addEventListener('click', ()=> document.getElementById('promptsModal').style.display='none');
         window.addEventListener('click', (e) => {
           if(e.target === modalDisc) modalDisc.style.display='none';
           if(e.target === modalTopic) modalTopic.style.display='none';
           if(e.target === modalLeg) modalLeg.style.display='none';
           if(e.target === helpModal) helpModal.style.display='none';
+          if(e.target === document.getElementById('tutorialModal')) document.getElementById('tutorialModal').style.display='none';
+          if(e.target === document.getElementById('promptsModal')) document.getElementById('promptsModal').style.display='none';
         });
       }
       function openDisciplineModal() {
@@ -2901,13 +2910,7 @@ REGRAS IMPORTANTES:
         document.getElementById('ctaEnterBtn').addEventListener('click', showApp);
         const foxHero = document.getElementById('foxHeroContainer');
         if (foxHero && typeof lottie !== 'undefined') {
-          lottie.loadAnimation({
-            container: foxHero,
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json'
-          });
+          lottie.loadAnimation({ container: foxHero, renderer: 'svg', loop: true, autoplay: true, path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json' });
           foxHero.querySelector('.fox-fallback').style.display = 'none';
         }
       }
