@@ -1706,14 +1706,12 @@ REGRAS IMPORTANTES:
       function showApp() {
         landingPage.classList.add('landing-hidden');
         appContainer.classList.remove('hidden-app');
-        // Inicializa o app se necessário
         if (!appInitialized) {
           initApp();
           appInitialized = true;
         } else {
           renderPage(currentPage);
         }
-        // Esconde a raposa do hero se existir
         const foxHero = document.getElementById('foxHeroContainer');
         if(foxHero) foxHero.style.display = 'none';
       }
@@ -1723,7 +1721,6 @@ REGRAS IMPORTANTES:
         appContainer.classList.add('hidden-app');
       }
 
-      // Inicialização do app
       let appInitialized = false;
       function initApp() {
         loadFromStorage();
@@ -2296,7 +2293,7 @@ REGRAS IMPORTANTES:
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
       }
 
-      // ========== AULAS (NOVA IMPLEMENTAÇÃO) ==========
+      // ========== AULAS ==========
       function renderAulas() {
         const getEmbedUrl = (url) => {
           if (!url) return '';
@@ -2443,23 +2440,431 @@ REGRAS IMPORTANTES:
         reattachGridEvents();
       }
 
-      // ========== DEMAIS PÁGINAS (mantidas como no original) ==========
-      function renderQuestoes() { /* ... código completo existente ... */ 
+      // ========== FUNÇÕES AUXILIARES PARA QUESTÕES ==========
+      function parseQuestions(rawText) {
+        const questions = [];
+        const blocks = rawText.split(/\(Questão de Treino\)/i).filter(block => block.trim() !== '');
+        
+        blocks.forEach(block => {
+          try {
+            const enunciadoMatch = block.match(/^([\s\S]*?)(?=\n\s*[a-e]\))/i);
+            const enunciado = enunciadoMatch ? enunciadoMatch[1].trim() : '';
+            
+            const altRegex = /([a-e])\)\s*([^\n]+)/gi;
+            const alternativas = [];
+            let match;
+            while ((match = altRegex.exec(block)) !== null) {
+              alternativas.push(match[2].trim());
+            }
+            
+            if (alternativas.length !== 5) {
+              console.warn('Questão ignorada: não possui 5 alternativas');
+              return;
+            }
+            
+            const gabaritoMatch = block.match(/Gabarito:\s*([a-e])/i);
+            if (!gabaritoMatch) {
+              console.warn('Questão ignorada: gabarito não encontrado');
+              return;
+            }
+            const gabaritoLetra = gabaritoMatch[1].toLowerCase();
+            const gabaritoIndex = gabaritoLetra.charCodeAt(0) - 'a'.charCodeAt(0);
+            
+            const comentarioMatch = block.match(/Comentário:\s*([\s\S]*?)(?=(\(Questão de Treino\)|$))/i);
+            const comentario = comentarioMatch ? comentarioMatch[1].trim() : '';
+            
+            questions.push({
+              enunciado,
+              alternativas,
+              gabarito: gabaritoIndex,
+              comentario,
+              respostaUsuario: null,
+              respondida: false,
+              eliminadas: new Array(5).fill(false),
+              mostrarComentario: false,
+              resultadoVerificado: false
+            });
+          } catch (e) {
+            console.error('Erro ao parsear questão:', e);
+          }
+        });
+        
+        return questions;
+      }
+
+      function renderQuestionCardsWithPagination() {
+        const start = (currentQuestionPage - 1) * questionsPerPage;
+        const end = start + questionsPerPage;
+        const pageQuestions = generatedQuestions.slice(start, end);
+        
+        let html = pageQuestions.map((q, idx) => {
+          const globalIndex = start + idx;
+          return renderSingleQuestionCard(q, globalIndex);
+        }).join('');
+        
+        const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
+        if (totalPages > 1) {
+          html += `
+            <div class="pagination">
+              <button ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev">
+                <i class="fas fa-chevron-left"></i> Anterior
+              </button>
+              <span>Página ${currentQuestionPage} de ${totalPages}</span>
+              <button ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">
+                Próxima <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          `;
+        }
+        
+        return html;
+      }
+
+      function renderSingleQuestionCard(q, index) {
+        const radioName = `q${index}`;
+        const respondida = q.respondida;
+        const resultadoVerificado = q.resultadoVerificado;
+        const respostaUsuario = q.respostaUsuario;
+        
+        const getAltClass = (altIndex) => {
+          if (!resultadoVerificado) return '';
+          if (altIndex === q.gabarito) return 'correta-destaque';
+          if (respostaUsuario === altIndex && respostaUsuario !== q.gabarito) return 'errada-destaque';
+          return '';
+        };
+        
+        const alternativasHtml = q.alternativas.map((texto, i) => {
+          const letra = String.fromCharCode(97 + i);
+          const checked = respostaUsuario === i ? 'checked' : '';
+          const disabled = resultadoVerificado ? 'disabled' : '';
+          const eliminadaClass = q.eliminadas[i] ? 'eliminada' : '';
+          const destaqueClass = getAltClass(i);
+          
+          return `
+            <div class="alternativa-item ${eliminadaClass} ${destaqueClass}">
+              <input type="radio" name="${radioName}" value="${i}" id="${radioName}_${i}" ${checked} ${disabled} data-question-index="${index}" data-alt-index="${i}">
+              <label for="${radioName}_${i}">${letra}) ${texto}</label>
+              <button class="tesoura-btn ${q.eliminadas[i] ? 'ativo' : ''}" data-question-index="${index}" data-alt-index="${i}" title="Eliminar alternativa">
+                <i class="fas fa-cut"></i>
+              </button>
+            </div>
+          `;
+        }).join('');
+        
+        const feedbackHtml = resultadoVerificado ? `
+          <div class="feedback-message ${respostaUsuario === q.gabarito ? 'feedback-correct' : 'feedback-wrong'}">
+            <i class="fas fa-${respostaUsuario === q.gabarito ? 'check-circle' : 'times-circle'}"></i>
+            ${respostaUsuario === q.gabarito ? 'Você acertou! Parabéns!' : 'Você errou. Veja o comentário para entender.'}
+          </div>
+        ` : '';
+        
+        const comentarioHtml = q.mostrarComentario ? `
+          <div class="comentario-box">
+            <strong><i class="fas fa-comment-dots"></i> Comentário:</strong>
+            <p>${q.comentario.replace(/\n/g, '<br>')}</p>
+          </div>
+        ` : '';
+        
+        const botoesHtml = !resultadoVerificado ? `
+          <button class="btn-primary ver-resultado-btn" data-question-index="${index}" ${!respondida ? 'disabled' : ''}>
+            <i class="fas fa-check-double"></i> Ver resultado
+          </button>
+        ` : `
+          <button class="btn-secondary ver-comentario-btn" data-question-index="${index}">
+            <i class="fas fa-comment"></i> ${q.mostrarComentario ? 'Ocultar' : 'Ver'} comentário
+          </button>
+        `;
+        
+        return `
+          <div class="question-card" data-question-index="${index}">
+            <div class="question-title">Questão ${index + 1}</div>
+            <div class="question-enunciado">${q.enunciado}</div>
+            <div class="alternativas">
+              ${alternativasHtml}
+            </div>
+            ${feedbackHtml}
+            ${comentarioHtml}
+            <div class="question-actions">
+              ${botoesHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      function refreshQuestionsDisplay() {
+        const container = document.getElementById('generatedQuestionsContainer');
+        if (!container) return;
+        
+        if (generatedQuestions.length === 0) {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>';
+          return;
+        }
+        
+        container.innerHTML = renderQuestionCardsWithPagination();
+        attachQuestionEvents();
+      }
+
+      function attachQuestionEvents() {
+        document.querySelectorAll('input[type="radio"][data-question-index]').forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            const questionIndex = parseInt(radio.dataset.questionIndex);
+            const altIndex = parseInt(radio.dataset.altIndex);
+            const question = generatedQuestions[questionIndex];
+            
+            if (question && !question.resultadoVerificado) {
+              question.respostaUsuario = altIndex;
+              question.respondida = true;
+              
+              const card = document.querySelector(`.question-card[data-question-index="${questionIndex}"]`);
+              if (card) {
+                const btn = card.querySelector('.ver-resultado-btn');
+                if (btn) btn.disabled = false;
+              }
+            }
+          });
+        });
+        
+        document.querySelectorAll('.ver-resultado-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const questionIndex = parseInt(btn.dataset.questionIndex);
+            const question = generatedQuestions[questionIndex];
+            
+            if (question && question.respondida && !question.resultadoVerificado) {
+              question.resultadoVerificado = true;
+              refreshQuestionsDisplay();
+            }
+          });
+        });
+        
+        document.querySelectorAll('.ver-comentario-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const questionIndex = parseInt(btn.dataset.questionIndex);
+            const question = generatedQuestions[questionIndex];
+            
+            if (question && question.resultadoVerificado) {
+              question.mostrarComentario = !question.mostrarComentario;
+              refreshQuestionsDisplay();
+            }
+          });
+        });
+        
+        document.querySelectorAll('.tesoura-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const questionIndex = parseInt(btn.dataset.questionIndex);
+            const altIndex = parseInt(btn.dataset.altIndex);
+            const question = generatedQuestions[questionIndex];
+            
+            if (question && !question.resultadoVerificado) {
+              question.eliminadas[altIndex] = !question.eliminadas[altIndex];
+              refreshQuestionsDisplay();
+            }
+          });
+        });
+        
+        document.querySelectorAll('[data-page]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const direction = btn.dataset.page;
+            const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
+            
+            if (direction === 'prev' && currentQuestionPage > 1) {
+              currentQuestionPage--;
+              refreshQuestionsDisplay();
+            } else if (direction === 'next' && currentQuestionPage < totalPages) {
+              currentQuestionPage++;
+              refreshQuestionsDisplay();
+            }
+          });
+        });
+      }
+
+      function registrarQuestaoManual(isCorrect) {
+        const qDiscipline = document.getElementById('qDiscipline');
+        const qTopic = document.getElementById('qTopic');
+        const selectedValue = qDiscipline.value;
+        
+        if (!selectedValue) {
+          alert('Selecione uma disciplina.');
+          return;
+        }
+        
+        let disc;
+        if (qDiscipline.options[qDiscipline.selectedIndex]?.dataset?.custom === 'true') {
+          const discId = parseInt(selectedValue);
+          disc = state.disciplines.find(d => d.id === discId);
+        } else {
+          disc = state.disciplines.find(d => d.name === selectedValue);
+          if (!disc) {
+            disc = { id: nextId++, name: selectedValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
+            state.disciplines.push(disc);
+          }
+        }
+        
+        const topicId = qTopic.value ? parseInt(qTopic.value) : null;
+        
+        if (topicId) {
+          const topic = disc.topics.find(t => t.id === topicId);
+          if (topic) {
+            topic.questions = (topic.questions || 0) + 1;
+            if (isCorrect) topic.correct = (topic.correct || 0) + 1;
+            else topic.wrong = (topic.wrong || 0) + 1;
+            recordQuestionHistory(disc.id, topicId, isCorrect);
+          }
+        } else {
+          disc.questions = (disc.questions || 0) + 1;
+          if (isCorrect) disc.correct = (disc.correct || 0) + 1;
+          else disc.wrong = (disc.wrong || 0) + 1;
+          recordQuestionHistory(disc.id, null, isCorrect);
+        }
+        
+        saveToStorage();
+        renderQuestoes();
+      }
+
+      // ========== QUESTÕES (CORRIGIDA) ==========
+      function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
-        const todayQs = state.questionsHistory.filter(q=>q.date === today);
-        const correctToday = todayQs.filter(q=>q.correct).length; const totalToday = todayQs.length;
-        const rate = totalToday ? ((correctToday/totalToday)*100).toFixed(1) : '0.0';
-        const html = `${renderGlobalTimer()}<div class="page-title">Questões</div><div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div>
-          <div class="dashboard-grid"><div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div></div>
-          <div class="card" style="margin-bottom: 32px;"><div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div><div style="display:grid; gap:16px; margin-top:20px;"><select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option></select><select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select><div style="display:flex; gap:12px;"><button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button><button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button></div></div></div>
-          <div class="section-divider"></div><div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;"><h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2><div style="display: flex; gap: 12px;"><button class="btn-secondary" id="modeloQuestaoBtn"><i class="far fa-file-alt"></i> Modelo de Questão</button></div></div>
-          <div class="card"><p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p><textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea><div style="display: flex; gap: 16px; margin-top: 16px;"><button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button></div></div>
-          <div id="generatedQuestionsContainer" style="margin-top: 24px;">${generatedQuestions.length ? renderQuestionCardsWithPagination() : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3></div>'}</div>`;
+        const todayQs = state.questionsHistory.filter(q => q.date === today);
+        const correctToday = todayQs.filter(q => q.correct).length;
+        const totalToday = todayQs.length;
+        const rate = totalToday ? ((correctToday / totalToday) * 100).toFixed(1) : '0.0';
+        
+        const html = `
+          ${renderGlobalTimer()}
+          <div class="page-title">Questões</div>
+          <div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div>
+          
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
+          </div>
+          
+          <div class="card" style="margin-bottom: 32px;">
+            <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
+            <div style="display:grid; gap:16px; margin-top:20px;">
+              <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;">
+                <option value="">Disciplina</option>
+              </select>
+              <select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled>
+                <option value="">Tópico (opcional)</option>
+              </select>
+              <div style="display:flex; gap:12px;">
+                <button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
+                <button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section-divider"></div>
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn-secondary" id="modeloQuestaoBtn"><i class="far fa-file-alt"></i> Modelo de Questão</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p>
+            <textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea>
+            <div style="display: flex; gap: 16px; margin-top: 16px;">
+              <button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button>
+            </div>
+          </div>
+          
+          <div id="generatedQuestionsContainer" style="margin-top: 24px;">
+            ${generatedQuestions.length ? renderQuestionCardsWithPagination() : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>'}
+          </div>
+        `;
+        
         contentDiv.innerHTML = html;
         attachTimerEvents();
         preencherDisciplinas('qDiscipline', state.disciplines);
-        // ... restante da lógica de questões (omitida por brevidade mas igual ao original)
+        
+        const qDiscipline = document.getElementById('qDiscipline');
+        const qTopic = document.getElementById('qTopic');
+        
+        qDiscipline.addEventListener('change', () => {
+          const selectedValue = qDiscipline.value;
+          if (!selectedValue) {
+            qTopic.disabled = true;
+            qTopic.innerHTML = '<option value="">Tópico (opcional)</option>';
+            return;
+          }
+          
+          let disc;
+          if (qDiscipline.options[qDiscipline.selectedIndex]?.dataset?.custom === 'true') {
+            const discId = parseInt(selectedValue);
+            disc = state.disciplines.find(d => d.id === discId);
+          } else {
+            disc = state.disciplines.find(d => d.name === selectedValue);
+          }
+          
+          if (disc && disc.topics.length > 0) {
+            qTopic.disabled = false;
+            qTopic.innerHTML = '<option value="">Tópico (opcional)</option>' +
+              disc.topics.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+          } else {
+            qTopic.disabled = true;
+            qTopic.innerHTML = '<option value="">Tópico (opcional)</option>';
+          }
+        });
+        
+        document.getElementById('registerCorrect').addEventListener('click', () => registrarQuestaoManual(true));
+        document.getElementById('registerWrong').addEventListener('click', () => registrarQuestaoManual(false));
+        
+        const processarBtn = document.getElementById('processarQuestoesBtn');
+        const textoInput = document.getElementById('questoesInput');
+        
+        processarBtn.addEventListener('click', () => {
+          const rawText = textoInput.value.trim();
+          if (!rawText) {
+            alert('Cole o texto das questões no formato especificado.');
+            return;
+          }
+          
+          generatedQuestions = parseQuestions(rawText);
+          currentQuestionPage = 1;
+          
+          if (generatedQuestions.length === 0) {
+            alert('Nenhuma questão válida encontrada. Verifique o formato.');
+          }
+          
+          refreshQuestionsDisplay();
+        });
+        
+        const modeloBtn = document.getElementById('modeloQuestaoBtn');
+        const modalModelo = document.getElementById('modeloQuestaoModal');
+        const copiarBtn = document.getElementById('copiarModeloBtn');
+        const fecharBtn = document.getElementById('fecharModeloModal');
+        const copyFeedback = document.getElementById('copyFeedback');
+        
+        modeloBtn.addEventListener('click', () => {
+          modalModelo.style.display = 'flex';
+        });
+        
+        copiarBtn.addEventListener('click', () => {
+          const textarea = document.getElementById('modeloPromptText');
+          navigator.clipboard.writeText(textarea.value).then(() => {
+            copyFeedback.textContent = '✓ Copiado com sucesso!';
+            setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
+          }).catch(() => {
+            alert('Não foi possível copiar. Tente manualmente.');
+          });
+        });
+        
+        fecharBtn.addEventListener('click', () => {
+          modalModelo.style.display = 'none';
+        });
+        
+        if (generatedQuestions.length > 0) {
+          attachQuestionEvents();
+        }
       }
+
+      // ========== DEMAIS PÁGINAS ==========
       function renderDesempenho() { contentDiv.innerHTML = `<div class="page-title">Desempenho</div><div class="greeting">Em construção</div>`; }
       function renderManualIA() { contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`; }
       function renderMentoria() { contentDiv.innerHTML = `<div class="page-title">Mentoria</div><div class="greeting">Em construção</div>`; }
@@ -2479,11 +2884,6 @@ REGRAS IMPORTANTES:
           const discId = parseInt(document.getElementById('currentDisciplineId').value);
           const disc = state.disciplines.find(d=>d.id===discId);
           if(name && disc) { disc.topics.push({ id: Date.now(), name, timeSeconds:0, questions:0, correct:0, wrong:0 }); disc.expanded = true; saveToStorage(); if(currentPage==='disciplinas') renderDisciplinas(); modalTopic.style.display='none'; }
-        });
-        const modalModelo = document.getElementById('modeloQuestaoModal');
-        document.getElementById('fecharModeloModal').addEventListener('click', ()=> modalModelo.style.display='none');
-        document.getElementById('copiarModeloBtn').addEventListener('click', () => {
-          navigator.clipboard.writeText(document.getElementById('modeloPromptText').value).then(() => document.getElementById('copyFeedback').textContent = '✓ Modelo copiado!');
         });
         const modalLeg = document.getElementById('legislacaoModal');
         document.getElementById('cancelLegislacaoModal').addEventListener('click', ()=> modalLeg.style.display='none');
@@ -2506,7 +2906,6 @@ REGRAS IMPORTANTES:
         window.addEventListener('click', (e) => {
           if(e.target === modalDisc) modalDisc.style.display='none';
           if(e.target === modalTopic) modalTopic.style.display='none';
-          if(e.target === modalModelo) modalModelo.style.display='none';
           if(e.target === modalLeg) modalLeg.style.display='none';
           if(e.target === helpModal) helpModal.style.display='none';
         });
