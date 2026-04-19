@@ -1479,7 +1479,7 @@
           <p>Controle disciplinas, legislação, questões e desempenho em um só lugar.</p>
           <div class="hero-buttons">
             <button class="btn-primary" id="startNowBtn"><i class="fas fa-rocket"></i> Começar agora</button>
-            <button class="btn-secondary" id="accessAppBtn"><i class="fas fa-arrow-right"></i> Acessar sistema</button>
+            <button class="btn-primary" id="accessAppBtn"><i class="fas fa-arrow-right"></i> Acessar sistema</button>
           </div>
         </div>
         <div class="hero-image">
@@ -1783,16 +1783,6 @@ REGRAS IMPORTANTES:
           selectEl.appendChild(optgroup);
         }
       }
-
-      const MOCK_QUESTIONS = [
-        { tema: "direito constitucional", enunciado: "Acerca dos direitos e garantias fundamentais previstos na Constituição Federal de 1988, assinale a alternativa correta:", alternativas: [
-          "A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial.",
-          "É plena a liberdade de associação para fins lícitos, inclusive a de caráter paramilitar.",
-          "A lei penal não retroagirá, salvo para beneficiar o réu, mas a lei processual penal poderá retroagir para prejudicar o acusado.",
-          "A prática do racismo constitui crime inafiançável e imprescritível, sujeito à pena de detenção, nos termos da lei.",
-          "Ninguém será privado de direitos por motivo de crença religiosa ou de convicção filosófica ou política, salvo se as invocar para eximir-se de obrigação legal a todos imposta e recusar-se a cumprir prestação alternativa."
-        ], gabarito: 0, comentario: "Alternativa A correta (art. 5º, XI, CF)." }
-      ];
 
       // ---------- ESTADO GLOBAL ----------
       let state = {
@@ -2570,15 +2560,22 @@ REGRAS IMPORTANTES:
       }
 
       // ========== FUNÇÕES AUXILIARES PARA QUESTÕES ==========
+      // PARSER ROBUSTO DE QUESTÕES
       function parseQuestions(rawText) {
         const questions = [];
-        const blocks = rawText.split(/\(Questão de Treino\)/i).filter(block => block.trim() !== '');
+        // Normaliza quebras de linha e espaços
+        let normalized = rawText.replace(/\r\n/g, '\n').trim();
+        // Divide por "(Questão de Treino)" case insensitive, permitindo espaços e variações
+        const blocks = normalized.split(/\(Questão de Treino\)\s*/i).filter(block => block.trim() !== '');
         
-        blocks.forEach(block => {
+        for (let block of blocks) {
           try {
-            const enunciadoMatch = block.match(/^([\s\S]*?)(?=\n\s*[a-e]\))/i);
-            const enunciado = enunciadoMatch ? enunciadoMatch[1].trim() : '';
+            // Captura o enunciado: tudo até encontrar "a)" ou "a) " no início da linha
+            let enunciadoMatch = block.match(/^([\s\S]*?)(?=\n\s*a\))/i);
+            if (!enunciadoMatch) continue;
+            let enunciado = enunciadoMatch[1].trim();
             
+            // Captura as alternativas
             const altRegex = /([a-e])\)\s*([^\n]+)/gi;
             const alternativas = [];
             let match;
@@ -2588,19 +2585,24 @@ REGRAS IMPORTANTES:
             
             if (alternativas.length !== 5) {
               console.warn('Questão ignorada: não possui 5 alternativas');
-              return;
+              continue;
             }
             
-            const gabaritoMatch = block.match(/Gabarito:\s*([a-e])/i);
+            // Captura o gabarito
+            const gabaritoMatch = block.match(/Gabarito:\s*([A-Ea-e])/i);
             if (!gabaritoMatch) {
               console.warn('Questão ignorada: gabarito não encontrado');
-              return;
+              continue;
             }
-            const gabaritoLetra = gabaritoMatch[1].toLowerCase();
-            const gabaritoIndex = gabaritoLetra.charCodeAt(0) - 'a'.charCodeAt(0);
+            const gabaritoLetra = gabaritoMatch[1].toUpperCase();
+            const gabaritoIndex = gabaritoLetra.charCodeAt(0) - 65;
             
+            // Captura o comentário
+            let comentario = '';
             const comentarioMatch = block.match(/Comentário:\s*([\s\S]*?)(?=(\(Questão de Treino\)|$))/i);
-            const comentario = comentarioMatch ? comentarioMatch[1].trim() : '';
+            if (comentarioMatch) {
+              comentario = comentarioMatch[1].trim();
+            }
             
             questions.push({
               enunciado,
@@ -2614,9 +2616,9 @@ REGRAS IMPORTANTES:
               resultadoVerificado: false
             });
           } catch (e) {
-            console.error('Erro ao parsear questão:', e);
+            console.warn('Erro ao parsear questão:', e);
           }
-        });
+        }
         
         return questions;
       }
@@ -2734,6 +2736,7 @@ REGRAS IMPORTANTES:
       }
 
       function attachQuestionEvents() {
+        // Eventos para seleção de alternativa
         document.querySelectorAll('input[type="radio"][data-question-index]').forEach(radio => {
           radio.addEventListener('change', (e) => {
             const questionIndex = parseInt(radio.dataset.questionIndex);
@@ -2744,6 +2747,7 @@ REGRAS IMPORTANTES:
               question.respostaUsuario = altIndex;
               question.respondida = true;
               
+              // Habilita o botão "Ver resultado"
               const card = document.querySelector(`.question-card[data-question-index="${questionIndex}"]`);
               if (card) {
                 const btn = card.querySelector('.ver-resultado-btn');
@@ -2753,6 +2757,7 @@ REGRAS IMPORTANTES:
           });
         });
         
+        // Evento "Ver resultado"
         document.querySelectorAll('.ver-resultado-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const questionIndex = parseInt(btn.dataset.questionIndex);
@@ -2765,6 +2770,7 @@ REGRAS IMPORTANTES:
           });
         });
         
+        // Evento "Ver comentário"
         document.querySelectorAll('.ver-comentario-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const questionIndex = parseInt(btn.dataset.questionIndex);
@@ -2777,6 +2783,7 @@ REGRAS IMPORTANTES:
           });
         });
         
+        // Evento da tesoura (eliminar alternativa)
         document.querySelectorAll('.tesoura-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -2791,6 +2798,7 @@ REGRAS IMPORTANTES:
           });
         });
         
+        // Eventos de paginação
         document.querySelectorAll('[data-page]').forEach(btn => {
           btn.addEventListener('click', () => {
             const direction = btn.dataset.page;
@@ -2850,7 +2858,7 @@ REGRAS IMPORTANTES:
         renderQuestoes();
       }
 
-      // ========== QUESTÕES (mantido) ==========
+      // ========== QUESTÕES (PÁGINA PRINCIPAL) ==========
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q => q.date === today);
