@@ -874,7 +874,7 @@
       pointer-events: none;
     }
 
-    /* ========== NOVOS ESTILOS PARA LEGISLAÇÃO ========== */
+    /* ========== ESTILOS LEGISLAÇÃO ========== */
     .legislacao-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1707,82 +1707,125 @@ REGRAS IMPORTANTES:
     (function(){
       'use strict';
       
-      // ---------- LISTA PADRONIZADA DE DISCIPLINAS ----------
-      const DISCIPLINAS_PADRAO = {
-        "Núcleo Comum": [
-          "Língua Portuguesa", "Raciocínio Lógico", "Matemática", "Noções de Informática", "Direito Constitucional",
-          "Direito Administrativo", "Matemática Financeira", "Atualidades", "Ética no Serviço Público",
-          "Lei de Improbidade Administrativa", "Lei de Licitações e Contratos", "Lei de Acesso à Informação",
-          "Administração Geral", "Administração Pública", "Contabilidade Geral", "Estatística"
-        ],
-        "Área Jurídica": [
-          "Direito Civil", "Direito Penal", "Direito Processual Civil", "Direito Processual Penal", "Direito do Trabalho",
-          "Direito Processual do Trabalho", "Direito Tributário", "Direito Empresarial", "Direito Previdenciário",
-          "Direito Ambiental", "Direito Internacional", "Direitos Humanos", "Direito do Consumidor",
-          "Estatuto da Criança e do Adolescente", "Legislação Penal Especial"
-        ],
-        "Área Fiscal": [
-          "Legislação Tributária Federal", "Legislação Tributária Estadual", "Legislação Tributária Municipal",
-          "Contabilidade Avançada", "Contabilidade de Custos", "Contabilidade Pública", "Auditoria Contábil",
-          "Auditoria Fiscal", "Legislação Aduaneira", "Comércio Internacional", "Economia", "Finanças Públicas",
-          "Tecnologia da Informação Fiscal"
-        ],
-        "Área de Controle": [
-          "Administração Financeira e Orçamentária - AFO", "Contabilidade Pública Aplicada", "Auditoria Governamental",
-          "Controle Externo", "Gestão de Pessoas", "Políticas Públicas", "Lei de Responsabilidade Fiscal",
-          "Economia do Setor Público", "Regimento Interno", "Lei Orgânica", "Análise de Dados", "Controle da Administração Pública"
-        ],
-        "Área Administrativa": [
-          "Arquivologia", "Redação Oficial", "Gestão de Materiais", "Atendimento ao Público", "Noções de Direito Financeiro",
-          "Gestão de Projetos", "Gestão de Conflitos", "Inglês Instrumental"
-        ]
-      };
-
-      const DEFAULT_DISCIPLINES = [
-        "Língua Portuguesa", "Direito Administrativo", "Direito Constitucional",
-        "Raciocínio Lógico", "Informática", "Matemática", "Atualidades",
-        "Administração Financeira e Orçamentária - AFO", "Administração Geral",
-        "Administração Pública", "Administração de Materiais"
+      // ========== DADOS PARA MENTORIA ==========
+      const areasConcurso = [
+        {
+          nome: "Área Fiscal",
+          descricao: "Tributos, arrecadação e fiscalização",
+          subareas: [
+            "Fiscal Federal",
+            "Fiscal Estadual",
+            "Fiscal Municipal",
+            "Fiscalização",
+            "Arrecadação",
+            "Julgamento Tributário"
+          ]
+        },
+        {
+          nome: "Área de Controle",
+          descricao: "Auditoria e fiscalização",
+          subareas: [
+            "Controle Externo",
+            "Controle Interno"
+          ]
+        },
+        {
+          nome: "Área de Tribunais",
+          descricao: "Carreiras no Judiciário",
+          subareas: [
+            "TRF",
+            "TRT",
+            "TRE",
+            "TJ",
+            "Tribunais Superiores",
+            "Área Administrativa",
+            "Área Judiciária",
+            "Apoio Especializado"
+          ]
+        },
+        {
+          nome: "Área Administrativa",
+          descricao: "Gestão pública",
+          subareas: [
+            "Administração Direta",
+            "Administração Indireta",
+            "RH",
+            "Compras",
+            "Logística"
+          ]
+        },
+        {
+          nome: "Área Policial",
+          descricao: "Segurança pública",
+          subareas: [
+            "Polícia Federal",
+            "Polícia Civil",
+            "Polícia Militar",
+            "PRF",
+            "Inteligência",
+            "Perícia",
+            "Operações Especiais"
+          ]
+        },
+        {
+          nome: "Área Legislativa",
+          descricao: "Poder Legislativo",
+          subareas: [
+            "Federal",
+            "Estadual",
+            "Municipal",
+            "Técnica Legislativa",
+            "Consultoria"
+          ]
+        },
+        {
+          nome: "Área Bancária",
+          descricao: "Instituições financeiras",
+          subareas: [
+            "Banco do Brasil",
+            "Caixa",
+            "BNDES",
+            "Banco Central",
+            "Crédito",
+            "Investimentos"
+          ]
+        },
+        {
+          nome: "Área Militar",
+          descricao: "Carreiras militares",
+          subareas: [
+            "Exército",
+            "Marinha",
+            "Aeronáutica",
+            "Polícia Militar",
+            "Bombeiros",
+            "Praças",
+            "Oficiais"
+          ]
+        },
+        {
+          nome: "Área de Educação",
+          descricao: "Carreiras educacionais",
+          subareas: [
+            "Educação Básica",
+            "Educação Superior",
+            "Docência",
+            "TAE"
+          ]
+        },
+        {
+          nome: "Área de Saúde",
+          descricao: "Sistema de saúde",
+          subareas: [
+            "Atenção Primária",
+            "Atenção Secundária",
+            "Atenção Terciária",
+            "Médica",
+            "Enfermagem",
+            "Odontologia"
+          ]
+        }
       ];
-
-      function preencherDisciplinas(selectId, disciplinasPersonalizadas = []) {
-        const selectEl = document.getElementById(selectId);
-        if (!selectEl) return;
-        const placeholder = selectEl.options[0]?.value === "" ? selectEl.options[0] : null;
-        selectEl.innerHTML = '';
-        if (placeholder) selectEl.appendChild(placeholder.cloneNode(true));
-        else {
-          const opt = document.createElement('option');
-          opt.value = '';
-          opt.textContent = 'Selecione a disciplina';
-          selectEl.appendChild(opt);
-        }
-        for (const [area, disciplinas] of Object.entries(DISCIPLINAS_PADRAO)) {
-          const optgroup = document.createElement('optgroup');
-          optgroup.label = area;
-          disciplinas.forEach(nome => {
-            const option = document.createElement('option');
-            option.value = nome;
-            option.textContent = nome;
-            optgroup.appendChild(option);
-          });
-          selectEl.appendChild(optgroup);
-        }
-        const nomesPadrao = Object.values(DISCIPLINAS_PADRAO).flat();
-        const personalizadasFiltradas = disciplinasPersonalizadas.filter(d => !nomesPadrao.includes(d.name));
-        if (personalizadasFiltradas.length > 0) {
-          const optgroup = document.createElement('optgroup');
-          optgroup.label = '📌 Personalizadas';
-          personalizadasFiltradas.forEach(d => {
-            const option = document.createElement('option');
-            option.value = d.id;
-            option.textContent = d.name;
-            option.dataset.custom = 'true';
-            optgroup.appendChild(option);
-          });
-          selectEl.appendChild(optgroup);
-        }
-      }
 
       // ---------- ESTADO GLOBAL ----------
       let state = {
@@ -1791,7 +1834,8 @@ REGRAS IMPORTANTES:
         leituras: [],
         user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
         questionsHistory: [],
-        videos: []
+        videos: [],
+        mentors: []  // lista de mentores
       };
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
@@ -1842,10 +1886,16 @@ REGRAS IMPORTANTES:
             state.legislations = state.legislations || [];
             state.videos = state.videos || [];
             state.leituras = state.leituras || [];
+            state.mentors = state.mentors || [];
           } catch(e){}
         }
         if(!state.disciplines.length) {
-          state.disciplines = DEFAULT_DISCIPLINES.map(name => ({
+          state.disciplines = [
+            "Língua Portuguesa", "Direito Administrativo", "Direito Constitucional",
+            "Raciocínio Lógico", "Informática", "Matemática", "Atualidades",
+            "Administração Financeira e Orçamentária - AFO", "Administração Geral",
+            "Administração Pública", "Administração de Materiais"
+          ].map(name => ({
             id: nextId++,
             name,
             timeSeconds: 0,
@@ -1872,8 +1922,18 @@ REGRAS IMPORTANTES:
         if(!state.leituras.length) {
           state.leituras = [];
         }
+        // Inicializar mentores com dados exemplo
+        if(!state.mentors.length) {
+          state.mentors = [
+            { id: 1, nome: "João Silva", area: "Área Fiscal", subarea: "Fiscal Estadual", experiencia: "Aprovado SEFAZ 2022", avaliacao: 4.9, descricao: "Especialista em estratégia de estudos para fiscos estaduais.", disponibilidade: true },
+            { id: 2, nome: "Maria Oliveira", area: "Área Fiscal", subarea: "Fiscal Federal", experiencia: "Auditora da Receita Federal", avaliacao: 5.0, descricao: "Mentoria focada em legislação tributária e direito aduaneiro.", disponibilidade: true },
+            { id: 3, nome: "Carlos Mendes", area: "Área de Controle", subarea: "Controle Externo", experiencia: "Aprovado no TCU", avaliacao: 4.8, descricao: "Técnicas de controle e auditoria governamental.", disponibilidade: true },
+            { id: 4, nome: "Ana Paula", area: "Área de Tribunais", subarea: "TRF", experiencia: "Analista Judiciário - TRF", avaliacao: 4.7, descricao: "Preparação para carreiras da Justiça Federal.", disponibilidade: false },
+            { id: 5, nome: "Roberto Lima", area: "Área Policial", subarea: "Polícia Federal", experiencia: "Delegado da PF", avaliacao: 5.0, descricao: "Mentoria completa para concurso da PF.", disponibilidade: true },
+            { id: 6, nome: "Fernanda Rios", area: "Área Bancária", subarea: "Banco do Brasil", experiencia: "Escriturária aprovada", avaliacao: 4.5, descricao: "Foco em matemática financeira e conhecimentos bancários.", disponibilidade: true }
+          ];
+        }
         videoDestaqueAtual = state.videos.find(v => v.id === 1) || state.videos[0];
-        state.disciplines.forEach(d => { d.topics = d.topics || []; d.expanded = false; });
         saveToStorage();
       }
       function saveToStorage() { localStorage.setItem('vulpis_state', JSON.stringify(state)); }
@@ -1968,25 +2028,17 @@ REGRAS IMPORTANTES:
         document.getElementById('timerStart').addEventListener('click', startTimer);
         document.getElementById('timerPause').addEventListener('click', pauseTimer);
         document.getElementById('timerStop').addEventListener('click', stopTimer);
-        preencherDisciplinas('disciplineSelect', state.disciplines);
+        const select = document.getElementById('disciplineSelect');
+        if(select) {
+          select.innerHTML = '<option value="">Selecione a disciplina</option>' + state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+        }
       }
       function startTimer() {
         const sel = document.getElementById('disciplineSelect'); if(!sel) return;
-        const selectedValue = sel.value;
-        if(!selectedValue) { alert('Selecione uma disciplina'); return; }
-        let discId;
-        if (sel.options[sel.selectedIndex]?.dataset?.custom === 'true') {
-          discId = parseInt(selectedValue);
-        } else {
-          const discName = selectedValue;
-          let disc = state.disciplines.find(d => d.name === discName);
-          if (!disc) {
-            disc = { id: nextId++, name: discName, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
-            state.disciplines.push(disc);
-            saveToStorage();
-          }
-          discId = disc.id;
-        }
+        const discId = parseInt(sel.value);
+        if(isNaN(discId)) { alert('Selecione uma disciplina'); return; }
+        const disc = state.disciplines.find(d => d.id === discId);
+        if(!disc) return;
         activeDisciplineId = discId; timerRunning = true;
         if(timerInterval) clearInterval(timerInterval);
         timerInterval = setInterval(() => { timerSeconds++; const disp = document.getElementById('timerDisplay'); if(disp) disp.textContent = formatTime(timerSeconds); }, 1000);
@@ -2005,7 +2057,7 @@ REGRAS IMPORTANTES:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ========== DASHBOARD ==========
+      // ========== DASHBOARD (resumo) ==========
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -2014,7 +2066,7 @@ REGRAS IMPORTANTES:
         });
         const avgPercent = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
         const wrongCount = totalQ - totalCorrect;
-        const feedbackMessage = getFeedbackMessage(parseFloat(avgPercent));
+        const feedbackMessage = avgPercent >= 80 ? 'Excelente! Continue assim! 🔥' : (avgPercent >= 60 ? 'Você está evoluindo bem! 📈' : (avgPercent >= 40 ? 'Bom progresso, foque nas revisões. 💪' : 'Hora de revisar os conteúdos! 📚'));
         const sortedByTime = [...state.disciplines].sort((a,b) => {
           const ta = a.topics.length ? a.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (a.timeSeconds||0);
           const tb = b.topics.length ? b.topics.reduce((s,t)=>s+(t.timeSeconds||0),0) : (b.timeSeconds||0);
@@ -2141,9 +2193,18 @@ REGRAS IMPORTANTES:
 
         document.getElementById('gotoQuestoesBtn')?.addEventListener('click', () => renderPage('questoes'));
         document.getElementById('revisarPioresBtn')?.addEventListener('click', () => {
-          const worst = getWorstDiscipline();
+          const worst = (() => {
+            let worstRate = 2, worstName = null;
+            state.disciplines.forEach(d => {
+              let q=0, c=0;
+              if(d.topics.length) { d.topics.forEach(t => { q+=t.questions||0; c+=t.correct||0; }); }
+              else { q=d.questions||0; c=d.correct||0; }
+              if(q>0) { const rate = c/q; if(rate < worstRate) { worstRate = rate; worstName = d.name; } }
+            });
+            return worstName;
+          })();
           if (worst) {
-            alert(`Sugestão: revise ${worst.name} (taxa de acerto: ${worst.rate.toFixed(0)}%)`);
+            alert(`Sugestão: revise ${worst} (taxa de acerto baixa)`);
             renderPage('disciplinas');
           } else {
             alert('Nenhuma disciplina com baixo desempenho identificada.');
@@ -2168,24 +2229,7 @@ REGRAS IMPORTANTES:
         }
       }
 
-      function getFeedbackMessage(percent) {
-        if (percent >= 80) return 'Excelente! Continue assim! 🔥';
-        if (percent >= 60) return 'Você está evoluindo bem! 📈';
-        if (percent >= 40) return 'Bom progresso, foque nas revisões. 💪';
-        return 'Hora de revisar os conteúdos! 📚';
-      }
-      function getWorstDiscipline() {
-        let worst = null, worstRate = 2;
-        state.disciplines.forEach(d => {
-          let q=0, c=0;
-          if(d.topics.length) { d.topics.forEach(t => { q+=t.questions||0; c+=t.correct||0; }); }
-          else { q=d.questions||0; c=d.correct||0; }
-          if(q>0) { const rate = c/q; if(rate < worstRate) { worstRate = rate; worst = {name: d.name, rate: rate*100}; } }
-        });
-        return worst;
-      }
-
-      // ========== DISCIPLINAS (mantido) ==========
+      // ========== DISCIPLINAS (resumido) ==========
       function renderDisciplinas() {
         const html = `
           ${renderGlobalTimer()}
@@ -2196,9 +2240,7 @@ REGRAS IMPORTANTES:
             </div>
             <button class="btn-primary" id="addDisciplineBtn"><i class="fas fa-plus-circle"></i> Adicionar disciplina</button>
           </div>
-
-          <div class="disciplines-table" style="position: relative;">
-            <img src="https://cdn-icons-png.flaticon.com/512/4524/4524556.png" alt="Livros" class="disciplines-decoration" onerror="this.style.display='none';">
+          <div class="disciplines-table">
             <div class="table-header"><span>Disciplina</span><span>Tempo</span><span>Questões</span><span>Certas</span><span>Erradas</span><span>% Acerto</span><span>Ações</span></div>
             <div id="disciplinesList"></div>
           </div>
@@ -2208,7 +2250,6 @@ REGRAS IMPORTANTES:
         attachTimerEvents();
         document.getElementById('addDisciplineBtn').addEventListener('click', openDisciplineModal);
       }
-
       function renderDisciplinesList() {
         const container = document.getElementById('disciplinesList');
         let rows = '';
@@ -2278,44 +2319,35 @@ REGRAS IMPORTANTES:
       function recordQuestionHistory(discId, topicId, correct) {
         const today = new Date().toISOString().split('T')[0];
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
+        saveToStorage();
       }
 
-      // ========== LEGISLAÇÃO (mantido) ==========
+      // ========== LEGISLAÇÃO (resumido) ==========
       function renderLegislacao() {
         const html = `
-          <div style="position: relative;">
-            <div class="page-title">📜 Legislação</div>
-            <div class="greeting"><i class="fas fa-gavel"></i> Gerencie e acompanhe seu progresso nas principais normas para concursos</div>
-            
-            <div style="display:flex; gap:16px; margin-bottom: 20px;">
-              <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar Legislação</button>
-              <button class="btn-secondary" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
-            </div>
-
-            <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card">
-              <p><i class="fas fa-info-circle"></i> <strong>Guia de Estudo de Legislação:</strong> 1) Leitura completa da lei seca. 2) Leitura de resumos e esquemas. 3) Revisões periódicas. 4) Resolução de questões. Marque seu progresso abaixo.</p>
-            </div>
-
-            <div class="legislacao-filters" id="legislacaoFilters">
-              <span class="filter-chip active" data-filter="all">Todas</span>
-              <span class="filter-chip" data-filter="in-progress">Em andamento</span>
-              <span class="filter-chip" data-filter="completed">Concluídas</span>
-              <span class="filter-chip" data-filter="pending">Não iniciadas</span>
-            </div>
+          <div class="page-title">📜 Legislação</div>
+          <div class="greeting"><i class="fas fa-gavel"></i> Gerencie e acompanhe seu progresso nas principais normas para concursos</div>
+          <div style="display:flex; gap:16px; margin-bottom: 20px;">
+            <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar Legislação</button>
+            <button class="btn-secondary" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
           </div>
-
+          <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card">
+            <p><i class="fas fa-info-circle"></i> <strong>Guia de Estudo de Legislação:</strong> 1) Leitura completa da lei seca. 2) Leitura de resumos e esquemas. 3) Revisões periódicas. 4) Resolução de questões. Marque seu progresso abaixo.</p>
+          </div>
+          <div class="legislacao-filters" id="legislacaoFilters">
+            <span class="filter-chip active" data-filter="all">Todas</span>
+            <span class="filter-chip" data-filter="in-progress">Em andamento</span>
+            <span class="filter-chip" data-filter="completed">Concluídas</span>
+            <span class="filter-chip" data-filter="pending">Não iniciadas</span>
+          </div>
           <div id="legislacaoList"></div>
-          
-          <img src="https://cdn-icons-png.flaticon.com/512/3510/3510354.png" alt="Decoração legislação" class="legislacao-decoration" onerror="this.style.display='none';">
         `;
         contentDiv.innerHTML = html;
-        
         document.getElementById('addLegislacaoBtn').addEventListener('click', () => openLegislacaoModal());
         document.getElementById('toggleGuiaBtn').addEventListener('click', () => {
           const guia = document.getElementById('guiaLegislacao');
           guia.style.display = guia.style.display === 'none' ? 'block' : 'none';
         });
-
         let currentFilter = 'all';
         document.querySelectorAll('.filter-chip').forEach(chip => {
           chip.addEventListener('click', () => {
@@ -2325,10 +2357,8 @@ REGRAS IMPORTANTES:
             renderLegislacaoList(currentFilter);
           });
         });
-
         renderLegislacaoList('all');
       }
-
       function getLegislacaoStatus(leg) {
         const leitura = leg.leituraCompleta;
         const resumo = leg.resumoLido;
@@ -2337,7 +2367,6 @@ REGRAS IMPORTANTES:
         if (leitura || resumo || questoesProgress > 0) return 'in-progress';
         return 'pending';
       }
-
       function renderLegislacaoList(filter = 'all') {
         const container = document.getElementById('legislacaoList');
         if (!state.legislations.length) {
@@ -2345,49 +2374,39 @@ REGRAS IMPORTANTES:
           document.getElementById('emptyAddLegislacaoBtn')?.addEventListener('click', () => openLegislacaoModal());
           return;
         }
-
         let filteredLegislations = state.legislations;
         if (filter !== 'all') {
           filteredLegislations = state.legislations.filter(leg => getLegislacaoStatus(leg) === filter);
         }
-
         if (filteredLegislations.length === 0) {
           container.innerHTML = `<div class="legislacao-empty-state"><i class="fas fa-filter"></i><h3>Nenhuma legislação neste filtro</h3><p>Tente selecionar outra categoria ou adicione novas normas.</p></div>`;
           return;
         }
-
-        container.innerHTML = `
-          <div class="legislacao-grid">
-            ${filteredLegislations.map(leg => {
-              const progresso = (leg.questoes.feitas / leg.questoes.meta) * 100;
-              const status = getLegislacaoStatus(leg);
-              let barColorClass = progresso >= 70 ? 'high' : (progresso >= 30 ? 'medium' : 'low');
-              const leituraClass = leg.leituraCompleta ? 'completed' : 'pending';
-              const resumoClass = leg.resumoLido ? 'completed' : 'pending';
-              const revisadoClass = leg.revisado ? 'completed' : 'pending';
-              return `
-                <div class="legislacao-card" data-leg-id="${leg.id}">
-                  <div class="legislacao-card-header"><h3>${leg.nome}</h3><div class="legislacao-card-actions"><i class="fas fa-edit" data-action="editLegislacao" data-id="${leg.id}"></i><i class="fas fa-trash-alt" data-action="deleteLegislacao" data-id="${leg.id}"></i></div></div>
-                  <div class="status-badges">
-                    <span class="status-badge ${leituraClass}" data-field="leituraCompleta" data-id="${leg.id}"><i class="fas fa-${leg.leituraCompleta ? 'check-circle' : 'book'}"></i> Leitura</span>
-                    <span class="status-badge ${resumoClass}" data-field="resumoLido" data-id="${leg.id}"><i class="fas fa-${leg.resumoLido ? 'check-circle' : 'file-alt'}"></i> Resumo</span>
-                    <span class="status-badge ${revisadoClass}" data-field="revisado" data-id="${leg.id}"><i class="fas fa-${leg.revisado ? 'check-circle' : 'sync-alt'}"></i> Revisão</span>
-                  </div>
-                  <div class="progress-section">
-                    <div class="progress-header"><span class="progress-label"><i class="fas fa-question-circle"></i> Questões</span><span class="progress-value">${leg.questoes.feitas} / ${leg.questoes.meta}</span></div>
-                    <div class="progress-bar-custom"><div class="progress-fill-custom ${barColorClass}" style="width: ${progresso}%;"></div></div>
-                    <div style="display: flex; justify-content: flex-end; font-size: 0.85rem; color: #757575;">${progresso.toFixed(0)}% concluído</div>
-                  </div>
-                  <div class="questoes-input-area">
-                    <input type="number" min="0" max="${leg.questoes.meta}" value="${leg.questoes.feitas}" data-id="${leg.id}" data-field="questoesFeitas">
-                    <button data-id="${leg.id}" data-action="updateQuestoes"><i class="fas fa-save"></i> Atualizar</button>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `;
-
+        container.innerHTML = `<div class="legislacao-grid">${filteredLegislations.map(leg => {
+          const progresso = (leg.questoes.feitas / leg.questoes.meta) * 100;
+          const status = getLegislacaoStatus(leg);
+          let barColorClass = progresso >= 70 ? 'high' : (progresso >= 30 ? 'medium' : 'low');
+          const leituraClass = leg.leituraCompleta ? 'completed' : 'pending';
+          const resumoClass = leg.resumoLido ? 'completed' : 'pending';
+          const revisadoClass = leg.revisado ? 'completed' : 'pending';
+          return `<div class="legislacao-card" data-leg-id="${leg.id}">
+            <div class="legislacao-card-header"><h3>${leg.nome}</h3><div class="legislacao-card-actions"><i class="fas fa-edit" data-action="editLegislacao" data-id="${leg.id}"></i><i class="fas fa-trash-alt" data-action="deleteLegislacao" data-id="${leg.id}"></i></div></div>
+            <div class="status-badges">
+              <span class="status-badge ${leituraClass}" data-field="leituraCompleta" data-id="${leg.id}"><i class="fas fa-${leg.leituraCompleta ? 'check-circle' : 'book'}"></i> Leitura</span>
+              <span class="status-badge ${resumoClass}" data-field="resumoLido" data-id="${leg.id}"><i class="fas fa-${leg.resumoLido ? 'check-circle' : 'file-alt'}"></i> Resumo</span>
+              <span class="status-badge ${revisadoClass}" data-field="revisado" data-id="${leg.id}"><i class="fas fa-${leg.revisado ? 'check-circle' : 'sync-alt'}"></i> Revisão</span>
+            </div>
+            <div class="progress-section">
+              <div class="progress-header"><span class="progress-label"><i class="fas fa-question-circle"></i> Questões</span><span class="progress-value">${leg.questoes.feitas} / ${leg.questoes.meta}</span></div>
+              <div class="progress-bar-custom"><div class="progress-fill-custom ${barColorClass}" style="width: ${progresso}%;"></div></div>
+              <div style="display: flex; justify-content: flex-end; font-size: 0.85rem; color: #757575;">${progresso.toFixed(0)}% concluído</div>
+            </div>
+            <div class="questoes-input-area">
+              <input type="number" min="0" max="${leg.questoes.meta}" value="${leg.questoes.feitas}" data-id="${leg.id}" data-field="questoesFeitas">
+              <button data-id="${leg.id}" data-action="updateQuestoes"><i class="fas fa-save"></i> Atualizar</button>
+            </div>
+          </div>`;
+        }).join('')}</div>`;
         container.querySelectorAll('.status-badge[data-field]').forEach(badge => {
           badge.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -2412,110 +2431,47 @@ REGRAS IMPORTANTES:
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
       }
 
-      // ========== AULAS (mantido) ==========
+      // ========== AULAS (resumido) ==========
       function renderAulas() {
         const getEmbedUrl = (url) => {
           if (!url) return '';
           let videoId = url.split('v=')[1]?.split('&')[0] || url.split('youtu.be/')[1]?.split('?')[0];
           return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
         };
-
         let destaqueId = videoDestaqueAtual?.id || (state.videos[0]?.id || null);
         const disciplinasUnicas = [...new Set(state.videos.map(v => v.disciplina))].filter(Boolean);
-
         const renderDestaque = (videoId) => {
           const video = state.videos.find(v => v.id === videoId);
-          if (!video) {
-            return `
-              <div class="empty-state" style="padding: 40px;">
-                <i class="fas fa-video-slash"></i>
-                <h3>Nenhum vídeo em destaque</h3>
-                <p>Selecione uma aula para assistir</p>
-              </div>
-            `;
-          }
+          if (!video) return `<div class="empty-state" style="padding: 40px;"><i class="fas fa-video-slash"></i><h3>Nenhum vídeo em destaque</h3><p>Selecione uma aula para assistir</p></div>`;
           const embedUrl = getEmbedUrl(video.link_video);
-          return `
-            <div class="video-wrapper">
-              <iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <div class="video-info">
-              <h3>${video.titulo}</h3>
-              <p>${video.descricao || ''}</p>
-              <span class="badge" style="margin-top: 8px; display: inline-block;">${video.disciplina}</span>
-            </div>
-          `;
+          return `<div class="video-wrapper"><iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe></div><div class="video-info"><h3>${video.titulo}</h3><p>${video.descricao || ''}</p><span class="badge" style="margin-top: 8px; display: inline-block;">${video.disciplina}</span></div>`;
         };
-
         const renderGrid = (videos, excluirId, filtroDisciplina = '') => {
           let filtered = videos.filter(v => v.id !== excluirId);
-          if (filtroDisciplina) {
-            filtered = filtered.filter(v => v.disciplina === filtroDisciplina);
-          }
-          if (filtered.length === 0) {
-            return `
-              <div class="empty-state" style="grid-column: 1/-1;">
-                <i class="fas fa-video"></i>
-                <h3>Nenhuma aula disponível</h3>
-                <p>${filtroDisciplina ? 'Tente outro filtro ou' : 'Que tal'} adicionar novas aulas?</p>
-                <button class="btn-primary" id="adicionarAulaPlaceholderBtn" style="margin-top: 16px;">
-                  <i class="fas fa-plus-circle"></i> Adicionar aula
-                </button>
-              </div>
-            `;
-          }
+          if (filtroDisciplina) filtered = filtered.filter(v => v.disciplina === filtroDisciplina);
+          if (filtered.length === 0) return `<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-video"></i><h3>Nenhuma aula disponível</h3><p>${filtroDisciplina ? 'Tente outro filtro ou' : 'Que tal'} adicionar novas aulas?</p><button class="btn-primary" id="adicionarAulaPlaceholderBtn" style="margin-top: 16px;"><i class="fas fa-plus-circle"></i> Adicionar aula</button></div>`;
           return filtered.map(video => {
             const embedUrl = getEmbedUrl(video.link_video);
-            return `
-              <div class="video-card" data-video-id="${video.id}">
-                <div class="video-thumb">
-                  <iframe src="${embedUrl}" frameborder="0" allowfullscreen loading="lazy"></iframe>
-                </div>
-                <div class="video-card-content">
-                  <div class="video-card-title">${video.titulo}</div>
-                  <span class="video-card-disciplina">${video.disciplina}</span>
-                  <p style="font-size:0.9rem; color:#5A5A5A; margin-bottom:16px;">${video.descricao || ''}</p>
-                  <div class="video-card-actions">
-                    <button class="btn-sm btn-sm-primary" data-action="assistir" data-id="${video.id}">
-                      <i class="fas fa-play"></i> Assistir
-                    </button>
-                    <button class="btn-sm btn-sm-secondary" data-action="marcarVisto" data-id="${video.id}">
-                      <i class="far fa-check-circle"></i> Visto
-                    </button>
-                  </div>
+            return `<div class="video-card" data-video-id="${video.id}">
+              <div class="video-thumb"><iframe src="${embedUrl}" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-card-content">
+                <div class="video-card-title">${video.titulo}</div>
+                <span class="video-card-disciplina">${video.disciplina}</span>
+                <p style="font-size:0.9rem; color:#5A5A5A; margin-bottom:16px;">${video.descricao || ''}</p>
+                <div class="video-card-actions">
+                  <button class="btn-sm btn-sm-primary" data-action="assistir" data-id="${video.id}"><i class="fas fa-play"></i> Assistir</button>
+                  <button class="btn-sm btn-sm-secondary" data-action="marcarVisto" data-id="${video.id}"><i class="far fa-check-circle"></i> Visto</button>
                 </div>
               </div>
-            `;
+            </div>`;
           }).join('');
         };
-
-        const html = `
-          <div class="page-title">🎥 Aulas</div>
-          <div class="greeting">Assista às aulas recomendadas e organize seu aprendizado</div>
-          <div class="filter-bar">
-            <select id="aulaFiltroDisciplina" class="filter-select">
-              <option value="">Todas as disciplinas</option>
-              ${disciplinasUnicas.map(d => `<option value="${d}">${d}</option>`).join('')}
-            </select>
-            <button class="btn-secondary" id="resetDestaqueBtn" style="margin-left: auto;">
-              <i class="fas fa-arrow-up"></i> Vídeo principal
-            </button>
-          </div>
-          <div id="videoDestaqueContainer" class="video-highlight">
-            ${renderDestaque(destaqueId)}
-          </div>
-          <h3 style="font-family: Poppins; margin: 32px 0 16px;">📚 Todas as aulas</h3>
-          <div id="videosGridContainer" class="videos-grid">
-            ${renderGrid(state.videos, destaqueId)}
-          </div>
-        `;
+        const html = `<div class="page-title">🎥 Aulas</div><div class="greeting">Assista às aulas recomendadas e organize seu aprendizado</div><div class="filter-bar"><select id="aulaFiltroDisciplina" class="filter-select"><option value="">Todas as disciplinas</option>${disciplinasUnicas.map(d => `<option value="${d}">${d}</option>`).join('')}</select><button class="btn-secondary" id="resetDestaqueBtn" style="margin-left: auto;"><i class="fas fa-arrow-up"></i> Vídeo principal</button></div><div id="videoDestaqueContainer" class="video-highlight">${renderDestaque(destaqueId)}</div><h3 style="font-family: Poppins; margin: 32px 0 16px;">📚 Todas as aulas</h3><div id="videosGridContainer" class="videos-grid">${renderGrid(state.videos, destaqueId)}</div>`;
         contentDiv.innerHTML = html;
-
         const filtroSelect = document.getElementById('aulaFiltroDisciplina');
         const resetBtn = document.getElementById('resetDestaqueBtn');
         const gridContainer = document.getElementById('videosGridContainer');
         const destaqueContainer = document.getElementById('videoDestaqueContainer');
-
         const atualizarTela = () => {
           const filtro = filtroSelect.value;
           const videoDestaque = state.videos.find(v => v.id === destaqueId);
@@ -2527,7 +2483,6 @@ REGRAS IMPORTANTES:
           gridContainer.innerHTML = renderGrid(state.videos, destaqueId, filtro);
           reattachGridEvents();
         };
-
         const reattachGridEvents = () => {
           document.querySelectorAll('[data-action="assistir"]').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -2538,15 +2493,10 @@ REGRAS IMPORTANTES:
             });
           });
           document.querySelectorAll('[data-action="marcarVisto"]').forEach(btn => {
-            btn.addEventListener('click', () => {
-              alert('✅ Aula marcada como vista! (Integração futura)');
-            });
+            btn.addEventListener('click', () => alert('✅ Aula marcada como vista! (Integração futura)'));
           });
-          document.getElementById('adicionarAulaPlaceholderBtn')?.addEventListener('click', () => {
-            alert('Funcionalidade de adicionar aula será integrada em breve.');
-          });
+          document.getElementById('adicionarAulaPlaceholderBtn')?.addEventListener('click', () => alert('Funcionalidade de adicionar aula será integrada em breve.'));
         };
-
         filtroSelect.addEventListener('change', atualizarTela);
         resetBtn.addEventListener('click', () => {
           const filtro = filtroSelect.value;
@@ -2555,572 +2505,184 @@ REGRAS IMPORTANTES:
           videoDestaqueAtual = primeiro || null;
           atualizarTela();
         });
-
         reattachGridEvents();
       }
 
-      // ========== FUNÇÕES AUXILIARES PARA QUESTÕES ==========
-      // PARSER ROBUSTO DE QUESTÕES - VERSÃO CORRIGIDA
+      // ========== QUESTÕES (simplificado) ==========
       function parseQuestions(rawText) {
         const questions = [];
-        // Normaliza quebras de linha e espaços
         let normalized = rawText.replace(/\r\n/g, '\n').trim();
-        
-        // Divide por marcadores: suporta "(Questão de Treino)" ou "Questão de Treino" (com ou sem parênteses, case insensitive)
         const blocks = normalized.split(/\s*\(?\s*Questão\s+de\s+Treino\s*\)?\s*/i).filter(b => b.trim() !== '');
-        
         for (let block of blocks) {
           try {
-            // 1. ENUNCIADO: capturar tudo até encontrar "a)" (pode estar na mesma linha ou em nova linha)
             let enunciado = '';
-            // Procura pelo padrão "a)" no texto
             const aPos = block.search(/\n\s*a\)/i);
             if (aPos === -1) {
-              // Se não encontrar quebra de linha, procura "a)" diretamente
               const altIndex = block.search(/\s*a\)/i);
-              if (altIndex !== -1) {
-                enunciado = block.substring(0, altIndex).trim();
-              }
-            } else {
-              enunciado = block.substring(0, aPos).trim();
-            }
+              if (altIndex !== -1) enunciado = block.substring(0, altIndex).trim();
+            } else enunciado = block.substring(0, aPos).trim();
             if (!enunciado) continue;
-            
-            // 2. ALTERNATIVAS: capturar linhas que começam com a) b) c) d) e)
             const altRegex = /([a-e])\)\s*([^\n]+)/gi;
             const alternativas = [];
             let match;
-            while ((match = altRegex.exec(block)) !== null) {
-              alternativas.push(match[2].trim());
-            }
-            if (alternativas.length !== 5) {
-              console.warn('Questão ignorada: número de alternativas != 5', alternativas.length);
-              continue;
-            }
-            
-            // 3. GABARITO: aceita "Gabarito: X", "Gabarito: Letra X", "Resposta: X", "Gabarito letra X"
+            while ((match = altRegex.exec(block)) !== null) alternativas.push(match[2].trim());
+            if (alternativas.length !== 5) continue;
             let gabaritoMatch = block.match(/(?:Gabarito|Resposta)\s*:?\s*(?:letra\s*)?([A-Ea-e])/i);
-            if (!gabaritoMatch) {
-              console.warn('Questão ignorada: gabarito não encontrado');
-              continue;
-            }
-            const gabaritoLetra = gabaritoMatch[1].toUpperCase();
-            const gabaritoIndex = gabaritoLetra.charCodeAt(0) - 65;
-            
-            // 4. COMENTÁRIO (opcional)
+            if (!gabaritoMatch) continue;
+            const gabaritoIndex = gabaritoMatch[1].toUpperCase().charCodeAt(0) - 65;
             let comentario = '';
             const comentarioMatch = block.match(/Comentário:\s*([\s\S]*?)(?=(?:\(?Questão de Treino\)?|$))/i);
-            if (comentarioMatch) {
-              comentario = comentarioMatch[1].trim();
-            }
-            
-            questions.push({
-              enunciado,
-              alternativas,
-              gabarito: gabaritoIndex,
-              comentario,
-              respostaUsuario: null,
-              respondida: false,
-              eliminadas: new Array(5).fill(false),
-              mostrarComentario: false,
-              resultadoVerificado: false
-            });
-          } catch(e) {
-            console.warn('Erro ao processar questão:', e);
-          }
+            if (comentarioMatch) comentario = comentarioMatch[1].trim();
+            questions.push({ enunciado, alternativas, gabarito: gabaritoIndex, comentario, respostaUsuario: null, respondida: false, eliminadas: new Array(5).fill(false), mostrarComentario: false, resultadoVerificado: false });
+          } catch(e) {}
         }
         return questions;
       }
-
-      function renderQuestionCardsWithPagination() {
-        const start = (currentQuestionPage - 1) * questionsPerPage;
-        const end = start + questionsPerPage;
-        const pageQuestions = generatedQuestions.slice(start, end);
-        
-        let html = pageQuestions.map((q, idx) => {
-          const globalIndex = start + idx;
-          return renderSingleQuestionCard(q, globalIndex);
-        }).join('');
-        
-        const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
-        if (totalPages > 1) {
-          html += `
-            <div class="pagination">
-              <button ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev">
-                <i class="fas fa-chevron-left"></i> Anterior
-              </button>
-              <span>Página ${currentQuestionPage} de ${totalPages}</span>
-              <button ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">
-                Próxima <i class="fas fa-chevron-right"></i>
-              </button>
-            </div>
-          `;
-        }
-        
-        return html;
-      }
-
       function renderSingleQuestionCard(q, index) {
         const radioName = `q${index}`;
         const respondida = q.respondida;
         const resultadoVerificado = q.resultadoVerificado;
         const respostaUsuario = q.respostaUsuario;
-        
         const getAltClass = (altIndex) => {
           if (!resultadoVerificado) return '';
           if (altIndex === q.gabarito) return 'correta-destaque';
           if (respostaUsuario === altIndex && respostaUsuario !== q.gabarito) return 'errada-destaque';
           return '';
         };
-        
         const alternativasHtml = q.alternativas.map((texto, i) => {
           const letra = String.fromCharCode(97 + i);
           const checked = respostaUsuario === i ? 'checked' : '';
           const disabled = resultadoVerificado ? 'disabled' : '';
           const eliminadaClass = q.eliminadas[i] ? 'eliminada' : '';
           const destaqueClass = getAltClass(i);
-          
-          return `
-            <div class="alternativa-item ${eliminadaClass} ${destaqueClass}">
-              <input type="radio" name="${radioName}" value="${i}" id="${radioName}_${i}" ${checked} ${disabled} data-question-index="${index}" data-alt-index="${i}">
-              <label for="${radioName}_${i}">${letra}) ${texto}</label>
-              <button class="tesoura-btn ${q.eliminadas[i] ? 'ativo' : ''}" data-question-index="${index}" data-alt-index="${i}" title="Eliminar alternativa">
-                <i class="fas fa-cut"></i>
-              </button>
-            </div>
-          `;
+          return `<div class="alternativa-item ${eliminadaClass} ${destaqueClass}"><input type="radio" name="${radioName}" value="${i}" id="${radioName}_${i}" ${checked} ${disabled} data-question-index="${index}" data-alt-index="${i}"><label for="${radioName}_${i}">${letra}) ${texto}</label><button class="tesoura-btn ${q.eliminadas[i] ? 'ativo' : ''}" data-question-index="${index}" data-alt-index="${i}" title="Eliminar alternativa"><i class="fas fa-cut"></i></button></div>`;
         }).join('');
-        
-        const feedbackHtml = resultadoVerificado ? `
-          <div class="feedback-message ${respostaUsuario === q.gabarito ? 'feedback-correct' : 'feedback-wrong'}">
-            <i class="fas fa-${respostaUsuario === q.gabarito ? 'check-circle' : 'times-circle'}"></i>
-            ${respostaUsuario === q.gabarito ? 'Você acertou! Parabéns!' : 'Você errou. Veja o comentário para entender.'}
-          </div>
-        ` : '';
-        
-        const comentarioHtml = q.mostrarComentario ? `
-          <div class="comentario-box">
-            <strong><i class="fas fa-comment-dots"></i> Comentário:</strong>
-            <p>${q.comentario.replace(/\n/g, '<br>')}</p>
-          </div>
-        ` : '';
-        
-        const botoesHtml = !resultadoVerificado ? `
-          <button class="btn-primary ver-resultado-btn" data-question-index="${index}" ${!respondida ? 'disabled' : ''}>
-            <i class="fas fa-check-double"></i> Ver resultado
-          </button>
-        ` : `
-          <button class="btn-secondary ver-comentario-btn" data-question-index="${index}">
-            <i class="fas fa-comment"></i> ${q.mostrarComentario ? 'Ocultar' : 'Ver'} comentário
-          </button>
-        `;
-        
-        return `
-          <div class="question-card" data-question-index="${index}">
-            <div class="question-title">Questão ${index + 1}</div>
-            <div class="question-enunciado">${q.enunciado}</div>
-            <div class="alternativas">
-              ${alternativasHtml}
-            </div>
-            ${feedbackHtml}
-            ${comentarioHtml}
-            <div class="question-actions">
-              ${botoesHtml}
-            </div>
-          </div>
-        `;
+        const feedbackHtml = resultadoVerificado ? `<div class="feedback-message ${respostaUsuario === q.gabarito ? 'feedback-correct' : 'feedback-wrong'}"><i class="fas fa-${respostaUsuario === q.gabarito ? 'check-circle' : 'times-circle'}"></i> ${respostaUsuario === q.gabarito ? 'Você acertou! Parabéns!' : 'Você errou. Veja o comentário para entender.'}</div>` : '';
+        const comentarioHtml = q.mostrarComentario ? `<div class="comentario-box"><strong><i class="fas fa-comment-dots"></i> Comentário:</strong><p>${q.comentario.replace(/\n/g, '<br>')}</p></div>` : '';
+        const botoesHtml = !resultadoVerificado ? `<button class="btn-primary ver-resultado-btn" data-question-index="${index}" ${!respondida ? 'disabled' : ''}><i class="fas fa-check-double"></i> Ver resultado</button>` : `<button class="btn-secondary ver-comentario-btn" data-question-index="${index}"><i class="fas fa-comment"></i> ${q.mostrarComentario ? 'Ocultar' : 'Ver'} comentário</button>`;
+        return `<div class="question-card" data-question-index="${index}"><div class="question-title">Questão ${index + 1}</div><div class="question-enunciado">${q.enunciado}</div><div class="alternativas">${alternativasHtml}</div>${feedbackHtml}${comentarioHtml}<div class="question-actions">${botoesHtml}</div></div>`;
       }
-
       function refreshQuestionsDisplay() {
         const container = document.getElementById('generatedQuestionsContainer');
         if (!container) return;
-        
-        if (generatedQuestions.length === 0) {
-          container.innerHTML = '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>';
-          return;
-        }
-        
-        container.innerHTML = renderQuestionCardsWithPagination();
+        if (generatedQuestions.length === 0) { container.innerHTML = '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>'; return; }
+        const start = (currentQuestionPage - 1) * questionsPerPage;
+        const end = start + questionsPerPage;
+        const pageQuestions = generatedQuestions.slice(start, end);
+        let html = pageQuestions.map((q, idx) => renderSingleQuestionCard(q, start + idx)).join('');
+        const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
+        if (totalPages > 1) html += `<div class="pagination"><button ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i> Anterior</button><span>Página ${currentQuestionPage} de ${totalPages}</span><button ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">Próxima <i class="fas fa-chevron-right"></i></button></div>`;
+        container.innerHTML = html;
         attachQuestionEvents();
       }
-
       function attachQuestionEvents() {
-        // Eventos para seleção de alternativa
         document.querySelectorAll('input[type="radio"][data-question-index]').forEach(radio => {
           radio.addEventListener('change', (e) => {
             const questionIndex = parseInt(radio.dataset.questionIndex);
             const altIndex = parseInt(radio.dataset.altIndex);
             const question = generatedQuestions[questionIndex];
-            
-            if (question && !question.resultadoVerificado) {
-              question.respostaUsuario = altIndex;
-              question.respondida = true;
-              
-              // Habilita o botão "Ver resultado"
-              const card = document.querySelector(`.question-card[data-question-index="${questionIndex}"]`);
-              if (card) {
-                const btn = card.querySelector('.ver-resultado-btn');
-                if (btn) btn.disabled = false;
-              }
-            }
+            if (question && !question.resultadoVerificado) { question.respostaUsuario = altIndex; question.respondida = true; const card = document.querySelector(`.question-card[data-question-index="${questionIndex}"]`); if (card) { const btn = card.querySelector('.ver-resultado-btn'); if (btn) btn.disabled = false; } }
           });
         });
-        
-        // Evento "Ver resultado"
         document.querySelectorAll('.ver-resultado-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const questionIndex = parseInt(btn.dataset.questionIndex);
             const question = generatedQuestions[questionIndex];
-            
-            if (question && question.respondida && !question.resultadoVerificado) {
-              question.resultadoVerificado = true;
-              refreshQuestionsDisplay();
-            }
+            if (question && question.respondida && !question.resultadoVerificado) { question.resultadoVerificado = true; refreshQuestionsDisplay(); }
           });
         });
-        
-        // Evento "Ver comentário"
         document.querySelectorAll('.ver-comentario-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const questionIndex = parseInt(btn.dataset.questionIndex);
             const question = generatedQuestions[questionIndex];
-            
-            if (question && question.resultadoVerificado) {
-              question.mostrarComentario = !question.mostrarComentario;
-              refreshQuestionsDisplay();
-            }
+            if (question && question.resultadoVerificado) { question.mostrarComentario = !question.mostrarComentario; refreshQuestionsDisplay(); }
           });
         });
-        
-        // Evento da tesoura (eliminar alternativa)
         document.querySelectorAll('.tesoura-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.preventDefault();
             const questionIndex = parseInt(btn.dataset.questionIndex);
             const altIndex = parseInt(btn.dataset.altIndex);
             const question = generatedQuestions[questionIndex];
-            
-            if (question && !question.resultadoVerificado) {
-              question.eliminadas[altIndex] = !question.eliminadas[altIndex];
-              refreshQuestionsDisplay();
-            }
+            if (question && !question.resultadoVerificado) { question.eliminadas[altIndex] = !question.eliminadas[altIndex]; refreshQuestionsDisplay(); }
           });
         });
-        
-        // Eventos de paginação
         document.querySelectorAll('[data-page]').forEach(btn => {
           btn.addEventListener('click', () => {
             const direction = btn.dataset.page;
             const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
-            
-            if (direction === 'prev' && currentQuestionPage > 1) {
-              currentQuestionPage--;
-              refreshQuestionsDisplay();
-            } else if (direction === 'next' && currentQuestionPage < totalPages) {
-              currentQuestionPage++;
-              refreshQuestionsDisplay();
-            }
+            if (direction === 'prev' && currentQuestionPage > 1) { currentQuestionPage--; refreshQuestionsDisplay(); }
+            else if (direction === 'next' && currentQuestionPage < totalPages) { currentQuestionPage++; refreshQuestionsDisplay(); }
           });
         });
       }
-
-      function registrarQuestaoManual(isCorrect) {
-        const qDiscipline = document.getElementById('qDiscipline');
-        const qTopic = document.getElementById('qTopic');
-        const selectedValue = qDiscipline.value;
-        
-        if (!selectedValue) {
-          alert('Selecione uma disciplina.');
-          return;
-        }
-        
-        let disc;
-        if (qDiscipline.options[qDiscipline.selectedIndex]?.dataset?.custom === 'true') {
-          const discId = parseInt(selectedValue);
-          disc = state.disciplines.find(d => d.id === discId);
-        } else {
-          disc = state.disciplines.find(d => d.name === selectedValue);
-          if (!disc) {
-            disc = { id: nextId++, name: selectedValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
-            state.disciplines.push(disc);
-          }
-        }
-        
-        const topicId = qTopic.value ? parseInt(qTopic.value) : null;
-        
-        if (topicId) {
-          const topic = disc.topics.find(t => t.id === topicId);
-          if (topic) {
-            topic.questions = (topic.questions || 0) + 1;
-            if (isCorrect) topic.correct = (topic.correct || 0) + 1;
-            else topic.wrong = (topic.wrong || 0) + 1;
-            recordQuestionHistory(disc.id, topicId, isCorrect);
-          }
-        } else {
-          disc.questions = (disc.questions || 0) + 1;
-          if (isCorrect) disc.correct = (disc.correct || 0) + 1;
-          else disc.wrong = (disc.wrong || 0) + 1;
-          recordQuestionHistory(disc.id, null, isCorrect);
-        }
-        
-        saveToStorage();
-        renderQuestoes();
-      }
-
-      // ========== QUESTÕES (PÁGINA PRINCIPAL) ==========
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q => q.date === today);
         const correctToday = todayQs.filter(q => q.correct).length;
         const totalToday = todayQs.length;
         const rate = totalToday ? ((correctToday / totalToday) * 100).toFixed(1) : '0.0';
-        
-        const html = `
-          ${renderGlobalTimer()}
-          <div class="page-title">Questões</div>
-          <div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div>
-          
-          <div class="dashboard-grid">
-            <div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
-          </div>
-          
-          <div class="card" style="margin-bottom: 32px;">
-            <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
-            <div style="display:grid; gap:16px; margin-top:20px;">
-              <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;">
-                <option value="">Disciplina</option>
-              </select>
-              <select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled>
-                <option value="">Tópico (opcional)</option>
-              </select>
-              <div style="display:flex; gap:12px;">
-                <button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
-                <button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="section-divider"></div>
-          
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2>
-            <div style="display: flex; gap: 12px;">
-              <button class="btn-secondary" id="modeloQuestaoBtn"><i class="far fa-file-alt"></i> Modelo de Questão</button>
-            </div>
-          </div>
-          
-          <div class="card">
-            <p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p>
-            <textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea>
-            <div style="display: flex; gap: 16px; margin-top: 16px;">
-              <button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button>
-            </div>
-          </div>
-          
-          <div id="generatedQuestionsContainer" style="margin-top: 24px;">
-            ${generatedQuestions.length ? renderQuestionCardsWithPagination() : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>'}
-          </div>
-        `;
-        
+        const html = `${renderGlobalTimer()}<div class="page-title">Questões</div><div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div><div class="dashboard-grid"><div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div><div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div></div><div class="card" style="margin-bottom: 32px;"><div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div><div style="display:grid; gap:16px; margin-top:20px;"><select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select><select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select><div style="display:flex; gap:12px;"><button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button><button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button></div></div></div><div class="section-divider"></div><div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;"><h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2><div style="display: flex; gap: 12px;"><button class="btn-secondary" id="modeloQuestaoBtn"><i class="far fa-file-alt"></i> Modelo de Questão</button></div></div><div class="card"><p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p><textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea><div style="display: flex; gap: 16px; margin-top: 16px;"><button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button></div></div><div id="generatedQuestionsContainer" style="margin-top: 24px;">${generatedQuestions.length ? renderQuestionCardsWithPagination() : '<div class="empty-state"><i class="fas fa-robot"></i><h3>Nenhuma questão gerada</h3><p>Cole questões no campo acima e clique em "Processar questões".</p></div>'}</div>`;
         contentDiv.innerHTML = html;
         attachTimerEvents();
-        preencherDisciplinas('qDiscipline', state.disciplines);
-        
         const qDiscipline = document.getElementById('qDiscipline');
         const qTopic = document.getElementById('qTopic');
-        
         qDiscipline.addEventListener('change', () => {
-          const selectedValue = qDiscipline.value;
-          if (!selectedValue) {
-            qTopic.disabled = true;
-            qTopic.innerHTML = '<option value="">Tópico (opcional)</option>';
-            return;
-          }
-          
-          let disc;
-          if (qDiscipline.options[qDiscipline.selectedIndex]?.dataset?.custom === 'true') {
-            const discId = parseInt(selectedValue);
-            disc = state.disciplines.find(d => d.id === discId);
-          } else {
-            disc = state.disciplines.find(d => d.name === selectedValue);
-          }
-          
-          if (disc && disc.topics.length > 0) {
-            qTopic.disabled = false;
-            qTopic.innerHTML = '<option value="">Tópico (opcional)</option>' +
-              disc.topics.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-          } else {
-            qTopic.disabled = true;
-            qTopic.innerHTML = '<option value="">Tópico (opcional)</option>';
-          }
+          const discId = parseInt(qDiscipline.value);
+          const disc = state.disciplines.find(d => d.id === discId);
+          if (disc && disc.topics.length) { qTopic.disabled = false; qTopic.innerHTML = '<option value="">Tópico (opcional)</option>' + disc.topics.map(t => `<option value="${t.id}">${t.name}</option>`).join(''); }
+          else { qTopic.disabled = true; qTopic.innerHTML = '<option value="">Tópico (opcional)</option>'; }
         });
-        
         document.getElementById('registerCorrect').addEventListener('click', () => registrarQuestaoManual(true));
         document.getElementById('registerWrong').addEventListener('click', () => registrarQuestaoManual(false));
-        
         const processarBtn = document.getElementById('processarQuestoesBtn');
         const textoInput = document.getElementById('questoesInput');
-        
         processarBtn.addEventListener('click', () => {
           const rawText = textoInput.value.trim();
-          if (!rawText) {
-            alert('Cole o texto das questões no formato especificado.');
-            return;
-          }
-          
+          if (!rawText) { alert('Cole o texto das questões no formato especificado.'); return; }
           generatedQuestions = parseQuestions(rawText);
           currentQuestionPage = 1;
-          
-          if (generatedQuestions.length === 0) {
-            alert('Nenhuma questão válida encontrada. Verifique o formato.');
-          }
-          
+          if (generatedQuestions.length === 0) alert('Nenhuma questão válida encontrada. Verifique o formato.');
           refreshQuestionsDisplay();
         });
-        
         const modeloBtn = document.getElementById('modeloQuestaoBtn');
         const modalModelo = document.getElementById('modeloQuestaoModal');
         const copiarBtn = document.getElementById('copiarModeloBtn');
         const fecharBtn = document.getElementById('fecharModeloModal');
         const copyFeedback = document.getElementById('copyFeedback');
-        
-        modeloBtn.addEventListener('click', () => {
-          modalModelo.style.display = 'flex';
-        });
-        
-        copiarBtn.addEventListener('click', () => {
-          const textarea = document.getElementById('modeloPromptText');
-          navigator.clipboard.writeText(textarea.value).then(() => {
-            copyFeedback.textContent = '✓ Copiado com sucesso!';
-            setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
-          }).catch(() => {
-            alert('Não foi possível copiar. Tente manualmente.');
-          });
-        });
-        
-        fecharBtn.addEventListener('click', () => {
-          modalModelo.style.display = 'none';
-        });
-        
-        if (generatedQuestions.length > 0) {
-          attachQuestionEvents();
-        }
+        modeloBtn.addEventListener('click', () => modalModelo.style.display = 'flex');
+        copiarBtn.addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('modeloPromptText').value).then(() => { copyFeedback.textContent = '✓ Copiado com sucesso!'; setTimeout(() => copyFeedback.textContent = '', 2000); }).catch(() => alert('Não foi possível copiar.')); });
+        fecharBtn.addEventListener('click', () => modalModelo.style.display = 'none');
+        if (generatedQuestions.length) attachQuestionEvents();
+      }
+      function registrarQuestaoManual(isCorrect) {
+        const discId = parseInt(document.getElementById('qDiscipline').value);
+        if (isNaN(discId)) { alert('Selecione uma disciplina.'); return; }
+        const disc = state.disciplines.find(d => d.id === discId);
+        if (!disc) return;
+        const topicId = parseInt(document.getElementById('qTopic').value);
+        if (topicId) {
+          const topic = disc.topics.find(t => t.id === topicId);
+          if (topic) { topic.questions = (topic.questions || 0) + 1; if (isCorrect) topic.correct = (topic.correct || 0) + 1; else topic.wrong = (topic.wrong || 0) + 1; recordQuestionHistory(disc.id, topicId, isCorrect); }
+        } else { disc.questions = (disc.questions || 0) + 1; if (isCorrect) disc.correct = (disc.correct || 0) + 1; else disc.wrong = (disc.wrong || 0) + 1; recordQuestionHistory(disc.id, null, isCorrect); }
+        saveToStorage();
+        renderQuestoes();
+      }
+      function renderQuestionCardsWithPagination() {
+        const start = (currentQuestionPage - 1) * questionsPerPage;
+        const end = start + questionsPerPage;
+        const pageQuestions = generatedQuestions.slice(start, end);
+        let html = pageQuestions.map((q, idx) => renderSingleQuestionCard(q, start + idx)).join('');
+        const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
+        if (totalPages > 1) html += `<div class="pagination"><button ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i> Anterior</button><span>Página ${currentQuestionPage} de ${totalPages}</span><button ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">Próxima <i class="fas fa-chevron-right"></i></button></div>`;
+        return html;
       }
 
-      // ========== LEITURA INTELIGENTE ==========
-      let leituraState = {
-        pdfDoc: null,
-        disciplinaId: null,
-        nomeArquivo: '',
-        tempoSessao: 0,
-        timerInterval: null,
-        timerRunning: false,
-        currentPage: 1,
-        totalPages: 0,
-        inactivityTimer: null,
-        ultimaAtividade: Date.now(),
-        modoFoco: false,
-        destaquesTemp: [],
-        anotacoesTemp: []
-      };
-
+      // ========== LEITURA INTELIGENTE (simplificado) ==========
+      let leituraState = { pdfDoc: null, disciplinaId: null, nomeArquivo: '', tempoSessao: 0, timerInterval: null, timerRunning: false, currentPage: 1, totalPages: 0, inactivityTimer: null, ultimaAtividade: Date.now(), modoFoco: false, destaquesTemp: [], anotacoesTemp: [] };
       function renderLeitura() {
-        const html = `
-          <div class="page-title">📖 Leitura Inteligente</div>
-          <div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div>
-          
-          <div class="leitura-container" id="leituraContainer">
-            <div class="leitura-sidebar">
-              <div style="margin-bottom: 20px;">
-                <label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label>
-                <select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;">
-                  <option value="">Selecione a disciplina</option>
-                </select>
-              </div>
-              
-              <div style="margin-bottom: 20px;">
-                <button class="btn-primary" id="abrirPdfBtn" style="width:100%;">
-                  <i class="fas fa-folder-open"></i> Abrir PDF
-                </button>
-                <input type="file" id="pdfFileInput" accept=".pdf" style="display:none;">
-              </div>
-              
-              <div id="pdfInfo" style="display:none;">
-                <p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p>
-                <p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p>
-              </div>
-              
-              <div class="card" style="margin: 16px 0;">
-                <div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div>
-                <div class="card-value" id="leituraTimerDisplay">00:00:00</div>
-                <div style="display: flex; gap: 8px; margin-top: 12px;">
-                  <button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button>
-                  <button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button>
-                  <button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button>
-                </div>
-              </div>
-              
-              <div class="highlight-control">
-                <p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p>
-                <button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled>
-                  <i class="fas fa-paint-brush"></i> Destacar seleção
-                </button>
-                <button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled>
-                  <i class="fas fa-pencil-alt"></i> Anotar
-                </button>
-                <button class="btn-secondary" id="modoFocoBtn" style="width:100%;">
-                  <i class="fas fa-eye"></i> Modo Foco
-                </button>
-              </div>
-              
-              <div style="margin-top: auto;">
-                <div class="progresso-leitura">
-                  <div class="progress-header">
-                    <span>Progresso de leitura</span>
-                    <span id="progressoPercent">0%</span>
-                  </div>
-                  <div class="progress-bar">
-                    <div class="progress-fill" id="progressoBarra" style="width:0%;"></div>
-                  </div>
-                </div>
-                <button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled>
-                  <i class="fas fa-check-circle"></i> Concluir leitura
-                </button>
-              </div>
-            </div>
-            
-            <div class="leitura-viewer">
-              <div class="pdf-toolbar">
-                <button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button>
-                <span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span>
-                <button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button>
-                <div style="flex:1;"></div>
-              </div>
-              <div class="pdf-pages-container" id="pdfContainer">
-                <div class="empty-state">
-                  <i class="fas fa-file-pdf"></i>
-                  <h3>Nenhum PDF carregado</h3>
-                  <p>Selecione uma disciplina e abra um arquivo PDF para começar.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="margin-top: 24px;">
-            <h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3>
-            <div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div>
-          </div>
-        `;
-        
+        const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
         contentDiv.innerHTML = html;
-        preencherDisciplinas('leituraDisciplinaSelect', state.disciplines);
-        initLeituraEvents();
-      }
-
-      function initLeituraEvents() {
         const disciplinaSelect = document.getElementById('leituraDisciplinaSelect');
         const abrirBtn = document.getElementById('abrirPdfBtn');
         const fileInput = document.getElementById('pdfFileInput');
@@ -3135,279 +2697,182 @@ REGRAS IMPORTANTES:
         const anotacaoBtn = document.getElementById('adicionarAnotacaoBtn');
         const modoFocoBtn = document.getElementById('modoFocoBtn');
         const concluirBtn = document.getElementById('concluirLeituraBtn');
-        
-        function resetInactivityTimer() {
-          leituraState.ultimaAtividade = Date.now();
-          if (leituraState.inactivityTimer) clearTimeout(leituraState.inactivityTimer);
-          leituraState.inactivityTimer = setTimeout(() => {
-            if (leituraState.timerRunning) {
-              pausarTimerLeitura(true);
-              mostrarMensagemFlutuante('Leitura pausada por inatividade', '#F57C00');
-            }
-          }, 60000);
-        }
-        
-        ['mousemove', 'keydown', 'click', 'scroll'].forEach(ev => 
-          document.addEventListener(ev, resetInactivityTimer)
-        );
-        
-        document.addEventListener('visibilitychange', () => {
-          if (document.hidden && leituraState.timerRunning) {
-            pausarTimerLeitura(true);
-            mostrarMensagemFlutuante('Leitura pausada (aba inativa)', '#F57C00');
-          }
-        });
-        
-        function pausarTimerLeitura(automatico = false) {
-          if (leituraState.timerInterval) {
-            clearInterval(leituraState.timerInterval);
-            leituraState.timerInterval = null;
-          }
-          leituraState.timerRunning = false;
-          if (iniciarBtn) iniciarBtn.disabled = false;
-          if (pausarBtn) pausarBtn.disabled = true;
-        }
-        
-        function iniciarTimerLeitura() {
-          if (!leituraState.pdfDoc) {
-            alert('Carregue um PDF primeiro.');
-            return;
-          }
-          if (!leituraState.disciplinaId) {
-            alert('Selecione uma disciplina.');
-            return;
-          }
-          leituraState.timerRunning = true;
-          leituraState.timerInterval = setInterval(() => {
-            leituraState.tempoSessao++;
-            if (timerDisplay) timerDisplay.textContent = formatTime(leituraState.tempoSessao);
-          }, 1000);
-          iniciarBtn.disabled = true;
-          pausarBtn.disabled = false;
-          resetInactivityTimer();
-        }
-        
-        function finalizarLeitura() {
-          if (!leituraState.pdfDoc) return;
-          pausarTimerLeitura();
-          
-          const novaLeitura = {
-            id: Date.now(),
-            disciplinaId: leituraState.disciplinaId,
-            nomeArquivo: leituraState.nomeArquivo,
-            tempoTotal: leituraState.tempoSessao,
-            data: new Date().toISOString(),
-            progresso: calcularProgresso(),
-            concluido: false,
-            anotacoes: [...leituraState.anotacoesTemp],
-            destaques: [...leituraState.destaquesTemp]
-          };
-          
-          state.leituras.push(novaLeitura);
-          
-          const disc = state.disciplines.find(d => d.id === leituraState.disciplinaId);
-          if (disc) {
-            disc.timeSeconds = (disc.timeSeconds || 0) + leituraState.tempoSessao;
-          }
-          
-          saveToStorage();
-          mostrarMensagemFlutuante(`Leitura finalizada! ${formatHoursMinutes(leituraState.tempoSessao)} adicionados à disciplina.`, '#2E7D32');
-          
-          leituraState = {
-            pdfDoc: null,
-            disciplinaId: null,
-            nomeArquivo: '',
-            tempoSessao: 0,
-            timerInterval: null,
-            timerRunning: false,
-            currentPage: 1,
-            totalPages: 0,
-            inactivityTimer: null,
-            ultimaAtividade: Date.now(),
-            modoFoco: false,
-            destaquesTemp: [],
-            anotacoesTemp: []
-          };
-          renderLeitura();
-        }
-        
-        function calcularProgresso() {
-          const cont = document.getElementById('pdfContainer');
-          if (!cont) return 0;
-          const scrollTop = cont.scrollTop;
-          const scrollHeight = cont.scrollHeight - cont.clientHeight;
-          return scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-        }
-        
-        function atualizarProgresso() {
-          const progresso = calcularProgresso();
-          const percentEl = document.getElementById('progressoPercent');
-          const barraEl = document.getElementById('progressoBarra');
-          if (percentEl) percentEl.textContent = `${Math.round(progresso)}%`;
-          if (barraEl) barraEl.style.width = `${progresso}%`;
-        }
-        
-        abrirBtn.addEventListener('click', () => {
-          const discValue = disciplinaSelect.value;
-          if (!discValue) {
-            alert('Selecione uma disciplina primeiro.');
-            return;
-          }
-          let disc;
-          if (disciplinaSelect.options[disciplinaSelect.selectedIndex]?.dataset?.custom === 'true') {
-            disc = state.disciplines.find(d => d.id === parseInt(discValue));
-          } else {
-            disc = state.disciplines.find(d => d.name === discValue);
-            if (!disc) {
-              disc = { id: nextId++, name: discValue, timeSeconds: 0, questions: 0, correct: 0, wrong: 0, topics: [], expanded: false };
-              state.disciplines.push(disc);
-            }
-          }
-          leituraState.disciplinaId = disc.id;
-          fileInput.click();
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (file && file.type === 'application/pdf') {
-            leituraState.nomeArquivo = file.name;
-            document.getElementById('pdfNome').textContent = file.name;
-            document.getElementById('pdfInfo').style.display = 'block';
-            
-            const fileReader = new FileReader();
-            fileReader.onload = function() {
-              const typedarray = new Uint8Array(this.result);
-              pdfjsLib.getDocument(typedarray).promise.then(pdf => {
-                leituraState.pdfDoc = pdf;
-                leituraState.totalPages = pdf.numPages;
-                document.getElementById('totalPaginas').textContent = pdf.numPages;
-                document.getElementById('pdfPaginas').textContent = pdf.numPages;
-                
-                document.getElementById('pdfAnterior').disabled = false;
-                document.getElementById('pdfProxima').disabled = false;
-                document.getElementById('adicionarDestaqueBtn').disabled = false;
-                document.getElementById('adicionarAnotacaoBtn').disabled = false;
-                document.getElementById('concluirLeituraBtn').disabled = false;
-                document.getElementById('leituraIniciarBtn').disabled = false;
-                document.getElementById('leituraPausarBtn').disabled = false;
-                document.getElementById('leituraFinalizarBtn').disabled = false;
-                
-                renderPagina(1);
-                iniciarTimerLeitura();
-              }).catch(err => {
-                alert('Erro ao carregar PDF: ' + err.message);
-              });
-            };
-            fileReader.readAsArrayBuffer(file);
-          } else {
-            alert('Por favor, selecione um arquivo PDF.');
-          }
-        });
-        
-        async function renderPagina(num) {
-          if (!leituraState.pdfDoc) return;
-          const container = document.getElementById('pdfContainer');
-          container.innerHTML = '';
-          leituraState.currentPage = num;
-          document.getElementById('paginaAtual').textContent = num;
-          
-          try {
-            const page = await leituraState.pdfDoc.getPage(num);
-            const viewport = page.getViewport({ scale: 1.5 });
-            const canvas = document.createElement('canvas');
-            canvas.className = 'pdf-page';
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-            await page.render({ canvasContext: context, viewport }).promise;
-            container.appendChild(canvas);
-          } catch (err) {
-            console.error(err);
-          }
-        }
-        
-        anteriorBtn.addEventListener('click', () => {
-          if (leituraState.currentPage > 1) renderPagina(leituraState.currentPage - 1);
-        });
-        proximaBtn.addEventListener('click', () => {
-          if (leituraState.currentPage < leituraState.totalPages) renderPagina(leituraState.currentPage + 1);
-        });
-        
-        const pdfContainerEl = document.getElementById('pdfContainer');
-        pdfContainerEl.addEventListener('scroll', atualizarProgresso);
-        
-        iniciarBtn.addEventListener('click', iniciarTimerLeitura);
-        pausarBtn.addEventListener('click', () => pausarTimerLeitura());
-        finalizarBtn.addEventListener('click', finalizarLeitura);
-        
-        destaqueBtn.addEventListener('click', () => {
-          leituraState.destaquesTemp.push({ texto: `Destaque na pág. ${leituraState.currentPage}`, pagina: leituraState.currentPage, cor: '#FFEB3B' });
-          mostrarMensagemFlutuante('Destaque adicionado!');
-        });
-        
-        anotacaoBtn.addEventListener('click', () => {
-          document.getElementById('anotacaoPagina').value = leituraState.currentPage;
-          document.getElementById('anotacaoPaginaLabel').textContent = leituraState.currentPage;
-          document.getElementById('anotacaoModal').style.display = 'flex';
-        });
-        
-        document.getElementById('saveAnotacao').addEventListener('click', () => {
-          const texto = document.getElementById('anotacaoTexto').value.trim();
-          const pagina = parseInt(document.getElementById('anotacaoPagina').value);
-          if (texto) {
-            leituraState.anotacoesTemp.push({ texto, pagina, timestamp: new Date().toISOString() });
-            atualizarListaAnotacoes();
-            document.getElementById('anotacaoModal').style.display = 'none';
-            document.getElementById('anotacaoTexto').value = '';
-          }
-        });
-        
-        document.getElementById('cancelAnotacao').addEventListener('click', () => {
-          document.getElementById('anotacaoModal').style.display = 'none';
-        });
-        
-        function atualizarListaAnotacoes() {
-          const containerLista = document.getElementById('anotacoesList');
-          if (leituraState.anotacoesTemp.length === 0) {
-            containerLista.innerHTML = '<p style="color:#9E9E9E;">Nenhuma anotação ainda.</p>';
-          } else {
-            containerLista.innerHTML = leituraState.anotacoesTemp.map(a => 
-              `<div class="anotacao-item"><strong>Pág. ${a.pagina}:</strong> ${a.texto}</div>`
-            ).join('');
-          }
-        }
-        
-        modoFocoBtn.addEventListener('click', () => {
-          leituraState.modoFoco = !leituraState.modoFoco;
-          document.querySelector('.app-container').classList.toggle('modo-foco');
-          modoFocoBtn.innerHTML = leituraState.modoFoco ? 
-            '<i class="fas fa-compress"></i> Sair do Modo Foco' : 
-            '<i class="fas fa-eye"></i> Modo Foco';
-        });
-        
-        concluirBtn.addEventListener('click', () => {
-          if (confirm('Marcar leitura como concluída e salvar progresso?')) {
-            if (state.leituras.length > 0) {
-              const ultima = state.leituras[state.leituras.length - 1];
-              if (ultima.nomeArquivo === leituraState.nomeArquivo) {
-                ultima.concluido = true;
-                ultima.progresso = calcularProgresso();
-              }
-            }
-            finalizarLeitura();
-            mostrarMensagemFlutuante('Leitura concluída! Deseja gerar questões sobre este conteúdo? (Em breve)', '#E65100');
-          }
-        });
-        
+        function resetInactivityTimer() { leituraState.ultimaAtividade = Date.now(); if (leituraState.inactivityTimer) clearTimeout(leituraState.inactivityTimer); leituraState.inactivityTimer = setTimeout(() => { if (leituraState.timerRunning) { pausarTimerLeitura(true); mostrarMensagemFlutuante('Leitura pausada por inatividade', '#F57C00'); } }, 60000); }
+        ['mousemove', 'keydown', 'click', 'scroll'].forEach(ev => document.addEventListener(ev, resetInactivityTimer));
+        document.addEventListener('visibilitychange', () => { if (document.hidden && leituraState.timerRunning) { pausarTimerLeitura(true); mostrarMensagemFlutuante('Leitura pausada (aba inativa)', '#F57C00'); } });
+        function pausarTimerLeitura(automatico = false) { if (leituraState.timerInterval) { clearInterval(leituraState.timerInterval); leituraState.timerInterval = null; } leituraState.timerRunning = false; if (iniciarBtn) iniciarBtn.disabled = false; if (pausarBtn) pausarBtn.disabled = true; }
+        function iniciarTimerLeitura() { if (!leituraState.pdfDoc) { alert('Carregue um PDF primeiro.'); return; } if (!leituraState.disciplinaId) { alert('Selecione uma disciplina.'); return; } leituraState.timerRunning = true; leituraState.timerInterval = setInterval(() => { leituraState.tempoSessao++; if (timerDisplay) timerDisplay.textContent = formatTime(leituraState.tempoSessao); }, 1000); iniciarBtn.disabled = true; pausarBtn.disabled = false; resetInactivityTimer(); }
+        function finalizarLeitura() { if (!leituraState.pdfDoc) return; pausarTimerLeitura(); const novaLeitura = { id: Date.now(), disciplinaId: leituraState.disciplinaId, nomeArquivo: leituraState.nomeArquivo, tempoTotal: leituraState.tempoSessao, data: new Date().toISOString(), progresso: calcularProgresso(), concluido: false, anotacoes: [...leituraState.anotacoesTemp], destaques: [...leituraState.destaquesTemp] }; state.leituras.push(novaLeitura); const disc = state.disciplines.find(d => d.id === leituraState.disciplinaId); if (disc) disc.timeSeconds = (disc.timeSeconds || 0) + leituraState.tempoSessao; saveToStorage(); mostrarMensagemFlutuante(`Leitura finalizada! ${formatHoursMinutes(leituraState.tempoSessao)} adicionados à disciplina.`, '#2E7D32'); leituraState = { pdfDoc: null, disciplinaId: null, nomeArquivo: '', tempoSessao: 0, timerInterval: null, timerRunning: false, currentPage: 1, totalPages: 0, inactivityTimer: null, ultimaAtividade: Date.now(), modoFoco: false, destaquesTemp: [], anotacoesTemp: [] }; renderLeitura(); }
+        function calcularProgresso() { const cont = document.getElementById('pdfContainer'); if (!cont) return 0; const scrollTop = cont.scrollTop; const scrollHeight = cont.scrollHeight - cont.clientHeight; return scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0; }
+        function atualizarProgresso() { const progresso = calcularProgresso(); const percentEl = document.getElementById('progressoPercent'); const barraEl = document.getElementById('progressoBarra'); if (percentEl) percentEl.textContent = `${Math.round(progresso)}%`; if (barraEl) barraEl.style.width = `${progresso}%`; }
+        abrirBtn.addEventListener('click', () => { const discId = parseInt(disciplinaSelect.value); if (isNaN(discId)) { alert('Selecione uma disciplina primeiro.'); return; } leituraState.disciplinaId = discId; fileInput.click(); });
+        fileInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file && file.type === 'application/pdf') { leituraState.nomeArquivo = file.name; document.getElementById('pdfNome').textContent = file.name; document.getElementById('pdfInfo').style.display = 'block'; const fileReader = new FileReader(); fileReader.onload = function() { const typedarray = new Uint8Array(this.result); pdfjsLib.getDocument(typedarray).promise.then(pdf => { leituraState.pdfDoc = pdf; leituraState.totalPages = pdf.numPages; document.getElementById('totalPaginas').textContent = pdf.numPages; document.getElementById('pdfPaginas').textContent = pdf.numPages; document.getElementById('pdfAnterior').disabled = false; document.getElementById('pdfProxima').disabled = false; document.getElementById('adicionarDestaqueBtn').disabled = false; document.getElementById('adicionarAnotacaoBtn').disabled = false; document.getElementById('concluirLeituraBtn').disabled = false; document.getElementById('leituraIniciarBtn').disabled = false; document.getElementById('leituraPausarBtn').disabled = false; document.getElementById('leituraFinalizarBtn').disabled = false; renderPagina(1); iniciarTimerLeitura(); }).catch(err => alert('Erro ao carregar PDF: ' + err.message)); }; fileReader.readAsArrayBuffer(file); } else alert('Por favor, selecione um arquivo PDF.'); });
+        async function renderPagina(num) { if (!leituraState.pdfDoc) return; const container = document.getElementById('pdfContainer'); container.innerHTML = ''; leituraState.currentPage = num; document.getElementById('paginaAtual').textContent = num; try { const page = await leituraState.pdfDoc.getPage(num); const viewport = page.getViewport({ scale: 1.5 }); const canvas = document.createElement('canvas'); canvas.className = 'pdf-page'; const context = canvas.getContext('2d'); canvas.height = viewport.height; canvas.width = viewport.width; await page.render({ canvasContext: context, viewport }).promise; container.appendChild(canvas); } catch (err) { console.error(err); } }
+        anteriorBtn.addEventListener('click', () => { if (leituraState.currentPage > 1) renderPagina(leituraState.currentPage - 1); });
+        proximaBtn.addEventListener('click', () => { if (leituraState.currentPage < leituraState.totalPages) renderPagina(leituraState.currentPage + 1); });
+        const pdfContainerEl = document.getElementById('pdfContainer'); pdfContainerEl.addEventListener('scroll', atualizarProgresso);
+        iniciarBtn.addEventListener('click', iniciarTimerLeitura); pausarBtn.addEventListener('click', () => pausarTimerLeitura()); finalizarBtn.addEventListener('click', finalizarLeitura);
+        destaqueBtn.addEventListener('click', () => { leituraState.destaquesTemp.push({ texto: `Destaque na pág. ${leituraState.currentPage}`, pagina: leituraState.currentPage, cor: '#FFEB3B' }); mostrarMensagemFlutuante('Destaque adicionado!'); });
+        anotacaoBtn.addEventListener('click', () => { document.getElementById('anotacaoPagina').value = leituraState.currentPage; document.getElementById('anotacaoPaginaLabel').textContent = leituraState.currentPage; document.getElementById('anotacaoModal').style.display = 'flex'; });
+        document.getElementById('saveAnotacao').addEventListener('click', () => { const texto = document.getElementById('anotacaoTexto').value.trim(); const pagina = parseInt(document.getElementById('anotacaoPagina').value); if (texto) { leituraState.anotacoesTemp.push({ texto, pagina, timestamp: new Date().toISOString() }); atualizarListaAnotacoes(); document.getElementById('anotacaoModal').style.display = 'none'; document.getElementById('anotacaoTexto').value = ''; } });
+        document.getElementById('cancelAnotacao').addEventListener('click', () => { document.getElementById('anotacaoModal').style.display = 'none'; });
+        function atualizarListaAnotacoes() { const containerLista = document.getElementById('anotacoesList'); if (leituraState.anotacoesTemp.length === 0) containerLista.innerHTML = '<p style="color:#9E9E9E;">Nenhuma anotação ainda.</p>'; else containerLista.innerHTML = leituraState.anotacoesTemp.map(a => `<div class="anotacao-item"><strong>Pág. ${a.pagina}:</strong> ${a.texto}</div>`).join(''); }
+        modoFocoBtn.addEventListener('click', () => { leituraState.modoFoco = !leituraState.modoFoco; document.querySelector('.app-container').classList.toggle('modo-foco'); modoFocoBtn.innerHTML = leituraState.modoFoco ? '<i class="fas fa-compress"></i> Sair do Modo Foco' : '<i class="fas fa-eye"></i> Modo Foco'; });
+        concluirBtn.addEventListener('click', () => { if (confirm('Marcar leitura como concluída e salvar progresso?')) { if (state.leituras.length) { const ultima = state.leituras[state.leituras.length - 1]; if (ultima.nomeArquivo === leituraState.nomeArquivo) { ultima.concluido = true; ultima.progresso = calcularProgresso(); } } finalizarLeitura(); mostrarMensagemFlutuante('Leitura concluída! Deseja gerar questões sobre este conteúdo? (Em breve)', '#E65100'); } });
         atualizarListaAnotacoes();
       }
 
-      // ========== DEMAIS PÁGINAS ==========
+      // ========== PÁGINAS RESIDUAIS ==========
       function renderDesempenho() { contentDiv.innerHTML = `<div class="page-title">Desempenho</div><div class="greeting">Em construção</div>`; }
       function renderManualIA() { contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`; }
-      function renderMentoria() { contentDiv.innerHTML = `<div class="page-title">Mentoria</div><div class="greeting">Em construção</div>`; }
       function renderPerfil() { contentDiv.innerHTML = `<div class="page-title">Perfil</div><div class="greeting">Em construção</div>`; }
 
+      // ========== MENTORIA (NOVA FUNCIONALIDADE) ==========
+      let mentoriaEstado = { area: null, subarea: null }; // estado interno da navegação
+
+      function renderMentoria() {
+        // Se não houver área selecionada, mostra áreas; se houver área mas não subárea, mostra subáreas; senão mostra mentores
+        if (!mentoriaEstado.area) {
+          renderAreasMentoria();
+        } else if (mentoriaEstado.area && !mentoriaEstado.subarea) {
+          renderSubareasMentoria(mentoriaEstado.area);
+        } else {
+          renderMentoresList(mentoriaEstado.area, mentoriaEstado.subarea);
+        }
+      }
+
+      function renderAreasMentoria() {
+        const areasHtml = areasConcurso.map(area => `
+          <div class="card" style="cursor: pointer; transition: all 0.2s;" data-area="${area.nome}">
+            <div class="card-header"><i class="fas fa-briefcase"></i> ${area.nome}</div>
+            <p style="color: #5A5A5A; margin-bottom: 8px;">${area.descricao}</p>
+            <span class="badge">${area.subareas.length} subáreas</span>
+          </div>
+        `).join('');
+        const html = `
+          <div class="mentoria-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div>
+                <div class="page-title">🧠 Mentoria</div>
+                <div class="greeting">Encontre mentores especializados na sua área de concurso</div>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+              ${areasHtml}
+            </div>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        // Adicionar eventos de clique nos cards
+        document.querySelectorAll('[data-area]').forEach(card => {
+          card.addEventListener('click', (e) => {
+            const areaNome = card.dataset.area;
+            mentoriaEstado.area = areaNome;
+            mentoriaEstado.subarea = null;
+            renderSubareasMentoria(areaNome);
+          });
+        });
+      }
+
+      function renderSubareasMentoria(areaNome) {
+        const area = areasConcurso.find(a => a.nome === areaNome);
+        if (!area) {
+          mentoriaEstado.area = null;
+          renderAreasMentoria();
+          return;
+        }
+        const subareasHtml = area.subareas.map(sub => `
+          <div class="card" style="cursor: pointer; transition: all 0.2s;" data-subarea="${sub}">
+            <div class="card-header"><i class="fas fa-layer-group"></i> ${sub}</div>
+            <p style="color: #5A5A5A;">Mentores especializados nesta subárea</p>
+          </div>
+        `).join('');
+        const html = `
+          <div class="mentoria-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div>
+                <div class="page-title">🧠 Mentoria · ${areaNome}</div>
+                <div class="greeting">Escolha a subárea para ver os mentores disponíveis</div>
+              </div>
+              <button class="btn-secondary" id="backToAreasMentoria"><i class="fas fa-arrow-left"></i> Voltar para áreas</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+              ${subareasHtml}
+            </div>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('backToAreasMentoria').addEventListener('click', () => {
+          mentoriaEstado.area = null;
+          mentoriaEstado.subarea = null;
+          renderAreasMentoria();
+        });
+        document.querySelectorAll('[data-subarea]').forEach(card => {
+          card.addEventListener('click', (e) => {
+            const subarea = card.dataset.subarea;
+            mentoriaEstado.subarea = subarea;
+            renderMentoresList(areaNome, subarea);
+          });
+        });
+      }
+
+      function filtrarMentores(area, subarea) {
+        return state.mentors.filter(m => m.area === area && m.subarea === subarea);
+      }
+
+      function renderMentoresList(area, subarea) {
+        const mentoresFiltrados = filtrarMentores(area, subarea);
+        let mentoresHtml = '';
+        if (mentoresFiltrados.length === 0) {
+          mentoresHtml = `<div class="empty-state"><i class="fas fa-user-friends"></i><h3>Nenhum mentor encontrado</h3><p>Não há mentores cadastrados para esta combinação ainda. Tente outra subárea ou área.</p></div>`;
+        } else {
+          mentoresHtml = mentoresFiltrados.map(mentor => `
+            <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-family: Poppins; font-size: 1.4rem;">${mentor.nome}</h3>
+                <span class="badge" style="background: #FFD54F; color: #212121;"><i class="fas fa-star"></i> ${mentor.avaliacao}</span>
+              </div>
+              <p><i class="fas fa-briefcase"></i> <strong>Experiência:</strong> ${mentor.experiencia}</p>
+              <p><i class="fas fa-info-circle"></i> ${mentor.descricao}</p>
+              <div style="display: flex; gap: 12px; margin-top: 8px;">
+                <button class="btn-primary solicitar-mentoria" data-mentor-id="${mentor.id}"><i class="fas fa-handshake"></i> Solicitar mentoria</button>
+              </div>
+            </div>
+          `).join('');
+        }
+        const html = `
+          <div class="mentoria-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div>
+                <div class="page-title">🧠 Mentoria · ${area} / ${subarea}</div>
+                <div class="greeting">Conheça os mentores especializados</div>
+              </div>
+              <button class="btn-secondary" id="backToSubareasMentoria"><i class="fas fa-arrow-left"></i> Voltar para subáreas</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
+              ${mentoresHtml}
+            </div>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        document.getElementById('backToSubareasMentoria').addEventListener('click', () => {
+          mentoriaEstado.subarea = null;
+          renderSubareasMentoria(area);
+        });
+        document.querySelectorAll('.solicitar-mentoria').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const mentorId = parseInt(btn.dataset.mentorId);
+            const mentor = state.mentors.find(m => m.id === mentorId);
+            if (mentor) {
+              mostrarMensagemFlutuante(`✅ Solicitação enviada para ${mentor.nome}! Entraremos em contato em breve.`, '#2E7D32');
+            } else {
+              mostrarMensagemFlutuante('Erro ao enviar solicitação. Tente novamente.', '#C62828');
+            }
+          });
+        });
+      }
+
+      // ========== MODAIS E AUXILIARES ==========
       function setupModals() {
         const modalDisc = document.getElementById('disciplineModal');
         document.getElementById('cancelModal').addEventListener('click', ()=> modalDisc.style.display='none');
@@ -3436,7 +2901,7 @@ REGRAS IMPORTANTES:
             state.legislations.push({ id: nextId++, nome, leituraCompleta: false, resumoLido: false, revisado: false, questoes: { feitas: 0, meta: 50 } });
           }
           saveToStorage();
-          if (currentPage === 'legislacao') renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all');
+          if (currentPage === 'legislacao') renderLegislacao();
           modalLeg.style.display = 'none';
         });
         const helpModal = document.getElementById('dashboardHelpModal');
@@ -3448,12 +2913,11 @@ REGRAS IMPORTANTES:
           if(e.target === helpModal) helpModal.style.display='none';
         });
       }
-
       function openDisciplineModal() {
         const datalist = document.getElementById('disciplinesDatalist');
         datalist.innerHTML = '';
-        Object.values(DISCIPLINAS_PADRAO).flat().forEach(nome => { const opt = document.createElement('option'); opt.value = nome; datalist.appendChild(opt); });
-        state.disciplines.forEach(d => { if(!Object.values(DISCIPLINAS_PADRAO).flat().includes(d.name)) { const opt = document.createElement('option'); opt.value = d.name; datalist.appendChild(opt); } });
+        const allDisciplineNames = state.disciplines.map(d => d.name);
+        allDisciplineNames.forEach(nome => { const opt = document.createElement('option'); opt.value = nome; datalist.appendChild(opt); });
         document.getElementById('disciplineModal').style.display = 'flex';
       }
       function openTopicModal(discId) { document.getElementById('currentDisciplineId').value = discId; document.getElementById('topicNameInput').value = ''; document.getElementById('topicModal').style.display = 'flex'; }
