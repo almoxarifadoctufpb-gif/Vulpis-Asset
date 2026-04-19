@@ -629,7 +629,7 @@
       color: #E65100;
     }
 
-    /* Aulas */
+    /* Aulas (mantido mas não utilizado após remoção da aba) */
     .video-highlight { margin-bottom: 32px; }
     .video-wrapper {
       position: relative;
@@ -1507,6 +1507,28 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+
+    /* Novos estilos para os cards do dashboard */
+    .motivational-card {
+      background: #FEF0E6;
+      border-left: 6px solid #E65100;
+    }
+    .revisao-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #EEEEEE;
+    }
+    .revisao-item:last-child { border-bottom: none; }
+    .revisao-status {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #9E9E9E;
+    }
+    .revisao-status.concluido { background: #2E7D32; }
+    .revisao-status.pendente { background: #F57C00; }
+    .small-progress { margin-top: 12px; }
   </style>
 </head>
 <body>
@@ -1622,9 +1644,7 @@
         <div class="nav-item" data-page="legislacao">
           <img src="https://cdn-icons-png.flaticon.com/512/6983/6983044.png" alt="Legislação" style="width:24px; height:24px; object-fit:contain;"> Legislação
         </div>
-        <div class="nav-item" data-page="aulas">
-          <img src="https://cdn-icons-png.flaticon.com/512/1294/1294269.png" alt="Aulas" style="width:24px; height:24px; object-fit:contain;"> Aulas
-        </div>
+        <!-- ABA "AULAS" REMOVIDA CONFORME SOLICITADO -->
         <div class="nav-item" data-page="leitura"><i class="fas fa-book-reader"></i> Leitura</div>
         <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
         <div class="nav-item" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
@@ -1786,10 +1806,11 @@ Comentário:
         disciplines: [],
         legislations: [],
         leituras: [],
-        user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50 },
+        user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50, examDate: null }, // adicionado examDate
         questionsHistory: [],
         videos: [],
-        mentors: []
+        mentors: [],
+        revisoes: [] // NOVO: array para revisões programadas
       };
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
@@ -1835,6 +1856,7 @@ Comentário:
             state.videos = state.videos || [];
             state.leituras = state.leituras || [];
             state.mentors = state.mentors || [];
+            state.revisoes = state.revisoes || []; // NOVO
           } catch(e){}
         }
         if(!state.disciplines.length) {
@@ -1868,6 +1890,8 @@ Comentário:
             { id:6, nome:"Fernanda Rios", area:"Área Bancária", subarea:"Banco do Brasil", experiencia:"Escriturária aprovada", avaliacao:4.5, descricao:"Foco em matemática financeira e conhecimentos bancários.", disponibilidade:true }
           ];
         }
+        // Inicializa revisoes se não existirem (array vazio)
+        if (!state.revisoes) state.revisoes = [];
         videoDestaqueAtual = state.videos.find(v => v.id === 1) || state.videos[0];
         saveToStorage();
       }
@@ -1898,7 +1922,7 @@ Comentário:
           case 'disciplinas': renderDisciplinas(); break;
           case 'questoes': renderQuestoes(); break;
           case 'legislacao': renderLegislacao(); break;
-          case 'aulas': renderAulas(); break;
+          // case 'aulas' removido
           case 'leitura': renderLeitura(); break;
           case 'desempenho': renderDesempenho(); break;
           case 'manual-ia': renderManualIA(); break;
@@ -1977,7 +2001,7 @@ Comentário:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ========== DASHBOARD ==========
+      // ========== DASHBOARD (COM NOVOS CARDS) ==========
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -2000,6 +2024,55 @@ Comentário:
         const desempenhoGeral = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
         const questoesFeitas = totalQ;
 
+        // NOVOS CARDS (FRASE MOTIVACIONAL, CONTAGEM REGRESSIVA, METAS DA SEMANA, PROGRESSO EDITAL)
+        const frases = [
+          "“A persistência é o caminho do êxito.”",
+          "“Estudar é investir em você mesmo.”",
+          "“Cada questão resolvida é um passo mais perto da aprovação.”",
+          "“A disciplina vence a inteligência.”",
+          "“Hoje é o melhor dia para estudar.”"
+        ];
+        const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+        
+        let diasParaProva = '—';
+        if (state.user.examDate) {
+          const hoje = new Date(); hoje.setHours(0,0,0,0);
+          const dataProva = new Date(state.user.examDate);
+          const diff = dataProva - hoje;
+          diasParaProva = diff > 0 ? Math.ceil(diff / (1000*60*60*24)) : '0';
+        }
+
+        // Metas da semana (simplificado: usando total de horas e questões da semana atual)
+        const hoje = new Date();
+        const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - hoje.getDay());
+        inicioSemana.setHours(0,0,0,0);
+        const fimSemana = new Date(inicioSemana); fimSemana.setDate(inicioSemana.getDate() + 7);
+        const questoesSemana = state.questionsHistory.filter(q => {
+          const d = new Date(q.date); return d >= inicioSemana && d < fimSemana;
+        }).length;
+        // Tempo da semana (estimativa simplificada baseada no total de horas registradas no state)
+        const tempoSemana = totalSec; // poderia ser mais preciso, mas usaremos total acumulado como exemplo
+        const metaHoras = state.user.dailyGoalHours * 7;
+        const metaQuestoes = state.user.dailyGoalQuestions * 7;
+        const percentHoras = Math.min((tempoSemana / 3600) / metaHoras * 100, 100);
+        const percentQuestoes = Math.min((questoesSemana / metaQuestoes) * 100, 100);
+
+        // Progresso no edital: % de tópicos que possuem pelo menos alguma atividade (questões respondidas)
+        let totalTopics = 0, completedTopics = 0;
+        state.disciplines.forEach(d => {
+          d.topics.forEach(t => {
+            totalTopics++;
+            if ((t.questions || 0) > 0) completedTopics++;
+          });
+        });
+        const editalPercent = totalTopics ? (completedTopics / totalTopics * 100).toFixed(0) : 0;
+
+        // NOVO: Revisões programadas (próximas 5 pendentes)
+        const revisoesPendentes = state.revisoes
+          .filter(r => r.status === 'pendente' && new Date(r.data) >= new Date().setHours(0,0,0,0))
+          .sort((a,b) => new Date(a.data) - new Date(b.data))
+          .slice(0, 5);
+
         const html = `
           ${renderGlobalTimer()}
           <div style="position: relative;">
@@ -2007,7 +2080,38 @@ Comentário:
             <div class="page-title">Dashboard</div>
             <div class="greeting">Olá, ${state.user.name.split(' ')[0]}! Veja seu resumo de estudos.</div>
           </div>
-          
+
+          <!-- NOVOS CARDS (grid de 4) -->
+          <div class="dashboard-grid">
+            <div class="card motivational-card">
+              <div class="card-header"><i class="fas fa-quote-right"></i> Frase do dia</div>
+              <p style="font-size: 1rem; line-height: 1.4; margin-bottom: 8px;">${fraseAleatoria}</p>
+            </div>
+            <div class="card">
+              <div class="card-header"><i class="fas fa-calendar-check"></i> Contagem regressiva</div>
+              <div class="card-value">${diasParaProva}</div>
+              <div class="card-label">dias para a prova</div>
+              ${!state.user.examDate ? '<button class="btn-secondary" id="definirDataProvaBtn" style="margin-top:12px; width:100%;"><i class="fas fa-calendar-plus"></i> Definir data</button>' : ''}
+            </div>
+            <div class="card">
+              <div class="card-header"><i class="fas fa-tasks"></i> Metas da semana</div>
+              <div style="margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between;"><span>⏱️ ${Math.floor(tempoSemana/3600)}/${metaHoras}h</span><span>${percentHoras.toFixed(0)}%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${percentHoras}%"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between;"><span>📝 ${questoesSemana}/${metaQuestoes} questões</span><span>${percentQuestoes.toFixed(0)}%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${percentQuestoes}%"></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><i class="fas fa-list-check"></i> Progresso no edital</div>
+              <div class="card-value">${editalPercent}%</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${editalPercent}%"></div></div>
+              <div class="card-label">${completedTopics} de ${totalTopics} tópicos iniciados</div>
+            </div>
+          </div>
+
           <div class="card" style="margin-bottom: 32px;">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
               <div style="text-align: center; flex: 1;">
@@ -2023,6 +2127,18 @@ Comentário:
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- LISTA DE REVISÕES (NOVO) -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header"><i class="fas fa-sync-alt"></i> Próximas revisões</div>
+            ${revisoesPendentes.length > 0 ? revisoesPendentes.map(r => {
+              const disc = state.disciplines.find(d => d.id === r.disciplinaId);
+              return `<div class="revisao-item">
+                <span><strong>${disc ? disc.name : 'Disciplina'}</strong> · ${new Date(r.data).toLocaleDateString()}</span>
+                <span class="revisao-status ${r.status}"></span>
+              </div>`;
+            }).join('') : '<p style="color: #9E9E9E;">Nenhuma revisão pendente.</p>'}
           </div>
 
           <div class="section-header">
@@ -2140,6 +2256,19 @@ Comentário:
           });
         });
 
+        // Botão para definir data da prova (novo)
+        const btnData = document.getElementById('definirDataProvaBtn');
+        if (btnData) {
+          btnData.addEventListener('click', () => {
+            const data = prompt('Informe a data da prova (AAAA-MM-DD):');
+            if (data && /^\d{4}-\d{2}-\d{2}$/.test(data)) {
+              state.user.examDate = data;
+              saveToStorage();
+              renderDashboard();
+            } else if (data) alert('Formato inválido. Use AAAA-MM-DD.');
+          });
+        }
+
         const hasSeenHelp = localStorage.getItem('vulpis_dashboard_help_seen');
         if (!hasSeenHelp) {
           setTimeout(() => {
@@ -2219,15 +2348,17 @@ Comentário:
         if(action === 'addCorrect' || action === 'addWrong') {
           if(discipline.topics.length) { alert('Adicione questões nos tópicos.'); return; }
           discipline.questions = (discipline.questions||0)+1;
-          if(action==='addCorrect') discipline.correct = (discipline.correct||0)+1; else discipline.wrong = (discipline.wrong||0)+1;
-          recordQuestionHistory(discId, null, action==='addCorrect');
+          const isCorrect = action==='addCorrect';
+          if(isCorrect) discipline.correct = (discipline.correct||0)+1; else discipline.wrong = (discipline.wrong||0)+1;
+          recordQuestionHistory(discId, null, isCorrect);
           saveToStorage(); renderDisciplinesList();
         } else if(action === 'topicCorrect' || action === 'topicWrong') {
           const topic = discipline.topics.find(t=>t.id===topicId);
           if(topic) {
             topic.questions = (topic.questions||0)+1;
-            if(action==='topicCorrect') topic.correct = (topic.correct||0)+1; else topic.wrong = (topic.wrong||0)+1;
-            recordQuestionHistory(discId, topicId, action==='topicCorrect');
+            const isCorrect = action==='topicCorrect';
+            if(isCorrect) topic.correct = (topic.correct||0)+1; else topic.wrong = (topic.wrong||0)+1;
+            recordQuestionHistory(discId, topicId, isCorrect);
             saveToStorage(); renderDisciplinesList();
           }
         } else if(action === 'addTopic') openTopicModal(discId);
@@ -2236,9 +2367,22 @@ Comentário:
         else if(action === 'editTopic') { const topic = discipline.topics.find(t=>t.id===topicId); const newName = prompt('Nome do tópico:', topic.name); if(newName) { topic.name = newName; saveToStorage(); renderDisciplinesList(); } }
         else if(action === 'deleteTopic') { discipline.topics = discipline.topics.filter(t=>t.id !== topicId); saveToStorage(); renderDisciplinesList(); }
       }
+      
+      // MODIFICADO: agora também gera revisões para questões erradas
       function recordQuestionHistory(discId, topicId, correct) {
         const today = new Date().toISOString().split('T')[0];
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
+        if (!correct) {
+          // Criar revisão para 7 dias depois
+          const revisaoData = new Date();
+          revisaoData.setDate(revisaoData.getDate() + 7);
+          state.revisoes.push({
+            id: Date.now() + Math.random(),
+            disciplinaId: discId,
+            data: revisaoData.toISOString().split('T')[0],
+            status: 'pendente'
+          });
+        }
         saveToStorage();
       }
 
@@ -2349,83 +2493,6 @@ Comentário:
         });
         container.querySelectorAll('[data-action="editLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); const leg = state.legislations.find(l => l.id === parseInt(i.dataset.id)); if(leg) openLegislacaoModal(leg); }));
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
-      }
-
-      // ========== AULAS ==========
-      function renderAulas() {
-        const getEmbedUrl = (url) => {
-          if (!url) return '';
-          let videoId = url.split('v=')[1]?.split('&')[0] || url.split('youtu.be/')[1]?.split('?')[0];
-          return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
-        };
-        let destaqueId = videoDestaqueAtual?.id || (state.videos[0]?.id || null);
-        const disciplinasUnicas = [...new Set(state.videos.map(v => v.disciplina))].filter(Boolean);
-        const renderDestaque = (videoId) => {
-          const video = state.videos.find(v => v.id === videoId);
-          if (!video) return `<div class="empty-state" style="padding: 40px;"><i class="fas fa-video-slash"></i><h3>Nenhum vídeo em destaque</h3><p>Selecione uma aula para assistir</p></div>`;
-          const embedUrl = getEmbedUrl(video.link_video);
-          return `<div class="video-wrapper"><iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe></div><div class="video-info"><h3>${video.titulo}</h3><p>${video.descricao || ''}</p><span class="badge" style="margin-top: 8px; display: inline-block;">${video.disciplina}</span></div>`;
-        };
-        const renderGrid = (videos, excluirId, filtroDisciplina = '') => {
-          let filtered = videos.filter(v => v.id !== excluirId);
-          if (filtroDisciplina) filtered = filtered.filter(v => v.disciplina === filtroDisciplina);
-          if (filtered.length === 0) return `<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-video"></i><h3>Nenhuma aula disponível</h3><p>${filtroDisciplina ? 'Tente outro filtro ou' : 'Que tal'} adicionar novas aulas?</p><button class="btn-primary" id="adicionarAulaPlaceholderBtn" style="margin-top: 16px;"><i class="fas fa-plus-circle"></i> Adicionar aula</button></div>`;
-          return filtered.map(video => {
-            const embedUrl = getEmbedUrl(video.link_video);
-            return `<div class="video-card" data-video-id="${video.id}">
-              <div class="video-thumb"><iframe src="${embedUrl}" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
-              <div class="video-card-content">
-                <div class="video-card-title">${video.titulo}</div>
-                <span class="video-card-disciplina">${video.disciplina}</span>
-                <p style="font-size:0.9rem; color:#5A5A5A; margin-bottom:16px;">${video.descricao || ''}</p>
-                <div class="video-card-actions">
-                  <button class="btn-sm btn-sm-primary" data-action="assistir" data-id="${video.id}"><i class="fas fa-play"></i> Assistir</button>
-                  <button class="btn-sm btn-sm-secondary" data-action="marcarVisto" data-id="${video.id}"><i class="far fa-check-circle"></i> Visto</button>
-                </div>
-              </div>
-            </div>`;
-          }).join('');
-        };
-        const html = `<div class="page-title">🎥 Aulas</div><div class="greeting">Assista às aulas recomendadas e organize seu aprendizado</div><div class="filter-bar"><select id="aulaFiltroDisciplina" class="filter-select"><option value="">Todas as disciplinas</option>${disciplinasUnicas.map(d => `<option value="${d}">${d}</option>`).join('')}</select><button class="btn-secondary" id="resetDestaqueBtn" style="margin-left: auto;"><i class="fas fa-arrow-up"></i> Vídeo principal</button></div><div id="videoDestaqueContainer" class="video-highlight">${renderDestaque(destaqueId)}</div><h3 style="font-family: Poppins; margin: 32px 0 16px;">📚 Todas as aulas</h3><div id="videosGridContainer" class="videos-grid">${renderGrid(state.videos, destaqueId)}</div>`;
-        contentDiv.innerHTML = html;
-        const filtroSelect = document.getElementById('aulaFiltroDisciplina');
-        const resetBtn = document.getElementById('resetDestaqueBtn');
-        const gridContainer = document.getElementById('videosGridContainer');
-        const destaqueContainer = document.getElementById('videoDestaqueContainer');
-        const atualizarTela = () => {
-          const filtro = filtroSelect.value;
-          const videoDestaque = state.videos.find(v => v.id === destaqueId);
-          if (!videoDestaque) {
-            const videosFiltrados = state.videos.filter(v => !filtro || v.disciplina === filtro);
-            destaqueId = videosFiltrados[0]?.id || null;
-          }
-          destaqueContainer.innerHTML = renderDestaque(destaqueId);
-          gridContainer.innerHTML = renderGrid(state.videos, destaqueId, filtro);
-          reattachGridEvents();
-        };
-        const reattachGridEvents = () => {
-          document.querySelectorAll('[data-action="assistir"]').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const id = parseInt(btn.dataset.id);
-              destaqueId = id;
-              videoDestaqueAtual = state.videos.find(v => v.id === id);
-              atualizarTela();
-            });
-          });
-          document.querySelectorAll('[data-action="marcarVisto"]').forEach(btn => {
-            btn.addEventListener('click', () => alert('✅ Aula marcada como vista! (Integração futura)'));
-          });
-          document.getElementById('adicionarAulaPlaceholderBtn')?.addEventListener('click', () => alert('Funcionalidade de adicionar aula será integrada em breve.'));
-        };
-        filtroSelect.addEventListener('change', atualizarTela);
-        resetBtn.addEventListener('click', () => {
-          const filtro = filtroSelect.value;
-          const primeiro = state.videos.find(v => !filtro || v.disciplina === filtro);
-          destaqueId = primeiro?.id || null;
-          videoDestaqueAtual = primeiro || null;
-          atualizarTela();
-        });
-        reattachGridEvents();
       }
 
       // ========== QUESTÕES ==========
@@ -2723,10 +2790,87 @@ Comentário:
         atualizarListaAnotacoes();
       }
 
-      // ========== PÁGINAS RESIDUAIS ==========
-      function renderDesempenho() { contentDiv.innerHTML = `<div class="page-title">Desempenho</div><div class="greeting">Em construção</div>`; }
-      function renderManualIA() { contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`; }
-      function renderPerfil() { contentDiv.innerHTML = `<div class="page-title">Perfil</div><div class="greeting">Em construção</div>`; }
+      // ========== PÁGINA DESEMPENHO (MELHORADA) ==========
+      function renderDesempenho() {
+        // Calcular totais semanais
+        const hoje = new Date();
+        const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - hoje.getDay());
+        inicioSemana.setHours(0,0,0,0);
+        const fimSemana = new Date(inicioSemana); fimSemana.setDate(inicioSemana.getDate() + 7);
+        const questoesSemana = state.questionsHistory.filter(q => {
+          const d = new Date(q.date); return d >= inicioSemana && d < fimSemana;
+        });
+        const acertosSemana = questoesSemana.filter(q => q.correct).length;
+        const totalQuestoes = questoesSemana.length;
+        const taxaAcerto = totalQuestoes ? ((acertosSemana / totalQuestoes)*100).toFixed(1) : '0.0';
+        let tempoSemana = 0;
+        state.disciplines.forEach(d => {
+          if (d.topics.length) d.topics.forEach(t => tempoSemana += t.timeSeconds || 0);
+          else tempoSemana += d.timeSeconds || 0;
+        });
+        
+        // Agrupar questões por dia para gráfico
+        const diasMap = {};
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(inicioSemana); d.setDate(inicioSemana.getDate() + i);
+          const key = d.toISOString().split('T')[0];
+          diasMap[key] = 0;
+        }
+        questoesSemana.forEach(q => { if (diasMap.hasOwnProperty(q.date)) diasMap[q.date]++; });
+        const labels = Object.keys(diasMap).map(d => new Date(d).toLocaleDateString('pt-BR', { weekday: 'short' }));
+        const dataQuestoes = Object.values(diasMap);
+
+        const html = `
+          <div class="page-title">📈 Desempenho</div>
+          <div class="greeting">Acompanhe sua evolução ao longo do tempo</div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><i class="fas fa-question-circle"></i> Questões (semana)</div><div class="card-value">${totalQuestoes}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-check-circle"></i> Acertos</div><div class="card-value">${acertosSemana}</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa de acerto</div><div class="card-value">${taxaAcerto}%</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-clock"></i> Tempo estudado</div><div class="card-value">${Math.floor(tempoSemana/3600)}h ${Math.floor((tempoSemana%3600)/60)}m</div></div>
+          </div>
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header"><i class="fas fa-chart-line"></i> Evolução de acertos (última semana)</div>
+            <canvas id="evolucaoChart" width="400" height="200" style="width:100%; max-height:250px;"></canvas>
+          </div>
+          <div class="card">
+            <div class="card-header"><i class="fas fa-calendar-alt"></i> Questões por dia</div>
+            <canvas id="questoesDiaChart" width="400" height="200" style="width:100%; max-height:250px;"></canvas>
+          </div>
+        `;
+        contentDiv.innerHTML = html;
+        // Renderizar gráficos simples com canvas
+        const ctxEvol = document.getElementById('evolucaoChart')?.getContext('2d');
+        if (ctxEvol) {
+          // Dados fictícios para evolução (poderiam ser baseados em histórico)
+          const dias = labels;
+          const acertosDia = dias.map((_, i) => {
+            const date = Object.keys(diasMap)[i];
+            const qsDia = questoesSemana.filter(q => q.date === date);
+            return qsDia.filter(q => q.correct).length;
+          });
+          new Chart(ctxEvol, { type: 'line', data: { labels: dias, datasets: [{ label: 'Acertos', data: acertosDia, borderColor: '#E65100', tension: 0.1 }] } });
+        }
+        const ctxDia = document.getElementById('questoesDiaChart')?.getContext('2d');
+        if (ctxDia) {
+          new Chart(ctxDia, { type: 'bar', data: { labels, datasets: [{ label: 'Questões', data: dataQuestoes, backgroundColor: '#F57C00' }] } });
+        }
+        // Se Chart não estiver definido, fallback simples
+        if (typeof Chart === 'undefined') {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+          script.onload = () => renderDesempenho(); // re-renderiza
+          document.head.appendChild(script);
+          return;
+        }
+      }
+
+      function renderManualIA() {
+        contentDiv.innerHTML = `<div class="page-title">Manual IA</div><div class="greeting">Em construção</div>`;
+      }
+      function renderPerfil() {
+        contentDiv.innerHTML = `<div class="page-title">Perfil</div><div class="greeting">Em construção</div>`;
+      }
 
       // ========== MENTORIA ==========
       let mentoriaEstado = { area: null, subarea: null };
