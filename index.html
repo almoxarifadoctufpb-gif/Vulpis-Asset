@@ -2560,36 +2560,46 @@ REGRAS IMPORTANTES:
       }
 
       // ========== FUNÇÕES AUXILIARES PARA QUESTÕES ==========
-      // PARSER ROBUSTO DE QUESTÕES
+      // PARSER ROBUSTO DE QUESTÕES - VERSÃO CORRIGIDA
       function parseQuestions(rawText) {
         const questions = [];
         // Normaliza quebras de linha e espaços
         let normalized = rawText.replace(/\r\n/g, '\n').trim();
-        // Divide por "(Questão de Treino)" case insensitive, permitindo espaços e variações
-        const blocks = normalized.split(/\(Questão de Treino\)\s*/i).filter(block => block.trim() !== '');
+        
+        // Divide por marcadores: suporta "(Questão de Treino)" ou "Questão de Treino" (com ou sem parênteses, case insensitive)
+        const blocks = normalized.split(/\s*\(?\s*Questão\s+de\s+Treino\s*\)?\s*/i).filter(b => b.trim() !== '');
         
         for (let block of blocks) {
           try {
-            // Captura o enunciado: tudo até encontrar "a)" no início da linha
-            let enunciadoMatch = block.match(/^([\s\S]*?)(?=\n\s*a\))/i);
-            if (!enunciadoMatch) continue;
-            let enunciado = enunciadoMatch[1].trim();
+            // 1. ENUNCIADO: capturar tudo até encontrar "a)" (pode estar na mesma linha ou em nova linha)
+            let enunciado = '';
+            // Procura pelo padrão "a)" no texto
+            const aPos = block.search(/\n\s*a\)/i);
+            if (aPos === -1) {
+              // Se não encontrar quebra de linha, procura "a)" diretamente
+              const altIndex = block.search(/\s*a\)/i);
+              if (altIndex !== -1) {
+                enunciado = block.substring(0, altIndex).trim();
+              }
+            } else {
+              enunciado = block.substring(0, aPos).trim();
+            }
+            if (!enunciado) continue;
             
-            // Captura as alternativas
+            // 2. ALTERNATIVAS: capturar linhas que começam com a) b) c) d) e)
             const altRegex = /([a-e])\)\s*([^\n]+)/gi;
             const alternativas = [];
             let match;
             while ((match = altRegex.exec(block)) !== null) {
               alternativas.push(match[2].trim());
             }
-            
             if (alternativas.length !== 5) {
-              console.warn('Questão ignorada: não possui 5 alternativas');
+              console.warn('Questão ignorada: número de alternativas != 5', alternativas.length);
               continue;
             }
             
-            // Captura o gabarito
-            const gabaritoMatch = block.match(/Gabarito:\s*([A-Ea-e])/i);
+            // 3. GABARITO: aceita "Gabarito: X", "Gabarito: Letra X", "Resposta: X", "Gabarito letra X"
+            let gabaritoMatch = block.match(/(?:Gabarito|Resposta)\s*:?\s*(?:letra\s*)?([A-Ea-e])/i);
             if (!gabaritoMatch) {
               console.warn('Questão ignorada: gabarito não encontrado');
               continue;
@@ -2597,9 +2607,9 @@ REGRAS IMPORTANTES:
             const gabaritoLetra = gabaritoMatch[1].toUpperCase();
             const gabaritoIndex = gabaritoLetra.charCodeAt(0) - 65;
             
-            // Captura o comentário
+            // 4. COMENTÁRIO (opcional)
             let comentario = '';
-            const comentarioMatch = block.match(/Comentário:\s*([\s\S]*?)(?=(\(Questão de Treino\)|$))/i);
+            const comentarioMatch = block.match(/Comentário:\s*([\s\S]*?)(?=(?:\(?Questão de Treino\)?|$))/i);
             if (comentarioMatch) {
               comentario = comentarioMatch[1].trim();
             }
@@ -2615,11 +2625,10 @@ REGRAS IMPORTANTES:
               mostrarComentario: false,
               resultadoVerificado: false
             });
-          } catch (e) {
-            console.warn('Erro ao parsear questão:', e);
+          } catch(e) {
+            console.warn('Erro ao processar questão:', e);
           }
         }
-        
         return questions;
       }
 
