@@ -42,7 +42,6 @@
 
     /* Aplicação automática a botões e elementos comuns, mantendo consistência */
     button, .btn-primary, .btn-secondary, .nav-item, .resumo-card, .filter-chip, .status-badge, .legislacao-card, .benefit-card, .step, .video-card, .pagination button, .expand-btn, .actions i, .help-btn-float, .welcome-cta, .timer-btn, .tesoura-btn, .mentoria-container .card, .landing-page .btn-primary, .landing-page .btn-secondary, .dashboard-help-modal .btn-primary, .tutorial-modal .btn-secondary, .prompts-modal .btn-secondary {
-      /* Herdam ou recebem a classe .interativo quando aplicada; garantimos que elementos sem a classe também tenham transição suave */
       transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
     }
 
@@ -477,12 +476,13 @@
     }
     .disciplines-table {
       background: #FFFFFF;
-      border-radius: 28px;
+      border-radius: 12px;        /* ALTERADO: conforme pedido */
       padding: 8px 0;
       box-shadow: 0 8px 20px rgba(0,0,0,0.02);
       border: 1px solid #F0F0F0;
       overflow-x: auto;
       position: relative;
+      overflow: hidden;           /* PARA RESPECTAR BORDER-RADIUS */
     }
     .table-header {
       display: grid;
@@ -500,10 +500,20 @@
       grid-template-columns: 2.5fr 1.2fr 1fr 0.8fr 0.8fr 1.2fr 1fr;
       padding: 16px 24px;
       align-items: center;
-      border-bottom: 1px solid #F5F5F5;
-      transition: background 0.15s;
+      border-bottom: 1px solid #e5e7eb; /* SEPARAÇÃO VISUAL SUAVE */
+      transition: background 0.2s ease;
     }
-    .discipline-row:hover { background: #FCFCFC; }
+    /* EFEITO ZEBRADO OBRIGATÓRIO */
+    .discipline-row:nth-child(odd) {
+      background-color: #f9fafb;
+    }
+    .discipline-row:nth-child(even) {
+      background-color: #ffffff;
+    }
+    /* HOVER SUAVE */
+    .discipline-row:hover {
+      background-color: #eef2ff !important;
+    }
     .discipline-name {
       font-weight: 600;
       display: flex;
@@ -1708,6 +1718,34 @@
     .revisao-status.concluido { background: #2E7D32; }
     .revisao-status.pendente { background: #F57C00; }
     .small-progress { margin-top: 12px; }
+
+    /* ========== NOVO CARD DE CONTAGEM REGRESSIVA ========== */
+    .card-contagem {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      margin-bottom: 20px;
+    }
+    .card-contagem h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-contagem p {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+    .card-contagem small {
+      display: block;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -2056,6 +2094,7 @@ Comentário:
       let questionsPerPage = 10;
       let foxAnimationInitialized = false;
       let videoDestaqueAtual = null;
+      let contagemInterval = null; // Intervalo para o card de contagem regressiva
 
       const landingPage = document.getElementById('landingPage');
       const appContainer = document.getElementById('appContainer');
@@ -2235,6 +2274,40 @@ Comentário:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
+      // ========== FUNÇÃO PARA ATUALIZAR CARD DE CONTAGEM REGRESSIVA ==========
+      function iniciarContagemProva() {
+        // Limpa intervalo anterior se existir
+        if (contagemInterval) clearInterval(contagemInterval);
+        
+        const dataProva = new Date("2026-12-01T08:00:00");
+        
+        function atualizarContagem() {
+          const agora = new Date();
+          const diferenca = dataProva - agora;
+          
+          const tempoRestanteEl = document.getElementById("tempo-restante");
+          const diasRestantesEl = document.getElementById("dias-restantes");
+          
+          if (!tempoRestanteEl || !diasRestantesEl) return;
+          
+          if (diferenca <= 0) {
+            tempoRestanteEl.innerText = "Prova chegou!";
+            diasRestantesEl.innerText = "Boa sorte! 🍀";
+            return;
+          }
+          
+          const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+          const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
+          const minutos = Math.floor((diferenca / (1000 * 60)) % 60);
+          
+          tempoRestanteEl.innerText = `${dias}d ${horas}h ${minutos}m`;
+          diasRestantesEl.innerText = `${dias} dias restantes`;
+        }
+        
+        atualizarContagem();
+        contagemInterval = setInterval(atualizarContagem, 60000);
+      }
+
       // ========== DASHBOARD ==========
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
@@ -2304,6 +2377,14 @@ Comentário:
 
         const html = `
           ${renderGlobalTimer()}
+          
+          <!-- NOVO CARD DE CONTAGEM REGRESSIVA PARA A PROVA -->
+          <div class="card-contagem" id="cardContagemProva">
+            <h3>⏳ Contagem para a prova</h3>
+            <p id="tempo-restante">Carregando...</p>
+            <small id="dias-restantes"></small>
+          </div>
+          
           <div style="position: relative;">
             <button class="help-btn-float interativo" id="dashboardHelpBtn" title="O que é o Dashboard?"><i class="far fa-question-circle"></i></button>
             <div class="page-title">Dashboard</div>
@@ -2429,6 +2510,9 @@ Comentário:
         `;
         contentDiv.innerHTML = html;
         attachTimerEvents();
+        
+        // Inicia a contagem regressiva do novo card
+        iniciarContagemProva();
         
         if (totalQ > 0) {
           const canvas = document.getElementById('donutChart');
