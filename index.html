@@ -11,6 +11,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
   <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <!-- Chart.js (usado em desempenho) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
   <style>
     /* ===== ESTILOS GERAIS (mantidos integralmente) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1746,6 +1748,62 @@
       font-size: 0.9rem;
       opacity: 0.9;
     }
+
+    /* ========== NOVO CARD DE FRASES MOTIVACIONAIS ========== */
+    .card-motivacional {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+      border: 1px solid #F0F0F0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.18s ease;
+      cursor: default;
+    }
+    .card-motivacional:hover {
+      box-shadow: 0 12px 28px rgba(0,0,0,0.04);
+    }
+    .card-motivacional .icone {
+      font-size: 24px;
+      color: #E65100;
+      background: #FEF0E6;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-motivacional .conteudo {
+      flex: 1;
+    }
+    .card-motivacional .frase {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #212121;
+      margin-bottom: 4px;
+    }
+    .card-motivacional .autor {
+      font-size: 12px;
+      color: #757575;
+      opacity: 0.8;
+    }
+
+    /* Container para os dois cards lado a lado */
+    .cards-top-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .cards-top-container > * {
+      flex: 1;
+      min-width: 280px;
+    }
   </style>
 </head>
 <body>
@@ -2096,6 +2154,30 @@ Comentário:
       let videoDestaqueAtual = null;
       let contagemInterval = null; // Intervalo para o card de contagem regressiva
 
+      // ========== FRASES MOTIVACIONAIS ==========
+      const frasesMotivacionais = [
+        { texto: "O sucesso é a soma de pequenos esforços repetidos dia após dia.", autor: "Robert Collier" },
+        { texto: "Comece onde você está. Use o que você tem. Faça o que você pode.", autor: "Arthur Ashe" },
+        { texto: "A persistência é o caminho do êxito.", autor: "Charles Chaplin" },
+        { texto: "A sorte favorece a mente preparada.", autor: "Louis Pasteur" },
+        { texto: "A ação é a chave fundamental para todo sucesso.", autor: "Pablo Picasso" },
+        { texto: "Não conte os dias, faça os dias contarem.", autor: "Muhammad Ali" },
+        { texto: "Você perde 100% das chances que não tenta.", autor: "Wayne Gretzky" },
+        { texto: "Grandes obras não são feitas por impulso, mas por uma série de pequenas coisas.", autor: "Van Gogh" },
+        { texto: "Você não precisa ser grande para começar, mas precisa começar.", autor: "Zig Ziglar" },
+        { texto: "O que você faz hoje pode melhorar todos os seus amanhãs.", autor: "Ralph Marston" }
+      ];
+
+      function obterFraseAleatoria() {
+        let ultimoIndice = localStorage.getItem('ultimaFraseMotivacional');
+        let indice;
+        do {
+          indice = Math.floor(Math.random() * frasesMotivacionais.length);
+        } while (ultimoIndice !== null && indice === parseInt(ultimoIndice) && frasesMotivacionais.length > 1);
+        localStorage.setItem('ultimaFraseMotivacional', indice);
+        return frasesMotivacionais[indice];
+      }
+
       const landingPage = document.getElementById('landingPage');
       const appContainer = document.getElementById('appContainer');
       
@@ -2375,14 +2457,29 @@ Comentário:
           .sort((a,b) => new Date(a.data) - new Date(b.data))
           .slice(0, 5);
 
+        // Obtém frase motivacional aleatória (com lógica anti-repetição)
+        const fraseMotivacional = obterFraseAleatoria();
+
         const html = `
           ${renderGlobalTimer()}
           
-          <!-- NOVO CARD DE CONTAGEM REGRESSIVA PARA A PROVA -->
-          <div class="card-contagem" id="cardContagemProva">
-            <h3>⏳ Contagem para a prova</h3>
-            <p id="tempo-restante">Carregando...</p>
-            <small id="dias-restantes"></small>
+          <!-- CONTAINER FLEX PARA OS DOIS CARDS SUPERIORES -->
+          <div class="cards-top-container">
+            <!-- CARD DE CONTAGEM REGRESSIVA (mantido) -->
+            <div class="card-contagem" id="cardContagemProva">
+              <h3>⏳ Contagem para a prova</h3>
+              <p id="tempo-restante">Carregando...</p>
+              <small id="dias-restantes"></small>
+            </div>
+            
+            <!-- NOVO CARD DE FRASES MOTIVACIONAIS -->
+            <div class="card-motivacional interativo">
+              <div class="icone">💡</div>
+              <div class="conteudo">
+                <p class="frase">“${fraseMotivacional.texto}”</p>
+                <span class="autor">— ${fraseMotivacional.autor}</span>
+              </div>
+            </div>
           </div>
           
           <div style="position: relative;">
