@@ -22,6 +22,9 @@
       --primary-color: #E65100;
       --secondary-text: #757575;
       --border-light: #EEEEEE;
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 88px;
+      --transition-speed: 0.25s;
     }
 
     /* ===== ESTILOS GERAIS (mantidos integralmente) ===== */
@@ -56,7 +59,7 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
     }
 
-    button:hover, .btn-primary:hover, .btn-secondary:hover, .nav-item:hover, .resumo-card:hover, .filter-chip:hover, .status-badge:hover, .legislacao-card:hover, .benefit-card:hover, .step:hover, .video-card:hover, .pagination button:hover, .expand-btn:hover, .actions i:hover, .help-btn-float:hover, .welcome-cta:hover, .timer-btn:hover, .tesoura-btn:hover, .mentoria-container .card:hover {
+    button:hover, .btn-primary:hover, .btn-secondary:hover, .nav-item:hover, .resumo-card:hover, .filter-chip:hover, .status-badge:hover, .legislacao-card:hover, .benefit-card:hover, .step:hover, .video-card:hover, .pagination button:hover, .expand-btn:hover, .actions i:hover, .help-btn-float:hover, .welcome-cta:hover, .timer-btn:hover, .tesoura-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
       filter: brightness(1.03);
@@ -147,10 +150,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 30000;           /* acima de tudo */
+      z-index: 30000;
       opacity: 0;
       transition: opacity 0.3s ease;
-      pointer-events: none;      /* evita bloqueio de clique quando oculto */
+      pointer-events: none;
     }
     .wov.show {
       opacity: 1;
@@ -223,64 +226,196 @@
       opacity: 0.5;
     }
 
-    /* ========== ESTILOS EXISTENTES (mantidos) ========== */
+    /* ========== SIDEBAR REFATORADA (AGRUPADA COM COLAPSO) ========== */
     .sidebar {
-      width: 280px;
+      width: var(--sidebar-width);
       background: #FFFFFF;
       display: flex;
       flex-direction: column;
-      padding: 32px 20px;
+      padding: 24px 12px;
       border-right: 1px solid #EEEEEE;
       box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+      transition: width var(--transition-speed) ease;
+      position: relative;
+      z-index: 20;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
+
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px 24px 8px;
+    }
+
     .logo-area {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 48px;
-      padding-left: 8px;
+      overflow: hidden;
+      white-space: nowrap;
     }
+
     .logo-icon {
-      width: 44px; height: 44px;
-      border-radius: 14px;
+      width: 40px; height: 40px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-size: 24px;
       overflow: hidden;
+      flex-shrink: 0;
     }
+
     .logo-icon img { width: 100%; height: 100%; object-fit: cover; }
+
     .logo-text {
       font-family: 'Poppins', sans-serif;
       font-weight: 700;
       font-size: 1.5rem;
       color: #212121;
+      transition: opacity 0.2s;
     }
-    .nav-menu {
-      flex: 1;
+
+    .sidebar.collapsed .logo-text {
+      opacity: 0;
+      width: 0;
+      display: none;
+    }
+
+    .collapse-toggle {
+      background: none;
+      border: none;
+      color: #757575;
+      font-size: 1.3rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
     }
-    .nav-item {
+
+    .collapse-toggle:hover {
+      background: #F5F5F5;
+      color: var(--primary-color);
+    }
+
+    .sidebar-group {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-group-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9E9E9E;
+      padding: 8px 12px 4px 12px;
+      display: block;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .sidebar.collapsed .sidebar-group-title {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      visibility: hidden;
+    }
+
+    .sidebar-item {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px 16px;
-      border-radius: 16px;
+      padding: 12px 14px;
+      margin: 2px 0;
+      border-radius: 14px;
       color: #5A5A5A;
       font-weight: 500;
+      text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
     }
-    .nav-item i, .nav-item img { width: 24px; font-size: 1.3rem; }
-    .nav-item.active {
+
+    .sidebar-item i, .sidebar-item img {
+      width: 24px;
+      font-size: 1.3rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-item img {
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .sidebar-item span {
+      transition: opacity 0.2s;
+    }
+
+    .sidebar.collapsed .sidebar-item span {
+      opacity: 0;
+      width: 0;
+      display: none;
+    }
+
+    .sidebar-item:hover {
+      background: #F9F9F9;
+      color: #212121;
+    }
+
+    .sidebar-item.active {
       background: #FEF0E6;
       color: #E65100;
+      font-weight: 600;
       box-shadow: 0 4px 8px rgba(230,81,0,0.05);
     }
-    .nav-item:hover:not(.active) { background: #F9F9F9; }
+
+    .sidebar-item.active i {
+      color: #E65100;
+    }
+
+    /* Tooltip para modo colapsado */
+    .sidebar.collapsed .sidebar-item {
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .sidebar.collapsed .sidebar-item:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 70px;
+      background: #212121;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      pointer-events: none;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: #F0F0F0;
+      margin: 16px 8px;
+    }
+
+    /* ========== ESTILOS EXISTENTES (mantidos) ========== */
     .main {
       flex: 1;
       overflow-y: auto;
@@ -1853,7 +1988,7 @@
     <div class="wov-footer">Imagem: Flaticon</div>
   </div>
 
-  <!-- LANDING PAGE (sem imagens Flaticon ou homem meditando) -->
+  <!-- LANDING PAGE -->
   <div id="landingPage" class="landing-page">
     <div class="container">
       <!-- Hero -->
@@ -1948,30 +2083,66 @@
     </div>
   </div>
 
-  <!-- APP PRINCIPAL (inicialmente oculto) -->
+  <!-- APP PRINCIPAL -->
   <div id="appContainer" class="app-container hidden-app">
-    <div class="sidebar">
-      <div class="logo-area">
-        <div class="logo-icon">
-          <img src="https://cdn-icons-png.flaticon.com/512/4193/4193312.png" alt="Raposa Vulpis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <i class="fas fa-fox" style="display:none; font-size:28px;"></i>
+    <!-- SIDEBAR REFATORADA (AGRUPADA COM COLAPSO) -->
+    <nav class="sidebar" id="mainSidebar">
+      <div class="sidebar-header">
+        <div class="logo-area">
+          <div class="logo-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/4193/4193312.png" alt="Raposa Vulpis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <i class="fas fa-fox" style="display:none; font-size:28px;"></i>
+          </div>
+          <span class="logo-text">Vulpis Asset</span>
         </div>
-        <span class="logo-text">Vulpis Asset</span>
+        <button class="collapse-toggle interativo" id="sidebarToggle" title="Recolher menu">
+          <i class="fas fa-chevron-left"></i>
+        </button>
       </div>
-      <div class="nav-menu">
-        <div class="nav-item interativo" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
-        <div class="nav-item interativo" data-page="disciplinas"><i class="fas fa-book-open"></i> Disciplinas</div>
-        <div class="nav-item interativo" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
-        <div class="nav-item interativo" data-page="legislacao">
-          <img src="https://cdn-icons-png.flaticon.com/512/6983/6983044.png" alt="Legislação" style="width:24px; height:24px; object-fit:contain;"> Legislação
+
+      <!-- Grupo: Estudo -->
+      <div class="sidebar-group">
+        <span class="sidebar-group-title">Estudo</span>
+        <div class="sidebar-item active" data-page="dashboard" data-tooltip="Dashboard">
+          <i class="fas fa-th-large"></i><span>Dashboard</span>
         </div>
-        <div class="nav-item interativo" data-page="leitura"><i class="fas fa-book-reader"></i> Leitura</div>
-        <div class="nav-item interativo" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
-        <div class="nav-item interativo" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
-        <div class="nav-item interativo" data-page="mentoria"><i class="fas fa-graduation-cap"></i> Mentoria</div>
-        <div class="nav-item interativo" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
+        <div class="sidebar-item" data-page="disciplinas" data-tooltip="Disciplinas">
+          <i class="fas fa-book-open"></i><span>Disciplinas</span>
+        </div>
+        <div class="sidebar-item" data-page="questoes" data-tooltip="Questões">
+          <i class="fas fa-question-circle"></i><span>Questões</span>
+        </div>
+        <div class="sidebar-item" data-page="legislacao" data-tooltip="Legislação">
+          <img src="https://cdn-icons-png.flaticon.com/512/6983/6983044.png" alt="Legislação" style="width:24px; height:24px;"><span>Legislação</span>
+        </div>
+        <div class="sidebar-item" data-page="leitura" data-tooltip="Leitura Inteligente">
+          <i class="fas fa-book-reader"></i><span>Leitura</span>
+        </div>
       </div>
-    </div>
+
+      <!-- Grupo: Análise -->
+      <div class="sidebar-group">
+        <span class="sidebar-group-title">Análise</span>
+        <div class="sidebar-item" data-page="desempenho" data-tooltip="Desempenho">
+          <i class="fas fa-chart-line"></i><span>Desempenho</span>
+        </div>
+        <div class="sidebar-item" data-page="manual-ia" data-tooltip="Manual IA">
+          <i class="fas fa-robot"></i><span>Manual IA</span>
+        </div>
+      </div>
+
+      <!-- Grupo: Ferramentas -->
+      <div class="sidebar-group">
+        <span class="sidebar-group-title">Ferramentas</span>
+        <div class="sidebar-item" data-page="mentoria" data-tooltip="Mentoria">
+          <i class="fas fa-graduation-cap"></i><span>Mentoria</span>
+        </div>
+        <div class="sidebar-item" data-page="perfil" data-tooltip="Perfil">
+          <i class="fas fa-user-circle"></i><span>Perfil</span>
+        </div>
+      </div>
+    </nav>
+
     <div class="main" id="app-content"></div>
   </div>
   
@@ -2107,7 +2278,7 @@ Comentário:
     (function(){
       'use strict';
       
-      // ========== CONTROLE DA TELA DE BOAS-VINDAS (LOADING EXISTENTE) ==========
+      // ========== CONTROLE DA TELA DE BOAS-VINDAS ==========
       const WELCOME_KEY = 'vulpis_welcome_seen';
       const welcomeScreen = document.getElementById('welcome-screen');
       
@@ -2130,12 +2301,11 @@ Comentário:
         }, 1500);
       }
 
-      // ========== NOVA FUNÇÃO PARA OVERLAY DE BOAS-VINDAS (TRIGGER NOS BOTÕES) ==========
+      // ========== NOVA FUNÇÃO PARA OVERLAY DE BOAS-VINDAS ==========
       function runWithWelcome(action) {
         const overlay = document.getElementById('welcome-overlay');
         if (!overlay) return;
         
-        // Reinicia a barra de progresso (remove e recria o elemento para reiniciar a animação)
         const oldBar = overlay.querySelector('.wov-bar');
         if (oldBar) {
           const newBar = document.createElement('div');
@@ -2144,7 +2314,6 @@ Comentário:
         }
         
         overlay.classList.remove('hidden');
-        // Pequeno delay para garantir que a classe 'hidden' foi removida antes de aplicar 'show'
         requestAnimationFrame(() => {
           overlay.classList.add('show');
         });
@@ -2166,27 +2335,21 @@ Comentário:
           const el = document.querySelector(selector);
           if (!el) return;
           
-          // Remove qualquer onclick anterior (não há, mas garantimos)
           el.onclick = null;
           
-          // Adiciona um novo listener que primeiro exibe o overlay e depois chama showApp
           el.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
-            // Desabilita temporariamente para evitar múltiplos cliques
             el.disabled = true;
             
             runWithWelcome(() => {
-              // Restaura o estado do botão
               el.disabled = false;
-              
-              // Ação principal: mostrar o aplicativo
               if (typeof showApp === 'function') {
                 showApp();
               }
             });
-          }, { once: false }); // não usar once para permitir múltiplas entradas (embora o botão seja desabilitado durante o overlay)
+          }, { once: false });
         });
       }
 
@@ -2269,7 +2432,7 @@ Comentário:
       function initApp() {
         loadFromStorage();
         setupModals();
-        document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => renderPage(item.dataset.page)));
+        initSidebar(); // Inicializa a sidebar refatorada
         renderPage('dashboard');
       }
 
@@ -2330,9 +2493,56 @@ Comentário:
       function formatHoursMinutes(sec) { const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60); return `${h}h ${m}m`; }
 
       const contentDiv = document.getElementById('app-content');
+      
+      // ========== SIDEBAR REFATORADA: GERENCIAMENTO DE ATIVO E COLAPSO ==========
+      function initSidebar() {
+        const sidebar = document.getElementById('mainSidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        
+        // Toggle colapso
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+          const icon = toggleBtn.querySelector('i');
+          if (sidebar.classList.contains('collapsed')) {
+            icon.classList.remove('fa-chevron-left');
+            icon.classList.add('fa-chevron-right');
+          } else {
+            icon.classList.remove('fa-chevron-right');
+            icon.classList.add('fa-chevron-left');
+          }
+        });
+
+        // Navegação
+        sidebarItems.forEach(item => {
+          item.addEventListener('click', (e) => {
+            const page = item.dataset.page;
+            if (page) {
+              setActiveSidebarItem(page);
+              renderPage(page);
+            }
+          });
+        });
+
+        // Inicializa tooltips nativos como fallback
+        if (sidebar.classList.contains('collapsed')) {
+          sidebarItems.forEach(item => {
+            if (!item.hasAttribute('title')) {
+              item.setAttribute('title', item.dataset.tooltip || '');
+            }
+          });
+        }
+      }
+
+      function setActiveSidebarItem(page) {
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.toggle('active', item.dataset.page === page);
+        });
+      }
+
       function renderPage(page) {
         currentPage = page;
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
+        setActiveSidebarItem(page);
         const foxContainer = document.getElementById('foxAnimationContainer');
         if (page === 'questoes') {
           foxContainer.style.display = 'block';
@@ -2965,7 +3175,7 @@ Comentário:
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
       }
 
-      // ========== QUESTÕES (ABA MODIFICADA) ==========
+      // ========== QUESTÕES ==========
       function parseQuestions(rawText) {
         const questions = [];
         let normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -3450,8 +3660,8 @@ Comentário:
         });
         const helpModal = document.getElementById('dashboardHelpModal');
         document.getElementById('closeDashboardHelpBtn').addEventListener('click', ()=> helpModal.style.display='none');
-        document.getElementById('closeTutorialBtn').addEventListener('click', ()=> document.getElementById('tutorialModal').style.display='none');
-        document.getElementById('closePromptsBtn').addEventListener('click', ()=> document.getElementById('promptsModal').style.display='none');
+        document.getElementById('closeTutorialBtn')?.addEventListener('click', ()=> document.getElementById('tutorialModal').style.display='none');
+        document.getElementById('closePromptsBtn')?.addEventListener('click', ()=> document.getElementById('promptsModal').style.display='none');
         window.addEventListener('click', (e) => {
           if(e.target === modalDisc) modalDisc.style.display='none';
           if(e.target === modalTopic) modalTopic.style.display='none';
@@ -3484,7 +3694,6 @@ Comentário:
         }
       }
 
-      // Inicializa o binding da nova overlay
       bindWelcomeButtons();
       initLanding();
     })();
