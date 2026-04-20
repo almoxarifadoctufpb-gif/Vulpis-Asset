@@ -275,12 +275,9 @@
 
     .logo-icon img { width: 100%; height: 100%; object-fit: cover; }
 
+    /* removido texto vulpis asset */
     .logo-text {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: #212121;
-      transition: opacity 0.2s;
+      display: none; /* removido conforme solicitado */
     }
 
     .sidebar.collapsed .logo-text {
@@ -1187,16 +1184,7 @@
       opacity: 0.7;
     }
 
-    /* Imagem decorativa de livros na página Disciplinas */
-    .disciplines-decoration {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      width: 120px;
-      opacity: 0.15;
-      pointer-events: none;
-      z-index: 1;
-    }
+    /* removida imagem decorativa de livros */
     .disciplines-table {
       position: relative;
     }
@@ -1433,13 +1421,7 @@
     }
 
     .legislacao-decoration {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 150px;
-      opacity: 0.1;
-      pointer-events: none;
-      z-index: 1;
+      display: none; /* removida */
     }
 
     .legislacao-filters {
@@ -1977,7 +1959,7 @@
   <!-- NOVA TELA DE BOAS-VINDAS (OVERLAY TRIGGER NOS BOTÕES) -->
   <div id="welcome-overlay" class="wov hidden">
     <div class="wov-card">
-      <img class="wov-img" src="https://cdn-icons-png.flaticon.com/512/6808/6808188.png" alt="Olá">
+      <img class="wov-img" src="./Imagem Tela de boas vindas.png" alt="Olá">
       <h1 class="wov-title">Olá, seja bem-vindo</h1>
       <p class="wov-sub">Estamos carregando seu ambiente de estudos...</p>
       <div class="wov-progress">
@@ -1985,7 +1967,7 @@
       </div>
       <button class="wov-btn" disabled>Carregando...</button>
     </div>
-    <div class="wov-footer">Imagem: Flaticon</div>
+    <div class="wov-footer"></div>
   </div>
 
   <!-- LANDING PAGE -->
@@ -2002,7 +1984,7 @@
           </div>
         </div>
         <div class="hero-image">
-          <img src="https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Estudante produtivo com laptop e cadernos" onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+          <img src="./Imagem Tela de Inicio 1.png" alt="Estudante produtivo com laptop e cadernos" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
           <div id="foxHeroContainer" class="fox-hero">
             <div class="fox-fallback">🦊</div>
           </div>
@@ -2039,7 +2021,7 @@
       <!-- Demo / Screenshot -->
       <div class="demo">
         <div class="demo-image">
-          <img src="https://images.pexels.com/photos/5900225/pexels-photo-5900225.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Dashboard do Vulpis Asset" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+          <img src="./Imagem Tela de Início 2.png" alt="Dashboard do Vulpis Asset" onerror="this.style.display='none';">
         </div>
         <div class="demo-content">
           <h2>Visualize seu progresso</h2>
@@ -2090,10 +2072,11 @@
       <div class="sidebar-header">
         <div class="logo-area">
           <div class="logo-icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/4193/4193312.png" alt="Raposa Vulpis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <i class="fas fa-fox" style="display:none; font-size:28px;"></i>
+            <img src="./Imagem Perfl.png" alt="Perfil" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <i class="fas fa-user-circle" style="display:none; font-size:28px;"></i>
           </div>
-          <span class="logo-text">Vulpis Asset</span>
+          <!-- removido texto vulpis asset -->
+          <span class="logo-text"></span>
         </div>
         <button class="collapse-toggle interativo" id="sidebarToggle" title="Recolher menu">
           <i class="fas fa-chevron-left"></i>
@@ -2152,7 +2135,7 @@
   </div>
 
   <!-- Rodapé com créditos (discreto) -->
-  <div class="global-footer">Ícones por Flaticon</div>
+  <div class="global-footer"></div>
 
   <!-- Modal de ajuda do Dashboard -->
   <div class="modal dashboard-help-modal" id="dashboardHelpModal">
