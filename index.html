@@ -1806,11 +1806,11 @@ Comentário:
         disciplines: [],
         legislations: [],
         leituras: [],
-        user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50, examDate: null }, // adicionado examDate
+        user: { name: 'Estudante Estratégico', dailyGoalHours: 4, dailyGoalQuestions: 50, examDate: null },
         questionsHistory: [],
         videos: [],
         mentors: [],
-        revisoes: [] // NOVO: array para revisões programadas
+        revisoes: []
       };
       let nextId = 1;
       let timerInterval = null, timerSeconds = 0, timerRunning = false, activeDisciplineId = null;
@@ -1856,7 +1856,7 @@ Comentário:
             state.videos = state.videos || [];
             state.leituras = state.leituras || [];
             state.mentors = state.mentors || [];
-            state.revisoes = state.revisoes || []; // NOVO
+            state.revisoes = state.revisoes || [];
           } catch(e){}
         }
         if(!state.disciplines.length) {
@@ -1890,7 +1890,6 @@ Comentário:
             { id:6, nome:"Fernanda Rios", area:"Área Bancária", subarea:"Banco do Brasil", experiencia:"Escriturária aprovada", avaliacao:4.5, descricao:"Foco em matemática financeira e conhecimentos bancários.", disponibilidade:true }
           ];
         }
-        // Inicializa revisoes se não existirem (array vazio)
         if (!state.revisoes) state.revisoes = [];
         videoDestaqueAtual = state.videos.find(v => v.id === 1) || state.videos[0];
         saveToStorage();
@@ -1922,7 +1921,6 @@ Comentário:
           case 'disciplinas': renderDisciplinas(); break;
           case 'questoes': renderQuestoes(); break;
           case 'legislacao': renderLegislacao(); break;
-          // case 'aulas' removido
           case 'leitura': renderLeitura(); break;
           case 'desempenho': renderDesempenho(); break;
           case 'manual-ia': renderManualIA(); break;
@@ -2001,7 +1999,7 @@ Comentário:
         if(currentPage === 'disciplinas') renderDisciplinas(); else if(currentPage === 'dashboard') renderDashboard();
       }
 
-      // ========== DASHBOARD (COM NOVOS CARDS) ==========
+      // ========== DASHBOARD ==========
       function renderDashboard() {
         let totalSec = 0, totalQ = 0, totalCorrect = 0;
         state.disciplines.forEach(d => {
@@ -2024,7 +2022,6 @@ Comentário:
         const desempenhoGeral = totalQ ? ((totalCorrect / totalQ)*100).toFixed(1) : '0.0';
         const questoesFeitas = totalQ;
 
-        // NOVOS CARDS (FRASE MOTIVACIONAL, CONTAGEM REGRESSIVA, METAS DA SEMANA, PROGRESSO EDITAL)
         const frases = [
           "“A persistência é o caminho do êxito.”",
           "“Estudar é investir em você mesmo.”",
@@ -2042,7 +2039,6 @@ Comentário:
           diasParaProva = diff > 0 ? Math.ceil(diff / (1000*60*60*24)) : '0';
         }
 
-        // Metas da semana (simplificado: usando total de horas e questões da semana atual)
         const hoje = new Date();
         const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - hoje.getDay());
         inicioSemana.setHours(0,0,0,0);
@@ -2050,14 +2046,12 @@ Comentário:
         const questoesSemana = state.questionsHistory.filter(q => {
           const d = new Date(q.date); return d >= inicioSemana && d < fimSemana;
         }).length;
-        // Tempo da semana (estimativa simplificada baseada no total de horas registradas no state)
-        const tempoSemana = totalSec; // poderia ser mais preciso, mas usaremos total acumulado como exemplo
+        const tempoSemana = totalSec;
         const metaHoras = state.user.dailyGoalHours * 7;
         const metaQuestoes = state.user.dailyGoalQuestions * 7;
         const percentHoras = Math.min((tempoSemana / 3600) / metaHoras * 100, 100);
         const percentQuestoes = Math.min((questoesSemana / metaQuestoes) * 100, 100);
 
-        // Progresso no edital: % de tópicos que possuem pelo menos alguma atividade (questões respondidas)
         let totalTopics = 0, completedTopics = 0;
         state.disciplines.forEach(d => {
           d.topics.forEach(t => {
@@ -2067,7 +2061,6 @@ Comentário:
         });
         const editalPercent = totalTopics ? (completedTopics / totalTopics * 100).toFixed(0) : 0;
 
-        // NOVO: Revisões programadas (próximas 5 pendentes)
         const revisoesPendentes = state.revisoes
           .filter(r => r.status === 'pendente' && new Date(r.data) >= new Date().setHours(0,0,0,0))
           .sort((a,b) => new Date(a.data) - new Date(b.data))
@@ -2081,7 +2074,6 @@ Comentário:
             <div class="greeting">Olá, ${state.user.name.split(' ')[0]}! Veja seu resumo de estudos.</div>
           </div>
 
-          <!-- NOVOS CARDS (grid de 4) -->
           <div class="dashboard-grid">
             <div class="card motivational-card">
               <div class="card-header"><i class="fas fa-quote-right"></i> Frase do dia</div>
@@ -2129,7 +2121,6 @@ Comentário:
             </div>
           </div>
 
-          <!-- LISTA DE REVISÕES (NOVO) -->
           <div class="card" style="margin-bottom: 24px;">
             <div class="card-header"><i class="fas fa-sync-alt"></i> Próximas revisões</div>
             ${revisoesPendentes.length > 0 ? revisoesPendentes.map(r => {
@@ -2256,7 +2247,6 @@ Comentário:
           });
         });
 
-        // Botão para definir data da prova (novo)
         const btnData = document.getElementById('definirDataProvaBtn');
         if (btnData) {
           btnData.addEventListener('click', () => {
@@ -2368,12 +2358,10 @@ Comentário:
         else if(action === 'deleteTopic') { discipline.topics = discipline.topics.filter(t=>t.id !== topicId); saveToStorage(); renderDisciplinesList(); }
       }
       
-      // MODIFICADO: agora também gera revisões para questões erradas
       function recordQuestionHistory(discId, topicId, correct) {
         const today = new Date().toISOString().split('T')[0];
         state.questionsHistory.push({ date: today, disciplineId: discId, topicId, correct });
         if (!correct) {
-          // Criar revisão para 7 dias depois
           const revisaoData = new Date();
           revisaoData.setDate(revisaoData.getDate() + 7);
           state.revisoes.push({
@@ -2495,7 +2483,7 @@ Comentário:
         container.querySelectorAll('[data-action="deleteLegislacao"]').forEach(i => i.addEventListener('click', (e) => { e.stopPropagation(); if(confirm('Excluir?')) { state.legislations = state.legislations.filter(l => l.id !== parseInt(i.dataset.id)); saveToStorage(); renderLegislacaoList(document.querySelector('.filter-chip.active')?.dataset.filter || 'all'); }}));
       }
 
-      // ========== QUESTÕES ==========
+      // ========== QUESTÕES (ABA MODIFICADA) ==========
       function parseQuestions(rawText) {
         const questions = [];
         let normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -2603,12 +2591,15 @@ Comentário:
           });
         });
       }
+      
       function renderQuestoes() {
         const today = new Date().toISOString().split('T')[0];
         const todayQs = state.questionsHistory.filter(q => q.date === today);
         const correctToday = todayQs.filter(q => q.correct).length;
         const totalToday = todayQs.length;
         const rate = totalToday ? ((correctToday / totalToday) * 100).toFixed(1) : '0.0';
+        
+        // HTML com a modificação solicitada: apenas botão "Baixar Prompts"
         const html = `
           ${renderGlobalTimer()}
           <div class="page-title">Questões</div>
@@ -2631,11 +2622,11 @@ Comentário:
             </div>
           </div>
           <div class="section-divider"></div>
+          <!-- Cabeçalho com botão único -->
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
             <h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2>
-            <div style="display: flex; gap: 12px;">
-              <button class="btn-secondary" id="tutorialBtn"><i class="fas fa-graduation-cap"></i> 📘 Aprenda a usar</button>
-              <button class="btn-primary" id="promptsBtn"><i class="fas fa-list-ul"></i> 📋 Prompts prontos</button>
+            <div>
+              <button class="btn-primary" id="downloadPromptsBtn"><i class="fas fa-download"></i> Baixar Prompts</button>
             </div>
           </div>
           <div class="card">
@@ -2671,15 +2662,21 @@ Comentário:
           if (generatedQuestions.length === 0) alert('Nenhuma questão válida encontrada. Verifique o formato.');
           refreshQuestionsDisplay();
         });
-        document.getElementById('tutorialBtn').addEventListener('click', () => {
-          document.getElementById('tutorialModal').style.display = 'flex';
-        });
-        document.getElementById('promptsBtn').addEventListener('click', () => {
-          renderPromptsModal();
-          document.getElementById('promptsModal').style.display = 'flex';
-        });
+        
+        // Evento do novo botão de download
+        const downloadBtn = document.getElementById('downloadPromptsBtn');
+        if (downloadBtn) {
+          downloadBtn.addEventListener('click', () => {
+            // Link de download direto do arquivo de prompts
+            const fileId = '12FtyyLgjkiteFvXis8KHweyIqMZXBhoU';
+            const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            window.open(downloadUrl, '_blank');
+          });
+        }
+
         if (generatedQuestions.length) attachQuestionEvents();
       }
+      
       function registrarQuestaoManual(isCorrect) {
         const discId = parseInt(document.getElementById('qDiscipline').value);
         if (isNaN(discId)) { alert('Selecione uma disciplina.'); return; }
@@ -2703,48 +2700,7 @@ Comentário:
         return html;
       }
 
-      // Lista de prompts
-      const promptsList = [
-        { titulo: "📊 13. ENUNCIADO COM BASE NOS TEMAS MAIS COBRADOS", descricao: "Foca nos assuntos mais cobrados em prova.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [disciplina], focando nos assuntos mais cobrados em prova.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "📚 14. ENUNCIADO POR TÓPICOS ESPECÍFICOS", descricao: "Aborda tópicos específicos fornecidos.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [disciplina], abordando especificamente os seguintes tópicos: [lista de tópicos].\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🔥 15. ENUNCIADO COM ALTA INCIDÊNCIA + DIFICULDADE", descricao: "Tópicos mais cobrados e nível elevado.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [disciplina], focando nos tópicos mais cobrados e com nível de dificuldade elevado.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "📌 1. ENUNCIADO DIRETO (CONCEITUAL)", descricao: "Cobra definição, conceito puro.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado direto e conceitual.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "📊 2. ENUNCIADO INTERPRETATIVO", descricao: "Exige leitura e análise.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado interpretativo.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "⚖️ 3. ENUNCIADO COM LEGISLAÇÃO", descricao: "Baseado em lei seca.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado baseado na literalidade da lei.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🧩 4. ENUNCIADO COM PEGADINHA", descricao: "Foco em erro comum.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado contendo pegadinhas típicas de prova.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "📚 5. ENUNCIADO CONTEXTUALIZADO", descricao: "Situação aplicada.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado contextualizado.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🧠 6. ENUNCIADO COM CASO PRÁTICO", descricao: "Simulação real.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado em forma de caso prático.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🔍 7. ENUNCIADO ANALÍTICO", descricao: "Exige comparação / raciocínio.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado analítico.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "📈 8. ENUNCIADO DE ALTA DIFICULDADE", descricao: "Nível avançado.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado de alta complexidade.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🔁 9. ENUNCIADO BASEADO EM ERRO", descricao: "Aprendizado ativo.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado semelhante a erros comuns de candidatos.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "⚡ 10. ENUNCIADO CURTO (REVISÃO)", descricao: "Rápido e direto.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado curto.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🎯 11. ENUNCIADO FOCADO EM BANCA", descricao: "Padrão da banca.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado típico da banca.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` },
-        { titulo: "🧪 12. ENUNCIADO MISTO (NÍVEL PROVA REAL)", descricao: "O mais poderoso.", prompt: `Gere uma questão de concurso público no estilo da banca [FCC/FGV/CESPE] sobre o tema: [assunto], com enunciado contextualizado, interpretativo e com pegadinha.\n\nUse o formato:\n(Questão de Treino)\n[Enunciado]\na) ...\nb) ...\nc) ...\nd) ...\ne) ...\nGabarito: [Letra]\nComentário:\n[Explicação]` }
-      ];
-
-      function renderPromptsModal() {
-        const container = document.getElementById('promptsListContainer');
-        container.innerHTML = promptsList.map(p => `
-          <div class="prompt-card">
-            <div class="prompt-card-header">
-              <h4>${p.titulo}</h4>
-              <button class="btn-sm btn-primary copiar-prompt-btn" data-prompt="${encodeURIComponent(p.prompt)}"><i class="fas fa-copy"></i> Copiar</button>
-            </div>
-            <p style="color: #5A5A5A; margin-bottom: 8px;">${p.descricao}</p>
-            <div class="prompt-text">${p.prompt.replace(/\n/g, '<br>')}</div>
-          </div>
-        `).join('');
-        document.querySelectorAll('.copiar-prompt-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const promptText = decodeURIComponent(btn.dataset.prompt);
-            navigator.clipboard.writeText(promptText).then(() => {
-              mostrarMensagemFlutuante('✅ Prompt copiado!', '#2E7D32');
-            }).catch(() => alert('Não foi possível copiar.'));
-          });
-        });
-      }
-
-      // ========== LEITURA INTELIGENTE ==========
+      // ========== LEITURA INTELIGENTE (inalterada) ==========
       let leituraState = { pdfDoc: null, disciplinaId: null, nomeArquivo: '', tempoSessao: 0, timerInterval: null, timerRunning: false, currentPage: 1, totalPages: 0, inactivityTimer: null, ultimaAtividade: Date.now(), modoFoco: false, destaquesTemp: [], anotacoesTemp: [] };
       function renderLeitura() {
         const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary" id="voltarInicioBtn"><i class="fas fa-arrow-left"></i> Voltar para Início</button><button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
@@ -2790,9 +2746,8 @@ Comentário:
         atualizarListaAnotacoes();
       }
 
-      // ========== PÁGINA DESEMPENHO (MELHORADA) ==========
+      // ========== PÁGINA DESEMPENHO ==========
       function renderDesempenho() {
-        // Calcular totais semanais
         const hoje = new Date();
         const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - hoje.getDay());
         inicioSemana.setHours(0,0,0,0);
@@ -2808,8 +2763,6 @@ Comentário:
           if (d.topics.length) d.topics.forEach(t => tempoSemana += t.timeSeconds || 0);
           else tempoSemana += d.timeSeconds || 0;
         });
-        
-        // Agrupar questões por dia para gráfico
         const diasMap = {};
         for (let i = 0; i < 7; i++) {
           const d = new Date(inicioSemana); d.setDate(inicioSemana.getDate() + i);
@@ -2839,10 +2792,8 @@ Comentário:
           </div>
         `;
         contentDiv.innerHTML = html;
-        // Renderizar gráficos simples com canvas
         const ctxEvol = document.getElementById('evolucaoChart')?.getContext('2d');
         if (ctxEvol) {
-          // Dados fictícios para evolução (poderiam ser baseados em histórico)
           const dias = labels;
           const acertosDia = dias.map((_, i) => {
             const date = Object.keys(diasMap)[i];
@@ -2855,11 +2806,10 @@ Comentário:
         if (ctxDia) {
           new Chart(ctxDia, { type: 'bar', data: { labels, datasets: [{ label: 'Questões', data: dataQuestoes, backgroundColor: '#F57C00' }] } });
         }
-        // Se Chart não estiver definido, fallback simples
         if (typeof Chart === 'undefined') {
           const script = document.createElement('script');
           script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-          script.onload = () => renderDesempenho(); // re-renderiza
+          script.onload = () => renderDesempenho();
           document.head.appendChild(script);
           return;
         }
