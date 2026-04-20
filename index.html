@@ -23,6 +23,49 @@
       overflow: hidden;
     }
 
+    /* ===== SISTEMA PADRONIZADO DE HOVER (INTERATIVO) ===== */
+    .interativo {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      cursor: pointer;
+    }
+
+    .interativo:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      filter: brightness(1.03);
+    }
+
+    .interativo:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+    }
+
+    /* Aplicação automática a botões e elementos comuns, mantendo consistência */
+    button, .btn-primary, .btn-secondary, .nav-item, .resumo-card, .filter-chip, .status-badge, .legislacao-card, .benefit-card, .step, .video-card, .pagination button, .expand-btn, .actions i, .help-btn-float, .welcome-cta, .timer-btn, .tesoura-btn, .mentoria-container .card, .landing-page .btn-primary, .landing-page .btn-secondary, .dashboard-help-modal .btn-primary, .tutorial-modal .btn-secondary, .prompts-modal .btn-secondary {
+      /* Herdam ou recebem a classe .interativo quando aplicada; garantimos que elementos sem a classe também tenham transição suave */
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    button:hover, .btn-primary:hover, .btn-secondary:hover, .nav-item:hover, .resumo-card:hover, .filter-chip:hover, .status-badge:hover, .legislacao-card:hover, .benefit-card:hover, .step:hover, .video-card:hover, .pagination button:hover, .expand-btn:hover, .actions i:hover, .help-btn-float:hover, .welcome-cta:hover, .timer-btn:hover, .tesoura-btn:hover, .mentoria-container .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      filter: brightness(1.03);
+    }
+
+    button:active, .btn-primary:active, .btn-secondary:active, .nav-item:active, .resumo-card:active, .filter-chip:active, .status-badge:active, .legislacao-card:active, .benefit-card:active, .step:active, .video-card:active, .pagination button:active, .expand-btn:active, .actions i:active, .help-btn-float:active, .welcome-cta:active, .timer-btn:active, .tesoura-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+    }
+
+    /* Elementos que já possuem box-shadow específico podem manter, mas o hover adiciona sombra extra */
+    .card, .modal-card, .global-timer, .disciplines-table {
+      transition: box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .card:hover, .modal-card:hover, .global-timer:hover, .disciplines-table:hover {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    }
+
     /* ========== TELA DE BOAS-VINDAS (WELCOME / ONBOARDING) ========== */
     #welcomeOverlay {
       position: fixed;
@@ -1687,11 +1730,11 @@
         <div class="highlight-item"><i class="fas fa-chart-line"></i> Desempenho</div>
         <div class="highlight-item"><i class="fas fa-gavel"></i> Legislação</div>
       </div>
-      <button class="welcome-cta" id="welcomeCtaBtn">
+      <button class="welcome-cta interativo" id="welcomeCtaBtn">
         <i class="fas fa-play"></i> Começar a estudar
       </button>
       <div class="welcome-footer">
-        <button class="skip-link" id="skipWelcomeBtn">Pular introdução</button>
+        <button class="skip-link interativo" id="skipWelcomeBtn">Pular introdução</button>
       </div>
     </div>
   </div>
@@ -1705,8 +1748,8 @@
           <h1>Estude com <span class="highlight">estratégia</span>,<br>não no escuro.</h1>
           <p>Controle disciplinas, legislação, questões e desempenho em um só lugar.</p>
           <div class="hero-buttons">
-            <button class="btn-primary" id="startNowBtn"><i class="fas fa-rocket"></i> Começar agora</button>
-            <button class="btn-primary" id="accessAppBtn"><i class="fas fa-arrow-right"></i> Acessar sistema</button>
+            <button class="btn-primary interativo" id="startNowBtn"><i class="fas fa-rocket"></i> Começar agora</button>
+            <button class="btn-primary interativo" id="accessAppBtn"><i class="fas fa-arrow-right"></i> Acessar sistema</button>
           </div>
         </div>
         <div class="hero-image">
@@ -1721,22 +1764,22 @@
       <div class="benefits">
         <h2 class="section-title">Tudo que você precisa para evoluir</h2>
         <div class="benefits-grid">
-          <div class="benefit-card">
+          <div class="benefit-card interativo">
             <i class="fas fa-chart-line"></i>
             <h3>Controle de desempenho</h3>
             <p>Acompanhe métricas, acertos e evolução com gráficos claros.</p>
           </div>
-          <div class="benefit-card">
+          <div class="benefit-card interativo">
             <i class="fas fa-book-open"></i>
             <h3>Gestão de disciplinas</h3>
             <p>Organize matérias, tópicos e cronograma de estudos.</p>
           </div>
-          <div class="benefit-card">
+          <div class="benefit-card interativo">
             <i class="fas fa-gavel"></i>
             <h3>Organização de legislação</h3>
             <p>Controle leitura de leis, resumos e questões por norma.</p>
           </div>
-          <div class="benefit-card">
+          <div class="benefit-card interativo">
             <i class="fas fa-brain"></i>
             <h3>Estudo inteligente</h3>
             <p>Baseado em dados, revisões estratégicas e foco no que importa.</p>
@@ -1760,17 +1803,17 @@
       <div class="steps">
         <h2 class="section-title">Como funciona</h2>
         <div class="steps-container">
-          <div class="step">
+          <div class="step interativo">
             <div class="step-number">1</div>
             <h3>Adicione suas disciplinas</h3>
             <p>Cadastre as matérias do seu concurso e organize por tópicos.</p>
           </div>
-          <div class="step">
+          <div class="step interativo">
             <div class="step-number">2</div>
             <h3>Registre seus estudos</h3>
             <p>Controle tempo, questões e acertos de forma simples.</p>
           </div>
-          <div class="step">
+          <div class="step interativo">
             <div class="step-number">3</div>
             <h3>Acompanhe seu desempenho</h3>
             <p>Visualize relatórios, taxas de acerto e priorize revisões.</p>
@@ -1782,7 +1825,7 @@
       <div class="cta">
         <h2>Comece a estudar com estratégia hoje.</h2>
         <p>Junte-se a centenas de concurseiros que usam o Vulpis Asset para acelerar a aprovação.</p>
-        <button class="btn-primary" id="ctaEnterBtn"><i class="fas fa-arrow-right"></i> Entrar no sistema</button>
+        <button class="btn-primary interativo" id="ctaEnterBtn"><i class="fas fa-arrow-right"></i> Entrar no sistema</button>
       </div>
 
       <div class="landing-footer">
@@ -1802,17 +1845,17 @@
         <span class="logo-text">Vulpis Asset</span>
       </div>
       <div class="nav-menu">
-        <div class="nav-item" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
-        <div class="nav-item" data-page="disciplinas"><i class="fas fa-book-open"></i> Disciplinas</div>
-        <div class="nav-item" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
-        <div class="nav-item" data-page="legislacao">
+        <div class="nav-item interativo" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
+        <div class="nav-item interativo" data-page="disciplinas"><i class="fas fa-book-open"></i> Disciplinas</div>
+        <div class="nav-item interativo" data-page="questoes"><i class="fas fa-question-circle"></i> Questões</div>
+        <div class="nav-item interativo" data-page="legislacao">
           <img src="https://cdn-icons-png.flaticon.com/512/6983/6983044.png" alt="Legislação" style="width:24px; height:24px; object-fit:contain;"> Legislação
         </div>
-        <div class="nav-item" data-page="leitura"><i class="fas fa-book-reader"></i> Leitura</div>
-        <div class="nav-item" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
-        <div class="nav-item" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
-        <div class="nav-item" data-page="mentoria"><i class="fas fa-graduation-cap"></i> Mentoria</div>
-        <div class="nav-item" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
+        <div class="nav-item interativo" data-page="leitura"><i class="fas fa-book-reader"></i> Leitura</div>
+        <div class="nav-item interativo" data-page="desempenho"><i class="fas fa-chart-line"></i> Desempenho</div>
+        <div class="nav-item interativo" data-page="manual-ia"><i class="fas fa-robot"></i> Manual IA</div>
+        <div class="nav-item interativo" data-page="mentoria"><i class="fas fa-graduation-cap"></i> Mentoria</div>
+        <div class="nav-item interativo" data-page="perfil"><i class="fas fa-user-circle"></i> Perfil</div>
       </div>
     </div>
     <div class="main" id="app-content"></div>
@@ -1841,7 +1884,7 @@
         <p>No fim das contas, o dashboard não é só uma tela bonita com gráficos — ele é uma <strong>ferramenta de decisão</strong>. Ele te mostra onde você está, para onde está indo e o que precisa ajustar, ajudando você a evoluir de forma mais consciente e consistente nos estudos.</p>
       </div>
       <div class="help-footer">
-        <button class="btn-primary" id="closeDashboardHelpBtn">Entendi</button>
+        <button class="btn-primary interativo" id="closeDashboardHelpBtn">Entendi</button>
       </div>
     </div>
   </div>
@@ -1851,7 +1894,7 @@
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <h2 style="font-family: Poppins; color: #E65100;"><i class="fas fa-graduation-cap"></i> Guia Completo: Gerando Questões com IA</h2>
-        <button class="btn-secondary" id="closeTutorialBtn" style="border-radius: 30px;"><i class="fas fa-times"></i></button>
+        <button class="btn-secondary interativo" id="closeTutorialBtn" style="border-radius: 30px;"><i class="fas fa-times"></i></button>
       </div>
       <div class="help-content" style="max-height: 70vh; overflow-y: auto; padding-right: 8px;">
         <h3>🌟 Introdução</h3>
@@ -1889,7 +1932,7 @@ Comentário:
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <h2 style="font-family: Poppins; color: #E65100;"><i class="fas fa-list-ul"></i> Prompts Prontos para IA</h2>
-        <button class="btn-secondary" id="closePromptsBtn" style="border-radius: 30px;"><i class="fas fa-times"></i></button>
+        <button class="btn-secondary interativo" id="closePromptsBtn" style="border-radius: 30px;"><i class="fas fa-times"></i></button>
       </div>
       <div id="promptsListContainer" style="max-height: 70vh; overflow-y: auto; padding-right: 8px;"></div>
     </div>
@@ -1903,8 +1946,8 @@ Comentário:
       <input list="disciplinesDatalist" id="disciplineNameInput" placeholder="Ex: Direito Constitucional">
       <datalist id="disciplinesDatalist"></datalist>
       <div class="flex-buttons">
-        <button class="btn-primary" style="background: #9E9E9E;" id="cancelModal">Cancelar</button>
-        <button class="btn-primary" id="saveDiscipline">Adicionar</button>
+        <button class="btn-primary interativo" style="background: #9E9E9E;" id="cancelModal">Cancelar</button>
+        <button class="btn-primary interativo" id="saveDiscipline">Adicionar</button>
       </div>
     </div>
   </div>
@@ -1914,8 +1957,8 @@ Comentário:
       <input type="text" id="topicNameInput" placeholder="Nome do tópico">
       <input type="hidden" id="currentDisciplineId">
       <div class="flex-buttons">
-        <button class="btn-primary" style="background: #9E9E9E;" id="cancelTopicModal">Cancelar</button>
-        <button class="btn-primary" id="saveTopic">Adicionar</button>
+        <button class="btn-primary interativo" style="background: #9E9E9E;" id="cancelTopicModal">Cancelar</button>
+        <button class="btn-primary interativo" id="saveTopic">Adicionar</button>
       </div>
     </div>
   </div>
@@ -1926,8 +1969,8 @@ Comentário:
       <input type="text" id="legislacaoNomeInput" placeholder="Ex: Constituição Federal, Lei 8.112/90...">
       <input type="hidden" id="legislacaoEditId">
       <div class="flex-buttons">
-        <button class="btn-primary" style="background: #9E9E9E;" id="cancelLegislacaoModal">Cancelar</button>
-        <button class="btn-primary" id="saveLegislacao">Salvar</button>
+        <button class="btn-primary interativo" style="background: #9E9E9E;" id="cancelLegislacaoModal">Cancelar</button>
+        <button class="btn-primary interativo" id="saveLegislacao">Salvar</button>
       </div>
     </div>
   </div>
@@ -1940,8 +1983,8 @@ Comentário:
       <textarea id="anotacaoTexto" rows="4" placeholder="Digite sua anotação..."></textarea>
       <input type="hidden" id="anotacaoPagina">
       <div class="flex-buttons">
-        <button class="btn-primary" style="background: #9E9E9E;" id="cancelAnotacao">Cancelar</button>
-        <button class="btn-primary" id="saveAnotacao">Salvar</button>
+        <button class="btn-primary interativo" style="background: #9E9E9E;" id="cancelAnotacao">Cancelar</button>
+        <button class="btn-primary interativo" id="saveAnotacao">Salvar</button>
       </div>
     </div>
   </div>
@@ -2145,9 +2188,9 @@ Comentário:
               <span class="timer-display" id="timerDisplay">${formatTime(timerSeconds)}</span>
             </div>
             <div class="timer-controls">
-              <button class="timer-btn play" id="timerStart" title="Iniciar"><i class="fas fa-play"></i></button>
-              <button class="timer-btn" id="timerPause" title="Pausar"><i class="fas fa-pause"></i></button>
-              <button class="timer-btn" id="timerStop" title="Finalizar e salvar"><i class="fas fa-stop"></i></button>
+              <button class="timer-btn play interativo" id="timerStart" title="Iniciar"><i class="fas fa-play"></i></button>
+              <button class="timer-btn interativo" id="timerPause" title="Pausar"><i class="fas fa-pause"></i></button>
+              <button class="timer-btn interativo" id="timerStop" title="Finalizar e salvar"><i class="fas fa-stop"></i></button>
             </div>
           </div>
         `;
@@ -2262,23 +2305,23 @@ Comentário:
         const html = `
           ${renderGlobalTimer()}
           <div style="position: relative;">
-            <button class="help-btn-float" id="dashboardHelpBtn" title="O que é o Dashboard?"><i class="far fa-question-circle"></i></button>
+            <button class="help-btn-float interativo" id="dashboardHelpBtn" title="O que é o Dashboard?"><i class="far fa-question-circle"></i></button>
             <div class="page-title">Dashboard</div>
             <div class="greeting">Olá, ${state.user.name.split(' ')[0]}! Veja seu resumo de estudos.</div>
           </div>
 
           <div class="dashboard-grid">
-            <div class="card motivational-card">
+            <div class="card motivational-card interativo">
               <div class="card-header"><i class="fas fa-quote-right"></i> Frase do dia</div>
               <p style="font-size: 1rem; line-height: 1.4; margin-bottom: 8px;">${fraseAleatoria}</p>
             </div>
-            <div class="card">
+            <div class="card interativo">
               <div class="card-header"><i class="fas fa-calendar-check"></i> Contagem regressiva</div>
               <div class="card-value">${diasParaProva}</div>
               <div class="card-label">dias para a prova</div>
-              ${!state.user.examDate ? '<button class="btn-secondary" id="definirDataProvaBtn" style="margin-top:12px; width:100%;"><i class="fas fa-calendar-plus"></i> Definir data</button>' : ''}
+              ${!state.user.examDate ? '<button class="btn-secondary interativo" id="definirDataProvaBtn" style="margin-top:12px; width:100%;"><i class="fas fa-calendar-plus"></i> Definir data</button>' : ''}
             </div>
-            <div class="card">
+            <div class="card interativo">
               <div class="card-header"><i class="fas fa-tasks"></i> Metas da semana</div>
               <div style="margin-bottom:12px;">
                 <div style="display:flex; justify-content:space-between;"><span>⏱️ ${Math.floor(tempoSemana/3600)}/${metaHoras}h</span><span>${percentHoras.toFixed(0)}%</span></div>
@@ -2289,7 +2332,7 @@ Comentário:
                 <div class="progress-bar"><div class="progress-fill" style="width:${percentQuestoes}%"></div></div>
               </div>
             </div>
-            <div class="card">
+            <div class="card interativo">
               <div class="card-header"><i class="fas fa-list-check"></i> Progresso no edital</div>
               <div class="card-value">${editalPercent}%</div>
               <div class="progress-bar"><div class="progress-fill" style="width:${editalPercent}%"></div></div>
@@ -2297,7 +2340,7 @@ Comentário:
             </div>
           </div>
 
-          <div class="card" style="margin-bottom: 32px;">
+          <div class="card interativo" style="margin-bottom: 32px;">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
               <div style="text-align: center; flex: 1;">
                 <div style="font-size: 1rem; color: #757575;">Taxa de Acerto</div>
@@ -2314,7 +2357,7 @@ Comentário:
             </div>
           </div>
 
-          <div class="card" style="margin-bottom: 24px;">
+          <div class="card interativo" style="margin-bottom: 24px;">
             <div class="card-header"><i class="fas fa-sync-alt"></i> Próximas revisões</div>
             ${revisoesPendentes.length > 0 ? revisoesPendentes.map(r => {
               const disc = state.disciplines.find(d => d.id === r.disciplinaId);
@@ -2328,7 +2371,7 @@ Comentário:
           <div class="section-header">
             <h2 style="font-family: Poppins; font-size:1.5rem;">Desempenho por Disciplina</h2>
           </div>
-          <div class="card" style="margin-bottom: 24px;">
+          <div class="card interativo" style="margin-bottom: 24px;">
             ${sortedByTime.map(d => {
               let t=0, q=0, c=0;
               if(d.topics.length) { d.topics.forEach(tp => { t+=tp.timeSeconds||0; q+=tp.questions||0; c+=tp.correct||0; }); }
@@ -2347,11 +2390,11 @@ Comentário:
           </div>
 
           <div class="action-buttons">
-            <button class="btn-primary" id="gotoQuestoesBtn"><i class="fas fa-pencil-alt"></i> Resolver questões agora</button>
-            <button class="btn-secondary" id="revisarPioresBtn"><i class="fas fa-sync-alt"></i> Revisar conteúdos com mais erros</button>
+            <button class="btn-primary interativo" id="gotoQuestoesBtn"><i class="fas fa-pencil-alt"></i> Resolver questões agora</button>
+            <button class="btn-secondary interativo" id="revisarPioresBtn"><i class="fas fa-sync-alt"></i> Revisar conteúdos com mais erros</button>
           </div>
 
-          <div class="card" style="margin-bottom: 32px;">
+          <div class="card interativo" style="margin-bottom: 32px;">
             <div class="card-header"><i class="fas fa-calendar-week"></i> Horas estudadas na semana</div>
             <div class="week-bars">
               ${weekDays.map((day, i) => {
@@ -2362,21 +2405,21 @@ Comentário:
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px;">
-            <div class="resumo-card" data-page="legislacao">
+            <div class="resumo-card interativo" data-page="legislacao">
               <i class="fas fa-gavel"></i>
               <h4>Legislação</h4>
               <p style="color: #5A5A5A; margin-bottom: 8px;">${legislacaoCount} normas cadastradas</p>
               <div class="progress-bar" style="margin: 8px 0;"><div class="progress-fill" style="width: ${legislacaoCount ? (legislacaoLidas/legislacaoCount)*100 : 0}%"></div></div>
               <small style="color: #757575;">${legislacaoLidas} lidas na íntegra</small>
             </div>
-            <div class="resumo-card" data-page="desempenho">
+            <div class="resumo-card interativo" data-page="desempenho">
               <i class="fas fa-chart-line"></i>
               <h4>Desempenho</h4>
               <p style="font-size: 2rem; font-weight: 700; color: #212121;">${desempenhoGeral}%</p>
               <p style="color: #5A5A5A;">${questoesFeitas} questões respondidas</p>
               <small style="color: #757575;">Evolução vs. semana anterior: +5%</small>
             </div>
-            <div class="resumo-card" data-page="manual-ia">
+            <div class="resumo-card interativo" data-page="manual-ia">
               <i class="fas fa-robot"></i>
               <h4>Manual de IA</h4>
               <p style="color: #5A5A5A;">Aprenda a gerar questões com ChatGPT e similares.</p>
@@ -2470,9 +2513,9 @@ Comentário:
               <div class="page-title">Disciplinas</div>
               <div class="greeting">Gerencie suas matérias e tópicos</div>
             </div>
-            <button class="btn-primary" id="addDisciplineBtn"><i class="fas fa-plus-circle"></i> Adicionar disciplina</button>
+            <button class="btn-primary interativo" id="addDisciplineBtn"><i class="fas fa-plus-circle"></i> Adicionar disciplina</button>
           </div>
-          <div class="disciplines-table">
+          <div class="disciplines-table interativo">
             <div class="table-header"><span>Disciplina</span><span>Tempo</span><span>Questões</span><span>Certas</span><span>Erradas</span><span>% Acerto</span><span>Ações</span></div>
             <div id="disciplinesList"></div>
           </div>
@@ -2491,12 +2534,12 @@ Comentário:
           else { t=disc.timeSeconds||0; q=disc.questions||0; c=disc.correct||0; w=disc.wrong||0; }
           const percent = q ? ((c/q)*100).toFixed(1) : '0.0';
           rows += `<div class="discipline-row" data-id="${disc.id}">
-            <div class="discipline-name"><button class="expand-btn" data-id="${disc.id}"><i class="fas fa-chevron-${disc.expanded ? 'down' : 'right'}"></i></button><span>${disc.name}</span>${disc.topics.length?`<span class="badge">${disc.topics.length} tópicos</span>`:''}</div>
+            <div class="discipline-name"><button class="expand-btn interativo" data-id="${disc.id}"><i class="fas fa-chevron-${disc.expanded ? 'down' : 'right'}"></i></button><span>${disc.name}</span>${disc.topics.length?`<span class="badge">${disc.topics.length} tópicos</span>`:''}</div>
             <div>${formatHoursMinutes(t)}</div><div>${q}</div><div>${c}</div><div>${w}</div>
             <div style="display:flex; align-items:center; gap:8px;"><span>${percent}%</span><div class="percentage-bar"><div class="percentage-fill" style="width:${percent}%"></div></div></div>
             <div class="actions">
-              <i class="fas fa-plus-circle" data-action="addCorrect" data-id="${disc.id}"></i><i class="fas fa-minus-circle" data-action="addWrong" data-id="${disc.id}"></i>
-              <i class="fas fa-layer-group" data-action="addTopic" data-id="${disc.id}"></i><i class="fas fa-edit" data-action="editDisc" data-id="${disc.id}"></i><i class="fas fa-trash-alt" data-action="deleteDisc" data-id="${disc.id}"></i>
+              <i class="fas fa-plus-circle interativo" data-action="addCorrect" data-id="${disc.id}"></i><i class="fas fa-minus-circle interativo" data-action="addWrong" data-id="${disc.id}"></i>
+              <i class="fas fa-layer-group interativo" data-action="addTopic" data-id="${disc.id}"></i><i class="fas fa-edit interativo" data-action="editDisc" data-id="${disc.id}"></i><i class="fas fa-trash-alt interativo" data-action="deleteDisc" data-id="${disc.id}"></i>
             </div>
           </div>`;
           if(disc.expanded && disc.topics.length) {
@@ -2506,8 +2549,8 @@ Comentário:
                 <div style="display:flex; gap:10px;"><i class="far fa-file-alt"></i> ${topic.name}</div><div>${formatHoursMinutes(topic.timeSeconds||0)}</div><div>${topic.questions||0}</div><div>${topic.correct||0}</div><div>${topic.wrong||0}</div>
                 <div style="display:flex; align-items:center; gap:8px;"><span>${tp}%</span><div class="percentage-bar"><div class="percentage-fill" style="width:${tp}%"></div></div></div>
                 <div class="actions">
-                  <i class="fas fa-plus-circle" data-action="topicCorrect" data-disc="${disc.id}" data-topic="${topic.id}"></i><i class="fas fa-minus-circle" data-action="topicWrong" data-disc="${disc.id}" data-topic="${topic.id}"></i>
-                  <i class="fas fa-edit" data-action="editTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i><i class="fas fa-trash-alt" data-action="deleteTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i>
+                  <i class="fas fa-plus-circle interativo" data-action="topicCorrect" data-disc="${disc.id}" data-topic="${topic.id}"></i><i class="fas fa-minus-circle interativo" data-action="topicWrong" data-disc="${disc.id}" data-topic="${topic.id}"></i>
+                  <i class="fas fa-edit interativo" data-action="editTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i><i class="fas fa-trash-alt interativo" data-action="deleteTopic" data-disc="${disc.id}" data-topic="${topic.id}"></i>
                 </div>
               </div>`;
             });
@@ -2573,17 +2616,17 @@ Comentário:
           <div class="page-title">📜 Legislação</div>
           <div class="greeting"><i class="fas fa-gavel"></i> Gerencie e acompanhe seu progresso nas principais normas para concursos</div>
           <div style="display:flex; gap:16px; margin-bottom: 20px;">
-            <button class="btn-primary" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar Legislação</button>
-            <button class="btn-secondary" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
+            <button class="btn-primary interativo" id="addLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar Legislação</button>
+            <button class="btn-secondary interativo" id="toggleGuiaBtn"><i class="fas fa-question-circle"></i> Como usar</button>
           </div>
-          <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card">
+          <div id="guiaLegislacao" style="display:none; margin-bottom:24px;" class="card insight-card interativo">
             <p><i class="fas fa-info-circle"></i> <strong>Guia de Estudo de Legislação:</strong> 1) Leitura completa da lei seca. 2) Leitura de resumos e esquemas. 3) Revisões periódicas. 4) Resolução de questões. Marque seu progresso abaixo.</p>
           </div>
           <div class="legislacao-filters" id="legislacaoFilters">
-            <span class="filter-chip active" data-filter="all">Todas</span>
-            <span class="filter-chip" data-filter="in-progress">Em andamento</span>
-            <span class="filter-chip" data-filter="completed">Concluídas</span>
-            <span class="filter-chip" data-filter="pending">Não iniciadas</span>
+            <span class="filter-chip interativo active" data-filter="all">Todas</span>
+            <span class="filter-chip interativo" data-filter="in-progress">Em andamento</span>
+            <span class="filter-chip interativo" data-filter="completed">Concluídas</span>
+            <span class="filter-chip interativo" data-filter="pending">Não iniciadas</span>
           </div>
           <div id="legislacaoList"></div>
         `;
@@ -2615,7 +2658,7 @@ Comentário:
       function renderLegislacaoList(filter = 'all') {
         const container = document.getElementById('legislacaoList');
         if (!state.legislations.length) {
-          container.innerHTML = `<div class="legislacao-empty-state"><i class="fas fa-scale-balanced"></i><h3>Nenhuma legislação cadastrada ainda</h3><p>Adicione normas importantes como a Constituição Federal, leis específicas e resumos.</p><button class="btn-primary" id="emptyAddLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar legislação</button></div>`;
+          container.innerHTML = `<div class="legislacao-empty-state"><i class="fas fa-scale-balanced"></i><h3>Nenhuma legislação cadastrada ainda</h3><p>Adicione normas importantes como a Constituição Federal, leis específicas e resumos.</p><button class="btn-primary interativo" id="emptyAddLegislacaoBtn"><i class="fas fa-plus-circle"></i> Adicionar legislação</button></div>`;
           document.getElementById('emptyAddLegislacaoBtn')?.addEventListener('click', () => openLegislacaoModal());
           return;
         }
@@ -2634,12 +2677,12 @@ Comentário:
           const leituraClass = leg.leituraCompleta ? 'completed' : 'pending';
           const resumoClass = leg.resumoLido ? 'completed' : 'pending';
           const revisadoClass = leg.revisado ? 'completed' : 'pending';
-          return `<div class="legislacao-card" data-leg-id="${leg.id}">
-            <div class="legislacao-card-header"><h3>${leg.nome}</h3><div class="legislacao-card-actions"><i class="fas fa-edit" data-action="editLegislacao" data-id="${leg.id}"></i><i class="fas fa-trash-alt" data-action="deleteLegislacao" data-id="${leg.id}"></i></div></div>
+          return `<div class="legislacao-card interativo" data-leg-id="${leg.id}">
+            <div class="legislacao-card-header"><h3>${leg.nome}</h3><div class="legislacao-card-actions"><i class="fas fa-edit interativo" data-action="editLegislacao" data-id="${leg.id}"></i><i class="fas fa-trash-alt interativo" data-action="deleteLegislacao" data-id="${leg.id}"></i></div></div>
             <div class="status-badges">
-              <span class="status-badge ${leituraClass}" data-field="leituraCompleta" data-id="${leg.id}"><i class="fas fa-${leg.leituraCompleta ? 'check-circle' : 'book'}"></i> Leitura</span>
-              <span class="status-badge ${resumoClass}" data-field="resumoLido" data-id="${leg.id}"><i class="fas fa-${leg.resumoLido ? 'check-circle' : 'file-alt'}"></i> Resumo</span>
-              <span class="status-badge ${revisadoClass}" data-field="revisado" data-id="${leg.id}"><i class="fas fa-${leg.revisado ? 'check-circle' : 'sync-alt'}"></i> Revisão</span>
+              <span class="status-badge interativo ${leituraClass}" data-field="leituraCompleta" data-id="${leg.id}"><i class="fas fa-${leg.leituraCompleta ? 'check-circle' : 'book'}"></i> Leitura</span>
+              <span class="status-badge interativo ${resumoClass}" data-field="resumoLido" data-id="${leg.id}"><i class="fas fa-${leg.resumoLido ? 'check-circle' : 'file-alt'}"></i> Resumo</span>
+              <span class="status-badge interativo ${revisadoClass}" data-field="revisado" data-id="${leg.id}"><i class="fas fa-${leg.revisado ? 'check-circle' : 'sync-alt'}"></i> Revisão</span>
             </div>
             <div class="progress-section">
               <div class="progress-header"><span class="progress-label"><i class="fas fa-question-circle"></i> Questões</span><span class="progress-value">${leg.questoes.feitas} / ${leg.questoes.meta}</span></div>
@@ -2648,7 +2691,7 @@ Comentário:
             </div>
             <div class="questoes-input-area">
               <input type="number" min="0" max="${leg.questoes.meta}" value="${leg.questoes.feitas}" data-id="${leg.id}" data-field="questoesFeitas">
-              <button data-id="${leg.id}" data-action="updateQuestoes"><i class="fas fa-save"></i> Atualizar</button>
+              <button class="interativo" data-id="${leg.id}" data-action="updateQuestoes"><i class="fas fa-save"></i> Atualizar</button>
             </div>
           </div>`;
         }).join('')}</div>`;
@@ -2723,12 +2766,12 @@ Comentário:
           const disabled = resultadoVerificado ? 'disabled' : '';
           const eliminadaClass = q.eliminadas[i] ? 'eliminada' : '';
           const destaqueClass = getAltClass(i);
-          return `<div class="alternativa-item ${eliminadaClass} ${destaqueClass}"><input type="radio" name="${radioName}" value="${i}" id="${radioName}_${i}" ${checked} ${disabled} data-question-index="${index}" data-alt-index="${i}"><label for="${radioName}_${i}">${letra}) ${texto}</label><button class="tesoura-btn ${q.eliminadas[i] ? 'ativo' : ''}" data-question-index="${index}" data-alt-index="${i}" title="Eliminar alternativa"><i class="fas fa-cut"></i></button></div>`;
+          return `<div class="alternativa-item ${eliminadaClass} ${destaqueClass}"><input type="radio" name="${radioName}" value="${i}" id="${radioName}_${i}" ${checked} ${disabled} data-question-index="${index}" data-alt-index="${i}"><label for="${radioName}_${i}">${letra}) ${texto}</label><button class="tesoura-btn interativo ${q.eliminadas[i] ? 'ativo' : ''}" data-question-index="${index}" data-alt-index="${i}" title="Eliminar alternativa"><i class="fas fa-cut"></i></button></div>`;
         }).join('');
         const feedbackHtml = resultadoVerificado ? `<div class="feedback-message ${respostaUsuario === q.gabarito ? 'feedback-correct' : 'feedback-wrong'}"><i class="fas fa-${respostaUsuario === q.gabarito ? 'check-circle' : 'times-circle'}"></i> ${respostaUsuario === q.gabarito ? 'Você acertou! Parabéns!' : 'Você errou. Veja o comentário para entender.'}</div>` : '';
         const comentarioHtml = q.mostrarComentario ? `<div class="comentario-box"><strong><i class="fas fa-comment-dots"></i> Comentário:</strong><p>${q.comentario.replace(/\n/g, '<br>')}</p></div>` : '';
-        const botoesHtml = !resultadoVerificado ? `<button class="btn-primary ver-resultado-btn" data-question-index="${index}" ${!respondida ? 'disabled' : ''}><i class="fas fa-check-double"></i> Ver resultado</button>` : `<button class="btn-secondary ver-comentario-btn" data-question-index="${index}"><i class="fas fa-comment"></i> ${q.mostrarComentario ? 'Ocultar' : 'Ver'} comentário</button>`;
-        return `<div class="question-card" data-question-index="${index}"><div class="question-title">Questão ${index + 1}</div><div class="question-enunciado">${q.enunciado}</div><div class="alternativas">${alternativasHtml}</div>${feedbackHtml}${comentarioHtml}<div class="question-actions">${botoesHtml}</div></div>`;
+        const botoesHtml = !resultadoVerificado ? `<button class="btn-primary interativo ver-resultado-btn" data-question-index="${index}" ${!respondida ? 'disabled' : ''}><i class="fas fa-check-double"></i> Ver resultado</button>` : `<button class="btn-secondary interativo ver-comentario-btn" data-question-index="${index}"><i class="fas fa-comment"></i> ${q.mostrarComentario ? 'Ocultar' : 'Ver'} comentário</button>`;
+        return `<div class="question-card interativo" data-question-index="${index}"><div class="question-title">Questão ${index + 1}</div><div class="question-enunciado">${q.enunciado}</div><div class="alternativas">${alternativasHtml}</div>${feedbackHtml}${comentarioHtml}<div class="question-actions">${botoesHtml}</div></div>`;
       }
       function refreshQuestionsDisplay() {
         const container = document.getElementById('generatedQuestionsContainer');
@@ -2739,7 +2782,7 @@ Comentário:
         const pageQuestions = generatedQuestions.slice(start, end);
         let html = pageQuestions.map((q, idx) => renderSingleQuestionCard(q, start + idx)).join('');
         const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
-        if (totalPages > 1) html += `<div class="pagination"><button ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i> Anterior</button><span>Página ${currentQuestionPage} de ${totalPages}</span><button ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">Próxima <i class="fas fa-chevron-right"></i></button></div>`;
+        if (totalPages > 1) html += `<div class="pagination"><button class="interativo" ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i> Anterior</button><span>Página ${currentQuestionPage} de ${totalPages}</span><button class="interativo" ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">Próxima <i class="fas fa-chevron-right"></i></button></div>`;
         container.innerHTML = html;
         attachQuestionEvents();
       }
@@ -2797,19 +2840,19 @@ Comentário:
           <div class="page-title">Questões</div>
           <div class="greeting"><i class="fas fa-pencil-alt"></i> Registre seu progresso ou pratique com questões geradas</div>
           <div class="dashboard-grid">
-            <div class="card"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-list"></i> Total hoje</div><div class="card-value">${totalToday}</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Acertos</div><div class="card-value" style="color:#2E7D32;">${correctToday}</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-times-circle" style="color:#C62828;"></i> Erros</div><div class="card-value" style="color:#C62828;">${totalToday - correctToday}</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-percent"></i> Taxa diária</div><div class="card-value">${rate}%</div></div>
           </div>
-          <div class="card" style="margin-bottom: 32px;">
+          <div class="card interativo" style="margin-bottom: 32px;">
             <div class="card-header"><i class="fas fa-pen"></i> Registrar nova questão</div>
             <div style="display:grid; gap:16px; margin-top:20px;">
               <select id="qDiscipline" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;"><option value="">Disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select>
               <select id="qTopic" style="padding:14px; border-radius:20px; border:1px solid #E0E0E0;" disabled><option value="">Tópico (opcional)</option></select>
               <div style="display:flex; gap:12px;">
-                <button class="btn-primary" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
-                <button class="btn-primary" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button>
+                <button class="btn-primary interativo" id="registerCorrect"><i class="fas fa-check"></i> Acerto</button>
+                <button class="btn-primary interativo" style="background:#9E9E9E;" id="registerWrong"><i class="fas fa-times"></i> Erro</button>
               </div>
             </div>
           </div>
@@ -2817,14 +2860,14 @@ Comentário:
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
             <h2 style="font-family: Poppins; font-weight: 600;"><i class="fas fa-robot" style="color:#E65100;"></i> Elaborar Questões</h2>
             <div>
-              <button class="btn-primary" id="downloadPromptsBtn"><i class="fas fa-download"></i> Baixar Prompts</button>
+              <button class="btn-primary interativo" id="downloadPromptsBtn"><i class="fas fa-download"></i> Baixar Prompts</button>
             </div>
           </div>
-          <div class="card">
+          <div class="card interativo">
             <p style="margin-bottom: 12px;"><i class="fas fa-info-circle"></i> Cole abaixo questões geradas por IA (ChatGPT, Gemini, etc.) no formato padrão.</p>
             <textarea id="questoesInput" placeholder="(Questão de Treino)&#10;Enunciado...&#10;a) ..." rows="6" style="width:100%; padding:16px; border-radius:20px; border:1.5px solid #E0E0E0; resize: vertical; font-family: monospace;"></textarea>
             <div style="display: flex; gap: 16px; margin-top: 16px;">
-              <button class="btn-primary" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button>
+              <button class="btn-primary interativo" id="processarQuestoesBtn"><i class="fas fa-magic"></i> Processar questões</button>
             </div>
           </div>
           <div id="generatedQuestionsContainer" style="margin-top: 24px;">
@@ -2885,14 +2928,14 @@ Comentário:
         const pageQuestions = generatedQuestions.slice(start, end);
         let html = pageQuestions.map((q, idx) => renderSingleQuestionCard(q, start + idx)).join('');
         const totalPages = Math.ceil(generatedQuestions.length / questionsPerPage);
-        if (totalPages > 1) html += `<div class="pagination"><button ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i> Anterior</button><span>Página ${currentQuestionPage} de ${totalPages}</span><button ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">Próxima <i class="fas fa-chevron-right"></i></button></div>`;
+        if (totalPages > 1) html += `<div class="pagination"><button class="interativo" ${currentQuestionPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i> Anterior</button><span>Página ${currentQuestionPage} de ${totalPages}</span><button class="interativo" ${currentQuestionPage === totalPages ? 'disabled' : ''} data-page="next">Próxima <i class="fas fa-chevron-right"></i></button></div>`;
         return html;
       }
 
       // ========== LEITURA INTELIGENTE ==========
       let leituraState = { pdfDoc: null, disciplinaId: null, nomeArquivo: '', tempoSessao: 0, timerInterval: null, timerRunning: false, currentPage: 1, totalPages: 0, inactivityTimer: null, ultimaAtividade: Date.now(), modoFoco: false, destaquesTemp: [], anotacoesTemp: [] };
       function renderLeitura() {
-        const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary" id="voltarInicioBtn"><i class="fas fa-arrow-left"></i> Voltar para Início</button><button class="btn-secondary" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
+        const html = `<div class="page-title">📖 Leitura Inteligente</div><div class="greeting">Estude PDFs com controle de tempo e ferramentas avançadas</div><div class="leitura-container" id="leituraContainer"><div class="leitura-sidebar"><div style="margin-bottom: 20px;"><label style="font-weight:500; display:block; margin-bottom:8px;">Disciplina</label><select id="leituraDisciplinaSelect" class="timer-select" style="width:100%;"><option value="">Selecione a disciplina</option>${state.disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}</select></div><div style="margin-bottom: 20px;"><button class="btn-primary interativo" id="abrirPdfBtn" style="width:100%;"><i class="fas fa-folder-open"></i> Abrir PDF</button><input type="file" id="pdfFileInput" accept=".pdf" style="display:none;"></div><div id="pdfInfo" style="display:none;"><p><i class="fas fa-file-pdf"></i> <span id="pdfNome"></span></p><p><i class="far fa-copy"></i> <span id="pdfPaginas"></span> páginas</p></div><div class="card interativo" style="margin: 16px 0;"><div class="card-header"><i class="fas fa-hourglass-half"></i> Tempo de leitura</div><div class="card-value" id="leituraTimerDisplay">00:00:00</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn-secondary interativo" id="leituraIniciarBtn" style="flex:1;" disabled><i class="fas fa-play"></i></button><button class="btn-secondary interativo" id="leituraPausarBtn" style="flex:1;" disabled><i class="fas fa-pause"></i></button><button class="btn-secondary interativo" id="leituraFinalizarBtn" style="flex:1;" disabled><i class="fas fa-stop"></i></button></div></div><div class="highlight-control"><p style="font-weight:600; margin-bottom:12px;"><i class="fas fa-highlighter"></i> Ferramentas</p><button class="btn-secondary interativo" id="adicionarDestaqueBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-paint-brush"></i> Destacar seleção</button><button class="btn-secondary interativo" id="adicionarAnotacaoBtn" style="width:100%; margin-bottom:8px;" disabled><i class="fas fa-pencil-alt"></i> Anotar</button><button class="btn-secondary interativo" id="modoFocoBtn" style="width:100%;"><i class="fas fa-eye"></i> Modo Foco</button></div><div style="margin-top: auto;"><div class="progresso-leitura"><div class="progress-header"><span>Progresso de leitura</span><span id="progressoPercent">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progressoBarra" style="width:0%;"></div></div></div><button class="btn-primary interativo" id="concluirLeituraBtn" style="width:100%; margin-top:16px;" disabled><i class="fas fa-check-circle"></i> Concluir leitura</button></div></div><div class="leitura-viewer"><div class="pdf-toolbar"><button class="btn-secondary interativo" id="voltarInicioBtn"><i class="fas fa-arrow-left"></i> Voltar para Início</button><button class="btn-secondary interativo" id="pdfAnterior" disabled><i class="fas fa-chevron-left"></i></button><span>Página <span id="paginaAtual">0</span> de <span id="totalPaginas">0</span></span><button class="btn-secondary interativo" id="pdfProxima" disabled><i class="fas fa-chevron-right"></i></button><div style="flex:1;"></div></div><div class="pdf-pages-container" id="pdfContainer"><div class="empty-state"><i class="fas fa-file-pdf"></i><h3>Nenhum PDF carregado</h3><p>Selecione uma disciplina e abra um arquivo PDF para começar.</p></div></div></div></div><div style="margin-top: 24px;"><h3 style="font-family:Poppins; margin-bottom:12px;"><i class="fas fa-sticky-note"></i> Anotações desta sessão</h3><div id="anotacoesList" style="display:flex; flex-direction:column; gap:8px;"></div></div>`;
         contentDiv.innerHTML = html;
         const disciplinaSelect = document.getElementById('leituraDisciplinaSelect');
         const abrirBtn = document.getElementById('abrirPdfBtn');
@@ -2966,16 +3009,16 @@ Comentário:
           <div class="page-title">📈 Desempenho</div>
           <div class="greeting">Acompanhe sua evolução ao longo do tempo</div>
           <div class="dashboard-grid">
-            <div class="card"><div class="card-header"><i class="fas fa-question-circle"></i> Questões (semana)</div><div class="card-value">${totalQuestoes}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-check-circle"></i> Acertos</div><div class="card-value">${acertosSemana}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-percent"></i> Taxa de acerto</div><div class="card-value">${taxaAcerto}%</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-clock"></i> Tempo estudado</div><div class="card-value">${Math.floor(tempoSemana/3600)}h ${Math.floor((tempoSemana%3600)/60)}m</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-question-circle"></i> Questões (semana)</div><div class="card-value">${totalQuestoes}</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-check-circle"></i> Acertos</div><div class="card-value">${acertosSemana}</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-percent"></i> Taxa de acerto</div><div class="card-value">${taxaAcerto}%</div></div>
+            <div class="card interativo"><div class="card-header"><i class="fas fa-clock"></i> Tempo estudado</div><div class="card-value">${Math.floor(tempoSemana/3600)}h ${Math.floor((tempoSemana%3600)/60)}m</div></div>
           </div>
-          <div class="card" style="margin-bottom:24px;">
+          <div class="card interativo" style="margin-bottom:24px;">
             <div class="card-header"><i class="fas fa-chart-line"></i> Evolução de acertos (última semana)</div>
             <canvas id="evolucaoChart" width="400" height="200" style="width:100%; max-height:250px;"></canvas>
           </div>
-          <div class="card">
+          <div class="card interativo">
             <div class="card-header"><i class="fas fa-calendar-alt"></i> Questões por dia</div>
             <canvas id="questoesDiaChart" width="400" height="200" style="width:100%; max-height:250px;"></canvas>
           </div>
@@ -3020,7 +3063,7 @@ Comentário:
       }
       function renderAreasMentoria() {
         const areasHtml = areasConcurso.map(area => `
-          <div class="card" style="cursor: pointer; transition: all 0.2s;" data-area="${area.nome}">
+          <div class="card interativo" style="cursor: pointer; transition: all 0.2s;" data-area="${area.nome}">
             <div class="card-header"><i class="fas fa-briefcase"></i> ${area.nome}</div>
             <p style="color: #5A5A5A; margin-bottom: 8px;">${area.descricao}</p>
             <span class="badge">${area.subareas.length} subáreas</span>
@@ -3052,7 +3095,7 @@ Comentário:
         const area = areasConcurso.find(a => a.nome === areaNome);
         if (!area) { mentoriaEstado.area = null; renderAreasMentoria(); return; }
         const subareasHtml = area.subareas.map(sub => `
-          <div class="card" style="cursor: pointer; transition: all 0.2s;" data-subarea="${sub}">
+          <div class="card interativo" style="cursor: pointer; transition: all 0.2s;" data-subarea="${sub}">
             <div class="card-header"><i class="fas fa-layer-group"></i> ${sub}</div>
             <p style="color: #5A5A5A;">Mentores especializados nesta subárea</p>
           </div>
@@ -3064,7 +3107,7 @@ Comentário:
                 <div class="page-title">🧠 Mentoria · ${areaNome}</div>
                 <div class="greeting">Escolha a subárea para ver os mentores disponíveis</div>
               </div>
-              <button class="btn-secondary" id="backToAreasMentoria"><i class="fas fa-arrow-left"></i> Voltar para áreas</button>
+              <button class="btn-secondary interativo" id="backToAreasMentoria"><i class="fas fa-arrow-left"></i> Voltar para áreas</button>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
               ${subareasHtml}
@@ -3088,7 +3131,7 @@ Comentário:
           mentoresHtml = `<div class="empty-state"><i class="fas fa-user-friends"></i><h3>Nenhum mentor encontrado</h3><p>Não há mentores cadastrados para esta combinação ainda. Tente outra subárea ou área.</p></div>`;
         } else {
           mentoresHtml = mentoresFiltrados.map(mentor => `
-            <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="card interativo" style="display: flex; flex-direction: column; gap: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-family: Poppins; font-size: 1.4rem;">${mentor.nome}</h3>
                 <span class="badge" style="background: #FFD54F; color: #212121;"><i class="fas fa-star"></i> ${mentor.avaliacao}</span>
@@ -3096,7 +3139,7 @@ Comentário:
               <p><i class="fas fa-briefcase"></i> <strong>Experiência:</strong> ${mentor.experiencia}</p>
               <p><i class="fas fa-info-circle"></i> ${mentor.descricao}</p>
               <div style="display: flex; gap: 12px; margin-top: 8px;">
-                <button class="btn-primary solicitar-mentoria" data-mentor-id="${mentor.id}"><i class="fas fa-handshake"></i> Solicitar mentoria</button>
+                <button class="btn-primary interativo solicitar-mentoria" data-mentor-id="${mentor.id}"><i class="fas fa-handshake"></i> Solicitar mentoria</button>
               </div>
             </div>
           `).join('');
@@ -3108,7 +3151,7 @@ Comentário:
                 <div class="page-title">🧠 Mentoria · ${area} / ${subarea}</div>
                 <div class="greeting">Conheça os mentores especializados</div>
               </div>
-              <button class="btn-secondary" id="backToSubareasMentoria"><i class="fas fa-arrow-left"></i> Voltar para subáreas</button>
+              <button class="btn-secondary interativo" id="backToSubareasMentoria"><i class="fas fa-arrow-left"></i> Voltar para subáreas</button>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
               ${mentoresHtml}
